@@ -8,4 +8,5 @@ export interface User {
   ultimoVoto?: string;
   votosRealizados: number;
   activo: boolean;
+  role: 'user' | 'admin';
 }
