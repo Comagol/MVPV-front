@@ -8,7 +8,7 @@ export interface LoginRequest {
   password:string;
 }
 
-export interface registerRequest {
+export interface RegisterRequest {
   email: string;
   nombre: string;
   password: string;
