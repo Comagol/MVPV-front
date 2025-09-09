@@ -23,4 +23,14 @@ export const useVoting = () => {
       setIsLoading(false);
     }
   };
-}
+
+  //valido si puede votar
+  const validateVote = async (matchId: string) => {
+    try{
+      return await voteService.validateVote(matchId);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al validar voto');
+      return false;
+    }
+  };
+};
