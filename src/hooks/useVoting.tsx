@@ -33,4 +33,18 @@ export const useVoting = () => {
       return false;
     }
   };
+
+  // obtener estadisticas del partido
+  const getMatchStats = async (matchId: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      return await voteService.getMatchStats(matchId);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener estadisticas');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 };
