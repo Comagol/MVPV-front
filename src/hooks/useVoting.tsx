@@ -1,0 +1,26 @@
+import { useState, useEffect } from 'react';
+import { voteService  } from '../services';
+import type { Vote } from '../types';
+
+export const useVoting = () => {
+  const [ votes, setVotes ] = useState<Vote[]>([]);
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ error, setError ] = useState<string | null>(null);
+
+  // Crear un voto
+  const createVote = async (playerId: string, matchId: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const newVote = await voteService.createVote(playerId, matchId);
+      setVotes(prev => [...prev, newVote]);
+      return newVote;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al votar');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+}
