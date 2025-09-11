@@ -49,5 +49,17 @@ export const useVoting = () => {
   };
 
   //obtener ganador de un partido
-  
+  const getMatchWinner = async (matchId: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      return await voteService.getMatchWinner(matchId);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener al ganador');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }
 };
