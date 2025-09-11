@@ -73,5 +73,15 @@ export const useVoting = () => {
     }
   };
 
-  
+  return {
+    votes,
+    isLoading,
+    error,
+    createVote,
+    validateVote,
+    getMatchStats,
+    getMatchWinner,
+    getTotalVotes,
+    clearError: () => setError(null)
+  };
 };
