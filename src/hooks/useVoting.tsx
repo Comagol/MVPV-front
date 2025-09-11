@@ -47,4 +47,7 @@ export const useVoting = () => {
       setIsLoading(false);
     }
   };
+
+  //obtener ganador de un partido
+  
 };
