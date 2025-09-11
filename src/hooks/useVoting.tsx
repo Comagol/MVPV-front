@@ -62,4 +62,16 @@ export const useVoting = () => {
       setIsLoading(false);
     }
   }
+
+  //obtener total de votos
+  const getTotalVotes = async (matchId: string) => {
+    try {
+      return await voteService.getTotalVotes(matchId);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener total de votos');
+      return 0;
+    }
+  };
+
+  
 };
