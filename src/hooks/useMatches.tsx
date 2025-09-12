@@ -26,6 +26,18 @@ export const useMatches = () => {
 
   //obtengo los partidos activos
   const fetchActiveMatches = async () => {
-    
-  }
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const active = await matchService.getActiveMatches();
+      setActiveMatches(active);
+      return active;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener los partidos activos');
+      throw err;
+    }finally {
+      setIsLoading(false);
+    }
+  };
 }
