@@ -9,7 +9,7 @@ export const useMatches = () => {
   const [error, setError] = useState<string | null>(null);
 
   //obtengo los partidos
-  const fectchAllMatches = async () => {
+  const fetchAllMatches = async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -56,4 +56,21 @@ export const useMatches = () => {
       setIsLoading(false);
     }
   };
+
+  // cargar los datos al montar el hook
+  useEffect(() => {
+    fetchAllMatches();
+    fetchActiveMatches();
+  }, []);
+
+  return {
+    matches,
+    activeMatches,
+    isLoading,
+    error,
+    fetchAllMatches,
+    fetchActiveMatches,
+    fetchMatchById,
+    clearError: () => setError(null)
+  }
 }
