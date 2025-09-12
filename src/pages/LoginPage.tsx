@@ -1,20 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Button,
-  FormControl,
-  FormLabel,
   Input,
   VStack,
   Heading,
-  Text,
-  Alert,
-  AlertIcon,
-  useToast
-} from "@chakra-ui/react";
-import { useAuth } from "../hooks/useAuth";
-import type { LoginRequest } from "../types";
+  Text
+} from '@chakra-ui/react';
+import { useAuth } from '../hooks/useAuth';
+import type { LoginRequest } from '../types';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequest>({
@@ -22,11 +17,10 @@ const LoginPage = () => {
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
-  const[error, setError] = useState<string | null>(null);
-
+  const [error, setError] = useState<string | null>(null);
+  
   const { login } = useAuth();
   const navigate = useNavigate();
-  const toast = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -42,16 +36,10 @@ const LoginPage = () => {
 
     try {
       await login(formData);
-      toast({
-        title: 'Login exitoso',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
       navigate('/vote');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al iniciar sesion');
-    }finally {
+      setError(err.response?.data?.message || 'Error al iniciar sesión');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -59,48 +47,48 @@ const LoginPage = () => {
   return (
     <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
-        <VStack spacing={6}>
+        <VStack gap={6}>
           <Heading size="lg" textAlign="center">
             Iniciar Sesión
           </Heading>
           
           {error && (
-            <Alert status="error">
-              <AlertIcon />
+            <Box p={4} bg="red.100" color="red.700" rounded="md">
               {error}
-            </Alert>
+            </Box>
           )}
 
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-            <VStack spacing={4}>
-              <FormControl isRequired>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="tu@email.com"
-                />
-              </FormControl>
+            <VStack gap={4}>
+            <Box w="full">
+              <Text mb={2} fontWeight="medium">Email</Text>
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="tu@email.com"
+                required
+              />
+            </Box>
 
-              <FormControl isRequired>
-                <FormLabel>Contraseña</FormLabel>
-                <Input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Tu contraseña"
-                />
-              </FormControl>
-
+            <Box w="full">
+              <Text mb={2} fontWeight="medium">Contraseña</Text>
+              <Input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Tu contraseña"
+                required
+              />
+            </Box>
               <Button
                 type="submit"
                 colorScheme="blue"
                 size="lg"
                 w="full"
-                isLoading={isLoading}
+                loading={isLoading}
                 loadingText="Iniciando sesión..."
               >
                 Iniciar Sesión
@@ -119,3 +107,5 @@ const LoginPage = () => {
     </Box>
   );
 };
+
+export default LoginPage;
