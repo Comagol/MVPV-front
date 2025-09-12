@@ -54,5 +54,68 @@ const LoginPage = () => {
     }finally {
       setIsLoading(false);
     }
-  }
-}
+  };
+
+  return (
+    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
+      <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
+        <VStack spacing={6}>
+          <Heading size="lg" textAlign="center">
+            Iniciar Sesión
+          </Heading>
+          
+          {error && (
+            <Alert status="error">
+              <AlertIcon />
+              {error}
+            </Alert>
+          )}
+
+          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+            <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="tu@email.com"
+                />
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Contraseña</FormLabel>
+                <Input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Tu contraseña"
+                />
+              </FormControl>
+
+              <Button
+                type="submit"
+                colorScheme="blue"
+                size="lg"
+                w="full"
+                isLoading={isLoading}
+                loadingText="Iniciando sesión..."
+              >
+                Iniciar Sesión
+              </Button>
+            </VStack>
+          </form>
+
+          <Text textAlign="center">
+            ¿No tienes cuenta?{' '}
+            <Link to="/register" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+              Regístrate aquí
+            </Link>
+          </Text>
+        </VStack>
+      </Box>
+    </Box>
+  );
+};
