@@ -3,7 +3,7 @@ import { matchService } from "../services";
 import type { Match } from "../types";
 
 export const useMatches = () => {
-  const [matches, setMatches] = usetState<Match[]>([]);
+  const [matches, setMatches] = useState<Match[]>([]);
   const [activeMatches, setActiveMatches] = useState<Match[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,5 +72,5 @@ export const useMatches = () => {
     fetchActiveMatches,
     fetchMatchById,
     clearError: () => setError(null)
-  }
-}
+  };
+};
