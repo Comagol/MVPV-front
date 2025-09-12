@@ -40,4 +40,20 @@ export const useMatches = () => {
       setIsLoading(false);
     }
   };
+
+  //obtengo partido por id
+  const fetchMatchById = async (id:string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const match = await matchService.getMatchById(id);
+      return match;
+    } catch (err: any) {
+      setError(err.reponse?.data.message || 'Error al obtener el partido');
+      throw err;
+    }finally {
+      setIsLoading(false);
+    }
+  };
 }
