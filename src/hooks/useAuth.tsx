@@ -1,6 +1,6 @@
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useEffect, createContext, useContext, useMemo } from 'react';
 import { authService } from '../services';
-import type { User, AuthResponse, LoginRequest, RegisterRequest } from '../types';
+import type { User, LoginRequest, RegisterRequest, AdminAuthResponse, UserAuthResponse } from '../types';
 
 //Contexto para compartir el estado de autenticacion
 const AuthContext = createContext<{
@@ -28,40 +28,78 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (authService.isAuthenticated()) {
-       const userData = sessionStorage.getItem('user');
-       if (userData) {
-        setUser(JSON.parse(userData));
-       }
+      try {
+        console.log('checkAuth ejecutándose...');
+        const isAuth = authService.isAuthenticated();
+        console.log('isAuthenticated() retorna:', isAuth);
+        
+        if (isAuth) {
+         const userData = sessionStorage.getItem('user');
+         console.log('userData:', userData);
+         if (userData && userData !== 'null' && userData !== 'undefined') {
+          setUser(JSON.parse(userData));
+          console.log('Usuario seteado correctamente');
+         } else {
+          console.log('No hay userData válido');
+         }
+        } else {
+          console.log('Usuario no autenticado');
+        }
+      } catch (error) {
+        console.error('Error en checkAuth:', error);
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+      } finally {
+        console.log('setIsLoading(false) ejecutándose...');
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
     checkAuth();
   }, []);
 
   const login = async (data: LoginRequest, isAdmin = false) => {
     try {
-      const response: AuthResponse = isAdmin 
-      ? await authService.adminLogin(data)
-      : await authService.userLogin(data);
-
-      sessionStorage.setItem('token', response.token);
-      sessionStorage.setItem('user', JSON.stringify(response.user));
-      setUser(response.user);
+      console.log('Iniciando login con datos:', data);
+      console.log('isAdmin:', isAdmin);
+      
+      if (isAdmin) {
+        const response: AdminAuthResponse = await authService.adminLogin(data);
+        console.log('Respuesta del backend (admin):', response);
+        
+        // Ahora accede directamente al token y admin
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('user', JSON.stringify(response.admin));
+        setUser(response.admin);
+      } else {
+        const response: UserAuthResponse = await authService.userLogin(data);
+        console.log('Respuesta del backend (user):', response);
+        
+        // Accede directamente al token y user
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('user', JSON.stringify(response.user));
+        setUser(response.user);
+      }
+      
+      console.log('Login exitoso');
     } catch (error) {
+      console.error('Error en login:', error);
       throw error;
     }
   };
 
   const register = async (data: RegisterRequest, isAdmin = false) => {
     try {
-      const response: AuthResponse = isAdmin 
-      ? await authService.adminRegister(data)
-      : await authService.userRegister(data);
-
-      sessionStorage.setItem('token', response.token);
-      sessionStorage.setItem('user', JSON.stringify(response.user));
-      setUser(response.user);
+      if (isAdmin) {
+        const response: AdminAuthResponse = await authService.adminRegister(data);
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('user', JSON.stringify(response.admin));
+        setUser(response.admin);
+      } else {
+        const response: UserAuthResponse = await authService.userRegister(data);
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('user', JSON.stringify(response.user));
+        setUser(response.user);
+      }
     } catch (error) {
       throw error;
     }
@@ -73,14 +111,14 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     setUser(null);
   };
 
-  const value = {
+  const value = useMemo(() => ({
     user,
     isAuthenticated: !!user,
     isLoading,
     login,
     register,
     logout,
-  };
+  }), [user, isLoading]);
 
   return (
     <AuthContext.Provider value={value}>

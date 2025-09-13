@@ -2,28 +2,29 @@ import api from './api';
 import type {
   LoginRequest,
   RegisterRequest,
-  AuthResponse,
+  UserAuthResponse,
+  AdminAuthResponse,
 } from '../types/index';
 
 export const authService = {
   //Usuarios
-  userLogin: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post('/auth/login', data);
+  userLogin: async (data: LoginRequest): Promise<UserAuthResponse> => {
+    const response = await api.post('/users/login', data);
     return response.data;
   },
 
-  userRegister: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post('/auth/register', data);
+  userRegister: async (data: RegisterRequest): Promise<UserAuthResponse> => {
+    const response = await api.post('/users/register', data);
     return response.data;
   },
 
   //Admins
-  adminLogin: async (data: LoginRequest): Promise<AuthResponse> => {
+  adminLogin: async (data: LoginRequest): Promise<AdminAuthResponse> => {
     const response = await api.post('/admin/login', data);
     return response.data;
   },
 
-  adminRegister: async (data: RegisterRequest): Promise<AuthResponse> => {
+  adminRegister: async (data: RegisterRequest): Promise<AdminAuthResponse> => {
     const response = await api.post('/admin/register', data);
     return response.data;
   },
@@ -34,6 +35,9 @@ export const authService = {
   },
 
   isAuthenticated: (): boolean => {
-    return !!sessionStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
+    console.log('Token en sessionStorage:', token);
+    console.log('¿Token existe?', !!token);
+    return !!token;
   }
 };
