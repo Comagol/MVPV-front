@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 const Navbar = () => {
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -22,7 +22,7 @@ const Navbar = () => {
         <HStack gap={4}>
           {/* Logo del club - reemplaza con tu logo */}
           <Box w="40px" h="40px" bg="white" rounded="full" display="flex" alignItems="center" justifyContent="center">
-            {/* Puedes reemplazar esto con <Image src="/logo.png" alt="Logo" w="40px" h="40px" /> */}
+            <Image src="/favicon.png" alt="Logo" w="40px" h="40px" />
             <Box color="blue.600" fontWeight="bold" fontSize="lg">🏉</Box>
           </Box>
           
