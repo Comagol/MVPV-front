@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { Box } from '@chakra-ui/react';
 import Navbar from '../layout/Navbar';
+import Footer from '../layout/Footer';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -27,6 +28,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       <Box>
         {children}
       </Box>
+      <Footer />
     </Box>
   );
 };
