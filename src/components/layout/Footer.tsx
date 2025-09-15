@@ -28,7 +28,7 @@ const Footer = () => {
         {/* Redes sociales */}
         <VStack align="center" gap={3}>
           <Text fontSize="sm" fontWeight="semibold" color="gray.300">
-            Síguenos en redes sociales
+            Síguenos en nuestras redes sociales
           </Text>
           <HStack gap={3}>
             <Link href="https://www.facebook.com/ClubVicentinos" target="_blank">
