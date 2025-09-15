@@ -31,7 +31,7 @@ const Footer = () => {
             Síguenos en redes sociales
           </Text>
           <HStack gap={3}>
-            <Link href="https://facebook.com/tu-club" target="_blank">
+            <Link href="https://www.facebook.com/ClubVicentinos" target="_blank">
             <IconButton
               aria-label="Facebook"
               size="lg"
@@ -44,7 +44,7 @@ const Footer = () => {
               <FaFacebook />
             </IconButton>
             </Link>
-            <Link href="https://instagram.com/tu-club" target="_blank">
+            <Link href="https://www.instagram.com/clubvicentinos" target="_blank">
             <IconButton
               aria-label="Instagram"
               size="lg"
