@@ -1,5 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { Box } from '@chakra-ui/react';
+import Navbar from '../layout/Navbar';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -19,5 +21,12 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   //si esta autenticado, renderizo el componente hijo
-  return <>{children}</>;
+  return (
+    <Box minH="100vh" bg="gray.50">
+      <Navbar />
+      <Box>
+        {children}
+      </Box>
+    </Box>
+  );
 };
