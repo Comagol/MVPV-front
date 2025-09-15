@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, VStack, Text, Link, IconButton } from '@chakra-ui/react';
+import { Box, Flex, HStack, VStack, Text, Link, IconButton, Image } from '@chakra-ui/react';
 import { FaFacebook, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
@@ -15,8 +15,8 @@ const Footer = () => {
         {/* Logo de la app */}
         <VStack align={{ base: 'center', md: 'flex-start' }} gap={2}>
           <HStack gap={2}>
-            <Box w="32px" h="32px" bg="white" rounded="full" display="flex" alignItems="center" justifyContent="center">
-              <Box color="blue.600" fontWeight="bold" fontSize="md">🏉</Box>
+            <Box w="32px" h="32px"  rounded="full" display="flex" alignItems="center" justifyContent="center">
+              <Image src="/favicon.png" alt="Logo" w="32px" h="32px" />
             </Box>
             <Text fontSize="lg" fontWeight="bold">Rugby MVP Voting</Text>
           </HStack>
@@ -37,8 +37,9 @@ const Footer = () => {
               size="lg"
               colorScheme="facebook"
               variant="ghost"
-              _hover={{ bg: "facebook.500", transform: "scale(1.1)" }}
+              _hover={{ bg: "facebook.500", transform: "scale(1.1)", color: "blue.500" }}
               transition="all 0.2s"
+              color="white"
               >
               <FaFacebook />
             </IconButton>
@@ -49,8 +50,9 @@ const Footer = () => {
               size="lg"
               colorScheme="pink"
               variant="ghost"
-              _hover={{ bg: "pink.500", transform: "scale(1.1)" }}
+              _hover={{ bg: "facebook.500", transform: "scale(1.1)", color: "pink.500" }}
               transition="all 0.2s"
+              color="white"
               >
               <FaInstagram />
             </IconButton>
