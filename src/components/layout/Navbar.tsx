@@ -20,10 +20,9 @@ const Navbar = () => {
       <Flex justify="space-between" align="center" maxW="7xl" mx="auto">
         {/* Logo y nombre de la app */}
         <HStack gap={4}>
-          {/* Logo del club - reemplaza con tu logo */}
-          <Box w="40px" h="40px" bg="white" rounded="full" display="flex" alignItems="center" justifyContent="center">
+          {/* Logo del club */}
+          <Box w="40px" h="40px"  rounded="full" display="flex" alignItems="center" justifyContent="center">
             <Image src="/favicon.png" alt="Logo" w="40px" h="40px" />
-            <Box color="blue.600" fontWeight="bold" fontSize="lg">🏉</Box>
           </Box>
           
           <Heading size="md" color="white">
