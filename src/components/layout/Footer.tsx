@@ -63,7 +63,7 @@ const Footer = () => {
         {/* Copyright */}
         <VStack align={{ base: 'center', md: 'flex-end' }} gap={1}>
           <Text fontSize="sm" color="gray.400">
-            © {new Date().getFullYear()} Rugby Club
+            © {new Date().getFullYear()} MVP Vicentinos
           </Text>
           <Text fontSize="xs" color="gray.500">
             Todos los derechos reservados
