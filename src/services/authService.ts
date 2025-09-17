@@ -2,29 +2,28 @@ import api from './api';
 import type {
   LoginRequest,
   RegisterRequest,
-  UserAuthResponse,
-  AdminAuthResponse,
+  AuthResponse,
 } from '../types/index';
 
 export const authService = {
   //Usuarios
-  userLogin: async (data: LoginRequest): Promise<UserAuthResponse> => {
+  userLogin: async (data: LoginRequest): Promise<AuthResponse> => {
     const response = await api.post('/users/login', data);
     return response.data;
   },
 
-  userRegister: async (data: RegisterRequest): Promise<UserAuthResponse> => {
+  userRegister: async (data: RegisterRequest): Promise<AuthResponse> => {
     const response = await api.post('/users/register', data);
     return response.data;
   },
 
   //Admins
-  adminLogin: async (data: LoginRequest): Promise<AdminAuthResponse> => {
+  adminLogin: async (data: LoginRequest): Promise<AuthResponse> => {
     const response = await api.post('/admin/login', data);
     return response.data;
   },
 
-  adminRegister: async (data: RegisterRequest): Promise<AdminAuthResponse> => {
+  adminRegister: async (data: RegisterRequest): Promise<AuthResponse> => {
     const response = await api.post('/admin/register', data);
     return response.data;
   },
