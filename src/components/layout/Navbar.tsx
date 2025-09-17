@@ -1,11 +1,11 @@
-import { Box, Flex, Heading, Button, HStack, Image } from '@chakra-ui/react';
+import { Box, Flex, Heading, Button, HStack, Image, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 const Navbar = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
-
+  const { isAdmin } = useAuth();
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -28,6 +28,9 @@ const Navbar = () => {
           <Heading size="md" color="white">
             Rugby MVP Voting
           </Heading>
+          <Text fontSize="sm" color="blue.100">
+            {isAdmin ? 'Panel Admin' : 'Usuario'}
+          </Text>
         </HStack>
 
         {/* Navegación */}

@@ -8,7 +8,7 @@ import type {
 export const authService = {
   //Usuarios
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post('/users/login', data);
+    const response = await api.post('/auth/login', data);
     return response.data;
   },
 
