@@ -3,16 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 const Navbar = () => {
-  const { logout } = useAuth();
+  const { logout, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+
   const handleLogout = () => {
     logout();
     navigate('/login');
-  };
-
-  const handleVoteClick = () => {
-    navigate('/vote');
   };
 
   return (
@@ -20,14 +16,14 @@ const Navbar = () => {
       <Flex justify="space-between" align="center" maxW="7xl" mx="auto">
         {/* Logo y nombre de la app */}
         <HStack gap={4}>
-          {/* Logo del club */}
-          <Box w="40px" h="40px"  rounded="full" display="flex" alignItems="center" justifyContent="center">
+          <Box w="40px" h="40px" rounded="full" display="flex" alignItems="center" justifyContent="center">
             <Image src="/favicon.png" alt="Logo" w="40px" h="40px" />
           </Box>
           
           <Heading size="md" color="white">
             Rugby MVP Voting
           </Heading>
+          
           <Text fontSize="sm" color="blue.100">
             {isAdmin ? 'Panel Admin' : 'Usuario'}
           </Text>
@@ -35,14 +31,47 @@ const Navbar = () => {
 
         {/* Navegación */}
         <HStack gap={4}>
-          <Button
-            variant="ghost"
-            color="white"
-            _hover={{ bg: "blue.500" }}
-            onClick={handleVoteClick}
-          >
-            Votar Jugador del Partido
-          </Button>
+          {isAdmin ? (
+            // Opciones para Admin
+            <>
+              <Button
+                variant="ghost"
+                color="white"
+                _hover={{ bg: "blue.500" }}
+                onClick={() => navigate('/admin/players')}
+              >
+                Cargar Jugadores
+              </Button>
+              
+              <Button
+                variant="ghost"
+                color="white"
+                _hover={{ bg: "blue.500" }}
+                onClick={() => navigate('/admin/matches/create')}
+              >
+                Crear Partido
+              </Button>
+              
+              <Button
+                variant="ghost"
+                color="white"
+                _hover={{ bg: "blue.500" }}
+                onClick={() => navigate('/admin/matches')}
+              >
+                Gestionar Partidos
+              </Button>
+            </>
+          ) : (
+            // Opciones para Usuario normal
+            <Button
+              variant="ghost"
+              color="white"
+              _hover={{ bg: "blue.500" }}
+              onClick={() => navigate('/vote')}
+            >
+              Votar Jugador del Partido
+            </Button>
+          )}
           
           <Button
             variant="outline"
