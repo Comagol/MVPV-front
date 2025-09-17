@@ -1,18 +1,17 @@
 import { useState, useEffect, createContext, useContext, useMemo } from 'react';
 import { authService } from '../services';
-import type { User, LoginRequest, RegisterRequest, AdminAuthResponse, UserAuthResponse } from '../types';
+import type { User, LoginRequest, RegisterRequest, AuthResponse } from '../types';
 
-//Contexto para compartir el estado de autenticacion
 const AuthContext = createContext<{
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (data: LoginRequest, isAdmin?: boolean) => Promise<void>;
-  register: (data: RegisterRequest, isAdmin?: boolean) => Promise<void>;
+  isAdmin: boolean;
+  login: (data: LoginRequest) => Promise<void>;
+  register: (data: RegisterRequest) => Promise<void>;
   logout: () => void;
 } | null>(null);
 
-// Hook personalizado para autenticacion
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -21,7 +20,6 @@ export const useAuth = () => {
   return context;
 };
 
-// Provider component
 export const AuthProvider = ({children}: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,77 +27,44 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        console.log('checkAuth ejecutándose...');
-        const isAuth = authService.isAuthenticated();
-        console.log('isAuthenticated() retorna:', isAuth);
-        
-        if (isAuth) {
+        if (authService.isAuthenticated()) {
          const userData = sessionStorage.getItem('user');
-         console.log('userData:', userData);
          if (userData && userData !== 'null' && userData !== 'undefined') {
           setUser(JSON.parse(userData));
-          console.log('Usuario seteado correctamente');
-         } else {
-          console.log('No hay userData válido');
          }
-        } else {
-          console.log('Usuario no autenticado');
         }
       } catch (error) {
         console.error('Error en checkAuth:', error);
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('token');
       } finally {
-        console.log('setIsLoading(false) ejecutándose...');
         setIsLoading(false);
       }
     };
     checkAuth();
   }, []);
 
-  const login = async (data: LoginRequest, isAdmin = false) => {
+  const login = async (data: LoginRequest) => {
     try {
-      console.log('Iniciando login con datos:', data);
-      console.log('isAdmin:', isAdmin);
+      const response: AuthResponse = await authService.userLogin(data);
       
-      if (isAdmin) {
-        const response: AdminAuthResponse = await authService.adminLogin(data);
-        console.log('Respuesta del backend (admin):', response);
-        
-        // Ahora accede directamente al token y admin
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('user', JSON.stringify(response.admin));
-        setUser(response.admin);
-      } else {
-        const response: UserAuthResponse = await authService.userLogin(data);
-        console.log('Respuesta del backend (user):', response);
-        
-        // Accede directamente al token y user
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('user', JSON.stringify(response.user));
-        setUser(response.user);
-      }
-      
-      console.log('Login exitoso');
+      sessionStorage.setItem('token', response.token);
+      sessionStorage.setItem('user', JSON.stringify(response.user));
+      sessionStorage.setItem('role', response.role); // Guardamos el rol
+      setUser(response.user);
     } catch (error) {
-      console.error('Error en login:', error);
       throw error;
     }
   };
 
-  const register = async (data: RegisterRequest, isAdmin = false) => {
+  const register = async (data: RegisterRequest) => {
     try {
-      if (isAdmin) {
-        const response: AdminAuthResponse = await authService.adminRegister(data);
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('user', JSON.stringify(response.admin));
-        setUser(response.admin);
-      } else {
-        const response: UserAuthResponse = await authService.userRegister(data);
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('user', JSON.stringify(response.user));
-        setUser(response.user);
-      }
+      const response: AuthResponse = await authService.userRegister(data);
+      
+      sessionStorage.setItem('token', response.token);
+      sessionStorage.setItem('user', JSON.stringify(response.user));
+      sessionStorage.setItem('role', response.role);
+      setUser(response.user);
     } catch (error) {
       throw error;
     }
@@ -108,17 +73,22 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
   const logout = () => {
     authService.logout();
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('role');
     setUser(null);
   };
+
+  // Determinar si es admin basado en el rol guardado
+  const isAdmin = sessionStorage.getItem('role') === 'admin';
 
   const value = useMemo(() => ({
     user,
     isAuthenticated: !!user,
     isLoading,
+    isAdmin,
     login,
     register,
     logout,
-  }), [user, isLoading]);
+  }), [user, isLoading, isAdmin]);
 
   return (
     <AuthContext.Provider value={value}>
