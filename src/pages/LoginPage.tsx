@@ -23,7 +23,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleChange ejecutándose:', e.target.name, e.target.value);
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -31,19 +30,14 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log('handleSubmit ejecutándose...');
-    console.log('formData:', formData);
     e.preventDefault();
     setIsLoading(true);
     setError(null);
   
     try {
-      console.log('Intentando hacer login...');
       await login(formData);
-      console.log('Login exitoso, navegando a /vote');
       navigate('/vote');
     } catch (err: any) {
-      console.error('Error en login:', err);
       setError(err.response?.data?.message || 'Error al iniciar sesión');
     } finally {
       setIsLoading(false);
