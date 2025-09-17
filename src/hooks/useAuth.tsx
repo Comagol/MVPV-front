@@ -37,6 +37,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
         console.error('Error en checkAuth:', error);
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('token');
+        sessionStorage.removeItem('userType');
       } finally {
         setIsLoading(false);
       }
@@ -46,12 +47,19 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
   const login = async (data: LoginRequest) => {
     try {
-      const response: AuthResponse = await authService.userLogin(data);
+      const response: AuthResponse = await authService.login(data);
       
       sessionStorage.setItem('token', response.token);
-      sessionStorage.setItem('user', JSON.stringify(response.user));
-      sessionStorage.setItem('role', response.role); // Guardamos el rol
-      setUser(response.user);
+      sessionStorage.setItem('userType', response.userType);
+      
+      // Guardar usuario según el tipo
+      if (response.userType === 'admin' && response.admin) {
+        sessionStorage.setItem('user', JSON.stringify(response.admin));
+        setUser(response.admin);
+      } else if (response.userType === 'user' && response.user) {
+        sessionStorage.setItem('user', JSON.stringify(response.user));
+        setUser(response.user);
+      }
     } catch (error) {
       throw error;
     }
@@ -62,9 +70,15 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
       const response: AuthResponse = await authService.userRegister(data);
       
       sessionStorage.setItem('token', response.token);
-      sessionStorage.setItem('user', JSON.stringify(response.user));
-      sessionStorage.setItem('role', response.role);
-      setUser(response.user);
+      sessionStorage.setItem('userType', response.userType);
+      
+      if (response.userType === 'admin' && response.admin) {
+        sessionStorage.setItem('user', JSON.stringify(response.admin));
+        setUser(response.admin);
+      } else if (response.userType === 'user' && response.user) {
+        sessionStorage.setItem('user', JSON.stringify(response.user));
+        setUser(response.user);
+      }
     } catch (error) {
       throw error;
     }
@@ -73,12 +87,11 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
   const logout = () => {
     authService.logout();
     sessionStorage.removeItem('user');
-    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('userType');
     setUser(null);
   };
 
-  // Determinar si es admin basado en el rol guardado
-  const isAdmin = sessionStorage.getItem('role') === 'admin';
+  const isAdmin = sessionStorage.getItem('userType') === 'admin';
 
   const value = useMemo(() => ({
     user,
