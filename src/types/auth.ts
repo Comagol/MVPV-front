@@ -16,7 +16,9 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
+  success: boolean;
+  userType: 'user' | 'admin';
   token: string;
-  user: User | Admin;
-  role: 'user' | 'admin';
+  user?: User;
+  admin?: Admin;
 }
