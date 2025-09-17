@@ -15,13 +15,8 @@ export interface RegisterRequest {
   password: string;
 }
 
-export interface AdminAuthResponse {
+export interface AuthResponse {
   token: string;
-  admin: Admin;
-}
-
-// Si también tienes usuarios, crea este tipo:
-export interface UserAuthResponse {
-  token: string;
-  user: User;
+  user: User | Admin;
+  role: 'user' | 'admin';
 }
