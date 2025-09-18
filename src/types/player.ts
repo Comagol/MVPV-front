@@ -11,3 +11,22 @@ export interface Player {
   camada: number;
   fechaRegistro: string;
 }
+
+export interface CreatePlayerRequest {
+  nombre: string;
+  apodo: string;
+  posicion: string;
+  imagen: string;
+  camiseta: number;
+  camada: number;
+}
+
+export interface UpdatePlayerRequest {
+  nombre?: string;
+  apodo?: string;
+  posicion?: string;
+  imagen?: string;
+  camiseta?: number;
+  camada?: number;
+  activo?: boolean;
+}
