@@ -3,14 +3,13 @@ import type {
   CreatePlayerRequest,
   UpdatePlayerRequest,
   PlayerResponse,
-  PlayerListResponse,
   PlayerPagination,
 } from '../types/index';
 
 export const playerService = {
   // Rutas protegidas por auth y ademas solo para admins
   //get all players
-  getAllPlayers: async (pagination?: PlayerPagination): Promise<PlayerListResponse> => {
+  getAllPlayers: async (pagination?: PlayerPagination): Promise<PlayerResponse[]> => {
     const response = await api.get('/players/', { params: pagination });
     return response.data;
   },

@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import VotePage from './pages/VotePage';
 import ThanksPage from './pages/ThanksPage';
+import PlayersPage from './pages/admin/PlayersPage'; // ← Agregar esta línea
 
 function App() {
   return(
@@ -27,6 +28,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ThanksPage/>
+              </ProtectedRoute>} />
+
+          {/* rutas de Admin */}
+          <Route 
+            path='/admin/players' 
+            element={
+              <ProtectedRoute>
+                <PlayersPage/>
               </ProtectedRoute>} />
 
           {/* ruta por defecto */}
