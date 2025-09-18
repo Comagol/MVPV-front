@@ -1,17 +1,4 @@
-//Creo el tipo de player
-
-export interface Player {
-  _id: string;
-  nombre: string;
-  apodo: string;
-  posicion: string;
-  imagen: string;
-  camiseta: number;
-  activo: boolean;
-  camada: number;
-  fechaRegistro: string;
-}
-
+// Tipos para crear un jugador
 export interface CreatePlayerRequest {
   nombre: string;
   apodo: string;
@@ -21,6 +8,7 @@ export interface CreatePlayerRequest {
   camada: number;
 }
 
+// Tipos para actualizar un jugador
 export interface UpdatePlayerRequest {
   nombre?: string;
   apodo?: string;
@@ -31,13 +19,36 @@ export interface UpdatePlayerRequest {
   activo?: boolean;
 }
 
+// Tipos para respuesta de un jugador
 export interface PlayerResponse {
-  _id: string;
+  id: string;
   nombre: string;
   apodo: string;
   posicion: string;
   imagen: string;
   camiseta: number;
-  activo: boolean;
   camada: number;
+  activo: boolean;
+}
+
+// Tipos para respuesta de la lista de jugadores
+export interface PlayerListResponse {
+  jugadores: PlayerResponse[];
+  total: number;
+  camada?: number;
+}
+
+// Tipos para respuesta de las estadisticas de un jugador
+export interface PlayerStatistics {
+  id: string;
+  nombre: string;
+  apodo: string;
+}
+
+// Tipos para paginacion de la lista de jugadores
+export interface PlayerPagination {
+  page: number;
+  limit: number;
+  sort?: 'nombre' | 'apodo' | 'camada';
+  order?: 'asc' | 'desc';
 }
