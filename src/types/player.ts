@@ -30,3 +30,14 @@ export interface UpdatePlayerRequest {
   camada?: number;
   activo?: boolean;
 }
+
+export interface PlayerResponse {
+  _id: string;
+  nombre: string;
+  apodo: string;
+  posicion: string;
+  imagen: string;
+  camiseta: number;
+  activo: boolean;
+  camada: number;
+}
