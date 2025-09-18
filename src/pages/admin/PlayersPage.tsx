@@ -5,6 +5,7 @@ import {
   Heading,
   Text,
   SimpleGrid,
+  Image,
 } from '@chakra-ui/react';
 import { playerService } from '../../services';
 import type { PlayerResponse } from '../../types';
@@ -66,14 +67,15 @@ const PlayersPage = () => {
               borderWidth="1px"
             >
               <VStack align="start" gap={2}>
-                <Text fontWeight="bold" fontSize="lg">
+                <Text fontWeight="bold" fontSize="lg" textAlign="center">
                   #{player.camiseta} - {player.nombre}
                 </Text>
                 <Text color="gray.600">"{player.apodo}"</Text>
-                <Text fontSize="sm">{player.posicion}</Text>
-                <Text fontSize="sm" color="gray.500">
+                <Text fontSize="sm" textAlign="center">{player.posicion}</Text>
+                <Text fontSize="sm" color="gray.500" textAlign="center">
                   Camada: {player.camada}
                 </Text>
+                <Image src={player.imagen} alt={player.nombre} boxSize="120px" mx="auto" mb={4} borderRadius="full" objectFit="cover" />
                 <Text fontSize="sm" color={player.activo ? "green.500" : "red.500"}>
                   {player.activo ? "Activo" : "Inactivo"}
                 </Text>
