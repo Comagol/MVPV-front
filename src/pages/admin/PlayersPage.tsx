@@ -188,7 +188,7 @@ const PlayersPage = () => {
             >
               <VStack align="start" gap={2}>
                 <Text fontWeight="bold" fontSize="lg" textAlign="center">
-                  #{player.camiseta} - {player.nombre}
+                  {player.camiseta} - {player.nombre}
                 </Text>
                 <Text color="gray.600">"{player.apodo}"</Text>
                 <Text fontSize="sm" textAlign="center">{player.posicion}</Text>
