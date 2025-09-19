@@ -1,4 +1,4 @@
-import { Box, VStack, Text, Button } from '@chakra-ui/react';
+import { Box, VStack, Text, Button, Image } from '@chakra-ui/react';
 import type { PlayerResponse } from '../../types';
 
 interface PlayerCardProps {
@@ -25,6 +25,7 @@ const PlayerCard = ({ player, onEdit, onDelete }: PlayerCardProps) => {
         <Text fontSize="sm" color="gray.500">
           Camada: {player.camada}
         </Text>
+        <Image src={player.imagen} alt={player.nombre} width={100} height={100} />
         <Text fontSize="sm" color={player.activo ? "green.500" : "red.500"}>
           {player.activo ? "Activo" : "Inactivo"}
         </Text>

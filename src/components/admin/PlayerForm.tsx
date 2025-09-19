@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { Box, VStack, Heading, Text, Input, Button, SimpleGrid } from '@chakra-ui/react';
-import type { CreatePlayerRequest, PlayerResponse } from '../../types';
+import { Box, Heading, Text, Input, Button, SimpleGrid } from '@chakra-ui/react';
+import type { CreatePlayerRequest, PlayerResponse, UpdatePlayerRequest } from '../../types';
 
 interface PlayerFormProps {
-  onSubmit: (data: CreatePlayerRequest) => Promise<void>;
+  onSubmit: (data: CreatePlayerRequest | UpdatePlayerRequest) => Promise<void>;
   onCancel?: () => void;
   initialData?: PlayerResponse | null;
   isEditing?: boolean;
 }
 
 const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: PlayerFormProps) => {
-  const [formData, setFormData] = useState<CreatePlayerRequest>({
+  const [formData, setFormData] = useState<CreatePlayerRequest | UpdatePlayerRequest>({
     nombre: initialData?.nombre || '',
     apodo: initialData?.apodo || '',
     posicion: initialData?.posicion || '',
@@ -33,7 +33,7 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      await onSubmit(formData as CreatePlayerRequest | UpdatePlayerRequest);
       // Limpiar formulario solo si no está editando
       if (!isEditing) {
         setFormData({
