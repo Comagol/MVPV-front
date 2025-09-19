@@ -96,85 +96,85 @@ const PlayersPage = () => {
         
         <Text>Total de jugadores: {players?.length || 0}</Text>
 
-        <Box bg="white" p={6} rounded="lg" shadow="md" borderWidth="1px">
-  <Heading size="md" mb={4}>Agregar Nuevo Jugador</Heading>
-  
-  <form onSubmit={handleSubmit}>
-    <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-      <Box>
-        <Text mb={2} fontWeight="medium">Nombre *</Text>
-        <Input
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleInputChange}
-          placeholder="Nombre del jugador"
-          required
-        />
-      </Box>
+        <Box bg="white" p={6} rounded="lg" shadow="md" borderWidth="1px" border="1px solid rgb(113, 122, 152)">
+        <Heading size="md" mb={4}>Agregar Nuevo Jugador</Heading>
+        
+        <form onSubmit={handleSubmit}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            <Box>
+              <Text mb={2} fontWeight="medium">Nombre *</Text>
+              <Input
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleInputChange}
+                placeholder="Nombre del jugador"
+                required
+              />
+            </Box>
 
-      <Box>
-        <Text mb={2} fontWeight="medium">Apodo *</Text>
-        <Input
-          name="apodo"
-          value={formData.apodo}
-          onChange={handleInputChange}
-          placeholder="Apodo del jugador"
-          required
-        />
-      </Box>
+            <Box>
+              <Text mb={2} fontWeight="medium">Apodo *</Text>
+              <Input
+                name="apodo"
+                value={formData.apodo}
+                onChange={handleInputChange}
+                placeholder="Apodo del jugador"
+                required
+              />
+            </Box>
 
-      <Box>
-        <Text mb={2} fontWeight="medium">Posición *</Text>
-        <Input
-          name="posicion"
-          value={formData.posicion}
-          onChange={handleInputChange}
-          placeholder="Ej: Fullback, Wing, etc."
-          required
-        />
-      </Box>
+            <Box>
+              <Text mb={2} fontWeight="medium">Posición *</Text>
+              <Input
+                name="posicion"
+                value={formData.posicion}
+                onChange={handleInputChange}
+                placeholder="Ej: Fullback, Wing, etc."
+                required
+              />
+            </Box>
 
-      <Box>
-        <Text mb={2} fontWeight="medium">URL de Imagen *</Text>
-        <Input
-          name="imagen"
-          value={formData.imagen}
-          onChange={handleInputChange}
-          placeholder="https://..."
-          required
-        />
-      </Box>
+            <Box>
+              <Text mb={2} fontWeight="medium">URL de Imagen *</Text>
+              <Input
+                name="imagen"
+                value={formData.imagen}
+                onChange={handleInputChange}
+                placeholder="https://..."
+                required
+              />
+            </Box>
 
-      <Box>
-        <Text mb={2} fontWeight="medium">Número de Camiseta *</Text>
-        <Input
-          name="camiseta"
-          type="number"
-          value={formData.camiseta}
-          onChange={handleInputChange}
-          placeholder="Número"
-          required
-        />
-      </Box>
+            <Box>
+              <Text mb={2} fontWeight="medium">Número de Camiseta *</Text>
+              <Input
+                name="camiseta"
+                type="number"
+                value={formData.camiseta}
+                onChange={handleInputChange}
+                placeholder="Número"
+                required
+              />
+            </Box>
 
-      <Box>
-        <Text mb={2} fontWeight="medium">Camada *</Text>
-        <Input
-          name="camada"
-          type="number"
-          value={formData.camada}
-          onChange={handleInputChange}
-          placeholder="Ej: 2020"
-          required
-        />
-      </Box>
-    </SimpleGrid>
+            <Box>
+              <Text mb={2} fontWeight="medium">Camada *</Text>
+              <Input
+                name="camada"
+                type="number"
+                value={formData.camada}
+                onChange={handleInputChange}
+                placeholder="Ej: 2020"
+                required
+              />
+            </Box>
+          </SimpleGrid>
 
-    <Button type="submit" colorScheme="blue" mt={4} size="lg">
-      Crear Jugador
-    </Button>
-  </form>
-</Box>
+          <Button type="submit" colorScheme="blue" mt={4} size="lg">
+            Crear Jugador
+          </Button>
+        </form>
+      </Box>
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>
           {players.map((player) => (
