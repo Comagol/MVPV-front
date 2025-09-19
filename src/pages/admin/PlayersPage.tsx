@@ -96,7 +96,7 @@ const PlayersPage = () => {
         
         <Text>Total de jugadores: {players?.length || 0}</Text>
 
-        <Box bg="white" p={6} rounded="lg" shadow="md" borderWidth="1px" border="1px solid rgb(113, 122, 152)">
+        <Box bg="white" p={6} rounded="lg" shadow="md" borderWidth="1px" border="2px solid rgb(113, 122, 152)">
         <Heading size="md" mb={4}>Agregar Nuevo Jugador</Heading>
         
         <form onSubmit={handleSubmit}>
