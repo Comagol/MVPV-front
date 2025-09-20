@@ -37,8 +37,20 @@ const PlayersPage = () => {
 
   const handleSubmitPlayer = async (formData: CreatePlayerRequest) => {
     if (editingPlayer) {
-      // Actualizar jugador existente
-      await playerService.updatePlayer(editingPlayer.id, formData);
+      const updatedFields: UpdatePlayerRequest = {};
+      if (formData.nombre && formData.nombre.trim() !== '') { updatedFields.nombre = formData.nombre;        
+      }
+      if (formData.apodo && formData.apodo.trim() !== '') { updatedFields.apodo = formData.apodo;        
+      }
+      if (formData.posicion && formData.posicion.trim() !== '') { updatedFields.posicion = formData.posicion;        
+      }
+      if (formData.imagen && formData.imagen.trim() !== '') { updatedFields.imagen = formData.imagen;        
+      }
+      if (formData.camiseta && formData.camiseta !== 0) { updatedFields.camiseta = formData.camiseta;        
+      }
+      if (formData.camada && formData.camada !== 0) { updatedFields.camada = formData.camada;        
+      }
+      await playerService.updatePlayer(editingPlayer.id, updatedFields);
       setEditingPlayer(null);
     } else {
       // Crear nuevo jugador

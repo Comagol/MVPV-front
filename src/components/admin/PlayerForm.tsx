@@ -67,7 +67,7 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
               value={formData.nombre}
               onChange={handleInputChange}
               placeholder="Nombre del jugador"
-              required
+              required={!isEditing}
               disabled={isSubmitting}
             />
           </Box>
@@ -79,7 +79,7 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
               value={formData.apodo}
               onChange={handleInputChange}
               placeholder="Apodo del jugador"
-              required
+              required={!isEditing}
               disabled={isSubmitting}
             />
           </Box>
@@ -91,7 +91,7 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
               value={formData.posicion}
               onChange={handleInputChange}
               placeholder="Ej: Fullback, Wing, etc."
-              required
+              required={!isEditing}
               disabled={isSubmitting}
             />
           </Box>
@@ -103,7 +103,7 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
               value={formData.imagen}
               onChange={handleInputChange}
               placeholder="https://..."
-              required
+              required={!isEditing}
               disabled={isSubmitting}
             />
           </Box>
@@ -116,7 +116,7 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
               value={formData.camiseta}
               onChange={handleInputChange}
               placeholder="Número"
-              required
+              required={!isEditing}
               disabled={isSubmitting}
             />
           </Box>
@@ -129,7 +129,7 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
               value={formData.camada}
               onChange={handleInputChange}
               placeholder="Ej: 2020"
-              required
+              required={!isEditing}
               disabled={isSubmitting}
             />
           </Box>
