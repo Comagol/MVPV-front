@@ -35,17 +35,16 @@ const PlayersPage = () => {
     }
   };
 
-  const handleCreatePlayer = async (formData: CreatePlayerRequest) => {
-    await playerService.createPlayer(formData);
-    loadPlayers();
-  };
-
-  const handleUpdatePlayer = async (formData: UpdatePlayerRequest) => {
+  const handleSubmitPlayer = async (formData: CreatePlayerRequest) => {
     if (editingPlayer) {
+      // Actualizar jugador existente
       await playerService.updatePlayer(editingPlayer.id, formData);
       setEditingPlayer(null);
-      loadPlayers();
+    } else {
+      // Crear nuevo jugador
+      await playerService.createPlayer(formData);
     }
+    loadPlayers();
   };
 
   const handleEditPlayer = (player: PlayerResponse) => {
@@ -84,7 +83,7 @@ const PlayersPage = () => {
         
         {/* Formulario */}
         <PlayerForm
-          onSubmit={editingPlayer ? handleUpdatePlayer : handleCreatePlayer}
+          onSubmit={handleSubmitPlayer}
           onCancel={editingPlayer ? handleCancelEdit : undefined}
           initialData={editingPlayer}
           isEditing={!!editingPlayer}
