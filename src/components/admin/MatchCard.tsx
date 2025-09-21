@@ -1,4 +1,4 @@
-import { Box, VStack, Text, Button, HStack, SimpleGrid, Image } from '@chakra-ui/react';
+import { Box, VStack, Text, Button, HStack, Image } from '@chakra-ui/react';
 import type { MatchResponse } from '../../types';
 
 interface MatchCardProps {
