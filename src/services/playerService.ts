@@ -36,4 +36,10 @@ export const playerService = {
   deletePlayer: async (id: string): Promise<void> => {
     await api.delete(`/players/${id}`);
   },
+
+  //toggle player active
+  togglePlayerActive: async (id: string, activo: boolean): Promise<PlayerResponse> => {
+    const response = await api.put(`/players/${id}`, { activo: !activo });
+    return response.data;
+  },
 };

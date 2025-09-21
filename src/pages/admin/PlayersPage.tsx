@@ -26,7 +26,6 @@ const PlayersPage = () => {
       setIsLoading(true);
       const data = await playerService.getAllPlayers();
       setPlayers(data);
-      console.log('Jugadores cargados:', data);
     } catch (err: any) {
       console.error('Error cargando jugadores:', err);
       setError('Error al cargar jugadores');
@@ -53,7 +52,6 @@ const PlayersPage = () => {
       await playerService.updatePlayer(editingPlayer.id, updatedFields);
       setEditingPlayer(null);
     } else {
-      // Crear nuevo jugador
       await playerService.createPlayer(formData);
     }
     loadPlayers();
@@ -70,6 +68,16 @@ const PlayersPage = () => {
   const handleDeletePlayer = async (id: string) => {
     await playerService.deletePlayer(id);
     loadPlayers();
+  };
+
+  const handleToggleActive = async (id: string, currentStatus: boolean) => {
+    try {
+      await playerService.togglePlayerActive(id, currentStatus);
+      loadPlayers();
+    } catch (err: any) {
+      console.error('Error cambiando estado del jugador:', err);
+      setError('Error al cambiar estado del jugador');
+    }
   };
 
   if (isLoading) {
@@ -93,7 +101,6 @@ const PlayersPage = () => {
       <VStack gap={6} align="stretch">
         <Heading size="lg">Gestión de Jugadores</Heading>
         
-        {/* Formulario */}
         <PlayerForm
           onSubmit={handleSubmitPlayer}
           onCancel={editingPlayer ? handleCancelEdit : undefined}
@@ -101,10 +108,9 @@ const PlayersPage = () => {
           isEditing={!!editingPlayer}
         />
         
-        {/* Lista de jugadores */}
         <Box>
           <Text mb={4} fontSize="lg" fontWeight="semibold">
-            Jugadores Registrados ({players?.length || 0})
+            Jugadores Registrados ({players.length})
           </Text>
           
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>
@@ -114,6 +120,7 @@ const PlayersPage = () => {
                 player={player}
                 onEdit={handleEditPlayer}
                 onDelete={handleDeletePlayer}
+                onToggleActive={handleToggleActive}
               />
             ))}
           </SimpleGrid>

@@ -1,13 +1,14 @@
-import { Box, VStack, Text, Button, Image } from '@chakra-ui/react';
+import { Box, VStack, Text, Button, Image, HStack } from '@chakra-ui/react';
 import type { PlayerResponse } from '../../types';
 
 interface PlayerCardProps {
   player: PlayerResponse;
   onEdit: (player: PlayerResponse) => void;
   onDelete: (id: string) => void;
+  onToggleActive: (id: string, currentStatus: boolean) => void;
 }
 
-const PlayerCard = ({ player, onEdit, onDelete }: PlayerCardProps) => {
+const PlayerCard = ({ player, onEdit, onDelete, onToggleActive }: PlayerCardProps) => {
   return (
     <Box 
       bg="white"
@@ -38,14 +39,25 @@ const PlayerCard = ({ player, onEdit, onDelete }: PlayerCardProps) => {
         >
           Editar
         </Button>
-        <Button
-          size="sm"
-          colorScheme="red"
-          mt={2}
-          onClick={() => onDelete(player.id)}
-        >
-          Eliminar
-        </Button>
+        <HStack w="full" gap={2}>
+            <Button
+              size="sm"
+              colorScheme={player.activo ? "orange" : "green"}
+              flex="1"
+              onClick={() => onToggleActive(player.id, player.activo)}
+            >
+              {player.activo ? "Desactivar" : "Activar"}
+            </Button>
+            
+            <Button
+              size="sm"
+              colorScheme="red"
+              flex="1"
+              onClick={() => onDelete(player.id)}
+            >
+              Eliminar
+            </Button>
+          </HStack>
       </VStack>
     </Box>
   );
