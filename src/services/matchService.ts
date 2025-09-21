@@ -12,7 +12,7 @@ export const matchService = {
   //get partidos activos
   getActiveMatches: async (): Promise<MatchResponse[]> => {
     const response = await api.get('/matches/active/matches');
-    return response.data.match;
+    return response.data;
   },
 
   //Get match By ID
