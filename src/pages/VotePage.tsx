@@ -27,7 +27,7 @@ const VotePage = () => {
   const navigate = useNavigate();
 
   // Obtener el partido activo (asumimos que hay solo uno)
-  const activeMatch = activeMatches[0];
+  const activeMatch = activeMatches?.[0] || null;
 
   useEffect(() => {
     const checkVotingStatus = async () => {
