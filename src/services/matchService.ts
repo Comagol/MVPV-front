@@ -44,6 +44,11 @@ export const matchService = {
   finishMatch: async (id: string): Promise<MatchResponse> => {
     const response = await api.put(`/matches/${id}/finish`);
     return response.data.match;
-  }
+  },
+
+  //delete match
+  deleteMatch: async (id: string): Promise<void> => {
+    await api.delete(`/matches/${id}`);
+  },
 
 };
