@@ -14,13 +14,13 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useMatches } from '../hooks/useMatches';
 import { useVoting } from '../hooks/useVoting';
-import type { Player } from '../types';
+import type { PlayerResponse } from '../types';
 
 const VotePage = () => {
   const { user, logout } = useAuth();
   const { activeMatches, isLoading: matchesLoading } = useMatches();
   const { createVote, validateVote, isLoading: votingLoading } = useVoting();
-  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<PlayerResponse | null>(null);
   const [canVote, setCanVote] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -33,7 +33,7 @@ const VotePage = () => {
     const checkVotingStatus = async () => {
       if (activeMatch) {
         try {
-          const canVoteResult = await validateVote(activeMatch._id);
+          const canVoteResult = await validateVote(activeMatch.id);
           setCanVote(canVoteResult);
         } catch (err) {
           setError('Error al verificar estado de votación');
@@ -47,7 +47,7 @@ const VotePage = () => {
     if (!selectedPlayer || !activeMatch) return;
 
     try {
-      await createVote(selectedPlayer._id, activeMatch._id);
+      await createVote(selectedPlayer.id, activeMatch.id);
       navigate('/thanks');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al votar');
@@ -112,12 +112,12 @@ const VotePage = () => {
 
         {/* Players Grid */}
         <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6} w="full">
-          {activeMatch.jugadores.map((player) => (
+          {activeMatch.jugadores.map((player: PlayerResponse) => (
             <Box
-              key={player._id}
+              key={player.id}
               cursor="pointer"
-              border={selectedPlayer?._id === player._id ? "2px solid" : "1px solid"}
-              borderColor={selectedPlayer?._id === player._id ? "blue.500" : "gray.200"}
+              border={selectedPlayer?.id === player.id ? "2px solid" : "1px solid"}
+              borderColor={selectedPlayer?.id === player.id ? "blue.500" : "gray.200"}
               onClick={() => setSelectedPlayer(player)}
               _hover={{ shadow: "md" }}
               p={6}
