@@ -14,30 +14,30 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useMatches } from '../hooks/useMatches';
 import { useVoting } from '../hooks/useVoting';
-import type { Player } from '../types';
+import type { PlayerResponse } from '../types';
 
 const ThanksPage = () => {
   const { user, logout } = useAuth();
   const { activeMatches, isLoading: matchesLoading } = useMatches();
   const { getMatchStats, getMatchWinner, getTotalVotes, isLoading: votingLoading } = useVoting();
   const [matchStats, setMatchStats] = useState<any>(null);
-  const [winner, setWinner] = useState<Player | null>(null);
+  const [winner, setWinner] = useState<PlayerResponse | null>(null);
   const [totalVotes, setTotalVotes] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   
   const navigate = useNavigate();
 
   // Obtener el partido activo
-  const activeMatch = activeMatches[0];
+  const activeMatch = activeMatches?.[0] || null;
 
   useEffect(() => {
     const loadVotingData = async () => {
       if (activeMatch) {
         try {
           const [stats, winnerData, total] = await Promise.all([
-            getMatchStats(activeMatch._id),
-            getMatchWinner(activeMatch._id),
-            getTotalVotes(activeMatch._id)
+            getMatchStats(activeMatch.id),
+            getMatchWinner(activeMatch.id),
+            getTotalVotes(activeMatch.id)
           ]);
           
           setMatchStats(stats);
