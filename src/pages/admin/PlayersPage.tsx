@@ -35,26 +35,42 @@ const PlayersPage = () => {
   };
 
   const handleSubmitPlayer = async (formData: CreatePlayerRequest) => {
-    if (editingPlayer) {
-      const updatedFields: UpdatePlayerRequest = {};
-      if (formData.nombre && formData.nombre.trim() !== '') { updatedFields.nombre = formData.nombre;        
+    try {
+      if (editingPlayer) {
+        // Modo edición - solo campos modificados
+        const updatedFields: UpdatePlayerRequest = {};
+        
+        if (formData.nombre && formData.nombre.trim() !== '') {
+          updatedFields.nombre = formData.nombre;
+        }
+        if (formData.apodo && formData.apodo.trim() !== '') {
+          updatedFields.apodo = formData.apodo;
+        }
+        if (formData.posicion && formData.posicion.trim() !== '') {
+          updatedFields.posicion = formData.posicion;
+        }
+        if (formData.imagen && formData.imagen.trim() !== '') {
+          updatedFields.imagen = formData.imagen;
+        }
+        if (formData.camiseta && formData.camiseta !== 0) {
+          updatedFields.camiseta = formData.camiseta;
+        }
+        if (formData.camada && formData.camada !== 0) {
+          updatedFields.camada = formData.camada;
+        }
+        
+        await playerService.updatePlayer(editingPlayer.id, updatedFields);
+        setEditingPlayer(null);
+      } else {
+        // Modo creación - todos los campos
+        console.log('Datos para crear:', formData);
+        await playerService.createPlayer(formData);
       }
-      if (formData.apodo && formData.apodo.trim() !== '') { updatedFields.apodo = formData.apodo;        
-      }
-      if (formData.posicion && formData.posicion.trim() !== '') { updatedFields.posicion = formData.posicion;        
-      }
-      if (formData.imagen && formData.imagen.trim() !== '') { updatedFields.imagen = formData.imagen;        
-      }
-      if (formData.camiseta && formData.camiseta !== 0) { updatedFields.camiseta = formData.camiseta;        
-      }
-      if (formData.camada && formData.camada !== 0) { updatedFields.camada = formData.camada;        
-      }
-      await playerService.updatePlayer(editingPlayer.id, updatedFields);
-      setEditingPlayer(null);
-    } else {
-      await playerService.createPlayer(formData);
+      loadPlayers();
+    } catch (error) {
+      console.error('Error en handleSubmitPlayer:', error);
+      setError('Error al procesar jugador');
     }
-    loadPlayers();
   };
 
   const handleEditPlayer = (player: PlayerResponse) => {
@@ -108,9 +124,10 @@ const PlayersPage = () => {
           isEditing={!!editingPlayer}
         />
         
+        {/* Lista de jugadores */}
         <Box>
           <Text mb={4} fontSize="lg" fontWeight="semibold">
-            Jugadores Registrados ({players.length})
+            Jugadores Registrados ({players?.length || 0})
           </Text>
           
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>

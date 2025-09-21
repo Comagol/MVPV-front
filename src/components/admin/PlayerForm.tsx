@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Heading, Text, Input, Button, SimpleGrid } from '@chakra-ui/react';
-import type { CreatePlayerRequest, PlayerResponse, UpdatePlayerRequest } from '../../types';
+import type { CreatePlayerRequest, PlayerResponse } from '../../types';
 
 interface PlayerFormProps {
   onSubmit: (data: CreatePlayerRequest) => Promise<void>;
@@ -10,7 +10,7 @@ interface PlayerFormProps {
 }
 
 const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: PlayerFormProps) => {
-  const [formData, setFormData] = useState<CreatePlayerRequest | UpdatePlayerRequest>({
+  const [formData, setFormData] = useState<CreatePlayerRequest>({
     nombre: initialData?.nombre || '',
     apodo: initialData?.apodo || '',
     posicion: initialData?.posicion || '',
