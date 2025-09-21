@@ -62,7 +62,6 @@ const PlayersPage = () => {
         await playerService.updatePlayer(editingPlayer.id, updatedFields);
         setEditingPlayer(null);
       } else {
-        // Modo creación - todos los campos
         console.log('Datos para crear:', formData);
         await playerService.createPlayer(formData);
       }
