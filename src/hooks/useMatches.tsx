@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { matchService } from "../services";
-import type { Match } from "../types";
+import type { MatchResponse } from "../types";
 
 export const useMatches = () => {
-  const [matches, setMatches] = useState<Match[]>([]);
-  const [activeMatches, setActiveMatches] = useState<Match[]>([]);
+  const [matches, setMatches] = useState<MatchResponse[]>([]);
+  const [activeMatches, setActiveMatches] = useState<MatchResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

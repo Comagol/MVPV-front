@@ -68,8 +68,7 @@ const MatchesPage = () => {
 
   const handleDeleteMatch = async (id: string) => {
     try {
-      // Aquí necesitarías agregar el método deleteMatch al service
-      // await matchService.deleteMatch(id);
+      await matchService.deleteMatch(id);
       console.log('Eliminar partido:', id);
       loadData();
     } catch (err: any) {
@@ -130,11 +129,11 @@ const MatchesPage = () => {
         {/* Lista de partidos */}
         <Box>
           <Text mb={4} fontSize="lg" fontWeight="semibold">
-            Partidos Registrados ({matches?.length || 0})
+            Partidos Registrados ({(matches || []).length})
           </Text>
           
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>
-            {matches.map((match) => (
+            {(matches || []).map((match) => (
               <MatchCard
                 key={match.id}
                 match={match}
@@ -146,7 +145,7 @@ const MatchesPage = () => {
             ))}
           </SimpleGrid>
 
-          {matches.length === 0 && (
+          {(matches || []).length === 0 && (
             <Text textAlign="center" color="gray.500">
               No hay partidos registrados
             </Text>

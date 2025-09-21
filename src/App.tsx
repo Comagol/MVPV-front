@@ -6,7 +6,7 @@ import RegisterPage from './pages/RegisterPage';
 import VotePage from './pages/VotePage';
 import ThanksPage from './pages/ThanksPage';
 import PlayersPage from './pages/admin/PlayersPage';
-import MatchPage from './pages/admin/MatchesPage';
+import MatchesPage from './pages/admin/MatchesPage';
 
 function App() {
   return(
@@ -43,7 +43,7 @@ function App() {
             path='/admin/matches' 
             element={
               <ProtectedRoute>
-                <MatchPage/>
+                <MatchesPage/>
               </ProtectedRoute>} />
 
           {/* ruta por defecto */}
