@@ -47,15 +47,6 @@ const Navbar = () => {
                 variant="ghost"
                 color="white"
                 _hover={{ bg: "blue.500" }}
-                onClick={() => navigate('/admin/matches/create')}
-              >
-                Crear Partido
-              </Button>
-              
-              <Button
-                variant="ghost"
-                color="white"
-                _hover={{ bg: "blue.500" }}
                 onClick={() => navigate('/admin/matches')}
               >
                 Gestionar Partidos
