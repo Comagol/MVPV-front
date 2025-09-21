@@ -6,7 +6,7 @@ export const matchService = {
   //get all matches
   getAllMatches: async (): Promise<MatchResponse[]> => {
     const response = await api.get('/matches/');
-    return response.data.match;
+    return response.data;
   },
 
   //get partidos activos

@@ -25,15 +25,20 @@ const MatchesPage = () => {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      // Cargar partidos y jugadores en paralelo
+      console.log('🔍 Iniciando carga de datos...');
+      
       const [matchesData, playersData] = await Promise.all([
         matchService.getAllMatches(),
         playerService.getAllPlayers()
       ]);
+      
+      console.log('📊 Matches recibidos:', matchesData);
+      console.log('👥 Players recibidos:', playersData);
+      
       setMatches(matchesData);
       setPlayers(playersData);
     } catch (err: any) {
-      console.error('Error cargando datos:', err);
+      console.error('❌ Error cargando datos:', err);
       setError('Error al cargar datos');
     } finally {
       setIsLoading(false);
