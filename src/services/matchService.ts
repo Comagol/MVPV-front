@@ -29,9 +29,9 @@ export const matchService = {
   },
 
   //update Match
-  updateMatch: async (id: string, matchData: Partial<MatchResponse>): Promise<MatchResponse> => {
+  updateMatch: async (id: string, matchData: Partial<CreateMatchRequest>): Promise<MatchResponse> => {
     const response = await api.put(`/matches/${id}`, matchData);
-    return response.data.match;
+    return response.data;
   },
 
   //start match
