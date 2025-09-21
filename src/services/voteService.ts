@@ -12,7 +12,7 @@ export const voteService = {
   //get ganador del partido
   getMatchWinner: async (matchId: string): Promise<any> => {
     const response = await api.get(`/votes/${matchId}/winner`);
-    response.data;
+    return response.data;
   },
 
   //Get total votos

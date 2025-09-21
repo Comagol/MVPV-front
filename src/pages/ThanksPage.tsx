@@ -49,7 +49,7 @@ const ThanksPage = () => {
       }
     };
     loadVotingData();
-  }, [activeMatch, getMatchStats, getMatchWinner, getTotalVotes]);
+  }, [activeMatch?.id]);
 
   if (matchesLoading || votingLoading) {
     return (
