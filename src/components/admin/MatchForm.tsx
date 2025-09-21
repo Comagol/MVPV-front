@@ -43,7 +43,7 @@ const MatchForm = ({ onSubmit, onCancel, isEditing = false, players }: MatchForm
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'fecha' ? new Date(value) : value
+      [name]: name === 'fecha' ? parseDateFromInput(value) : value
     }));
   };
 
@@ -88,6 +88,21 @@ const MatchForm = ({ onSubmit, onCancel, isEditing = false, players }: MatchForm
     }
   };
 
+  const formatDateForInput = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+  
+  const parseDateFromInput = (dateString: string): Date => {
+    // El input datetime-local devuelve formato: "YYYY-MM-DDTHH:mm"
+    return new Date(dateString);
+  };
+
   return (
     <Box bg="white" p={6} rounded="lg" shadow="md" borderWidth="1px">
       <Heading size="md" mb={4}>
@@ -117,7 +132,7 @@ const MatchForm = ({ onSubmit, onCancel, isEditing = false, players }: MatchForm
               <Input
                 name="fecha"
                 type="datetime-local"
-                value={formData.fecha.toISOString().slice(0, 16)}
+                value={formatDateForInput(formData.fecha)}
                 onChange={handleInputChange}
                 required
                 disabled={isSubmitting}
