@@ -163,7 +163,7 @@ const ThanksPage = () => {
                     #{index + 1}
                   </Badge>
                   <Image
-                    src={player.playerImage}
+                    src={player.playerImagen}
                     alt={player.playerName}
                     boxSize="80px"
                     mx="auto"
@@ -194,7 +194,7 @@ const ThanksPage = () => {
             </Heading>
             <Box textAlign="center">
               <Image
-                src={winner.playerImage}
+                src={winner.playerImagen}
                 alt={winner.playerName}
                 boxSize="120px"
                 mx="auto"
