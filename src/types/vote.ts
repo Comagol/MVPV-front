@@ -18,3 +18,16 @@ export interface VoteState {
   error: string | null;
   vote: VoteResponse | null;
 }
+
+export interface VoteStatistics {
+  playerId: string;
+  playerName: string;
+  totalVotos: number;
+  porcentaje: number;
+}
+
+export interface VoteValidationResponse {
+  puedeVotar: boolean;
+  razon?: string;
+  tiempoRestante?: number;
+}
