@@ -14,16 +14,17 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useMatches } from '../hooks/useMatches';
 import { useVoting } from '../hooks/useVoting';
-import type { PlayerResponse } from '../types';
+import type { VoteStatistics } from '../types/vote';
 
 const ThanksPage = () => {
   const { user, logout } = useAuth();
   const { activeMatches, isLoading: matchesLoading } = useMatches();
-  const { getMatchStats, getMatchWinner, getTotalVotes, isLoading: votingLoading } = useVoting();
-  const [matchStats, setMatchStats] = useState<any>(null);
-  const [winner, setWinner] = useState<PlayerResponse | null>(null);
+  const { getMatchStats, getTotalVotes, isLoading: votingLoading } = useVoting();
+  const [matchStats, setMatchStats] = useState<VoteStatistics[]>([]);
+  const [winner, setWinner] = useState<VoteStatistics | null>(null);
   const [totalVotes, setTotalVotes] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
   
   const navigate = useNavigate();
 
@@ -34,21 +35,44 @@ const ThanksPage = () => {
     const loadVotingData = async () => {
       if (activeMatch) {
         try {
-          const [stats, winnerData, total] = await Promise.all([
+          console.log('🔍 Iniciando carga de datos para match:', activeMatch.id);
+          
+          // Solo cargar stats (que funciona) y total votes
+          const [stats, total] = await Promise.all([
             getMatchStats(activeMatch.id),
-            getMatchWinner(activeMatch.id),
             getTotalVotes(activeMatch.id)
           ]);
           
+          console.log('�� Stats del backend:', stats);
+          console.log('🔍 Total votos del backend:', total);
+          
           setMatchStats(stats);
-          setWinner(winnerData);
           setTotalVotes(total);
+          
+          // Calcular el ganador desde las stats en lugar de usar el endpoint
+          if (stats.length > 0) {
+            const winner = stats.reduce((prev, current) => 
+              (prev.totalVotos > current.totalVotos) ? prev : current
+            );
+            setWinner(winner);
+            console.log('🔍 Ganador calculado:', winner);
+          }
+          
+          setDataLoaded(true);
+          console.log('�� Estado actualizado - matchStats:', stats);
+          console.log('🔍 Estado actualizado - totalVotes:', total);
+          
         } catch (err) {
+          console.error('❌ Error al cargar datos de votación:', err);
           setError('Error al cargar datos de votación');
+          setDataLoaded(true);
         }
       }
     };
-    loadVotingData();
+    
+    // Esperar un poco antes de cargar datos para dar tiempo al backend
+    const timer = setTimeout(loadVotingData, 1000);
+    return () => clearTimeout(timer);
   }, [activeMatch?.id]);
 
   if (matchesLoading || votingLoading) {
@@ -86,7 +110,7 @@ const ThanksPage = () => {
           </Text>
         </Box>
 
-        {/* Error message */}
+        {/* Error message - solo mostrar si es un error crítico */}
         {error && (
           <Box p={4} bg="red.100" color="red.700" rounded="md" w="full">
             {error}
@@ -100,9 +124,9 @@ const ThanksPage = () => {
           </Heading>
           <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap={4}>
             <Box textAlign="center" p={4} bg="blue.50" rounded="md">
-              <Text fontSize="2xl" fontWeight="bold" color="blue.600">
-                {totalVotes}
-              </Text>
+            <Text fontSize="2xl" fontWeight="bold" color="blue.600">
+              {dataLoaded ? (typeof totalVotes === 'object' ? (totalVotes as { totalVotes: number }).totalVotes : totalVotes) : '...'}
+            </Text>
               <Text color="gray.600">Total de Votos</Text>
             </Box>
             <Box textAlign="center" p={4} bg="green.50" rounded="md">
@@ -114,33 +138,33 @@ const ThanksPage = () => {
           </Grid>
         </Box>
 
-        {/* Top 3 jugadores */}
-        {matchStats && (
+        {/* Resultados de votación - mostrar SIEMPRE que haya datos */}
+        {dataLoaded && matchStats.length > 0 && (
           <Box w="full" bg="white" p={6} rounded="lg" shadow="md">
             <Heading size="md" mb={4} textAlign="center">
-              Top 3 Jugadores
+              Resultados de Votación
             </Heading>
             <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={4}>
-              {matchStats.slice(0, 3).map((player: any, index: number) => (
+              {matchStats.map((player: VoteStatistics, index: number) => (
                 <Box
-                  key={player._id}
+                  key={player.playerId}
                   p={4}
-                  bg={index === 0 ? "yellow.50" : index === 1 ? "gray.50" : "orange.50"}
+                  bg={index === 0 ? "yellow.50" : "gray.50"}
                   rounded="lg"
                   border={index === 0 ? "2px solid" : "1px solid"}
                   borderColor={index === 0 ? "yellow.400" : "gray.200"}
                   textAlign="center"
                 >
                   <Badge
-                    colorScheme={index === 0 ? "yellow" : index === 1 ? "gray" : "orange"}
+                    colorScheme={index === 0 ? "yellow" : "gray"}
                     mb={2}
                     fontSize="sm"
                   >
                     #{index + 1}
                   </Badge>
                   <Image
-                    src={player.imagen || "/placeholder-player.jpg"}
-                    alt={player.nombre}
+                    src={player.playerImage}
+                    alt={player.playerName}
                     boxSize="80px"
                     mx="auto"
                     mb={3}
@@ -148,13 +172,13 @@ const ThanksPage = () => {
                     objectFit="cover"
                   />
                   <Heading size="sm" mb={1}>
-                    {player.nombre}
+                    {player.playerName}
                   </Heading>
-                  <Text color="gray.600" fontSize="sm" mb={2}>
-                    {player.apodo}
-                  </Text>
                   <Text fontSize="lg" fontWeight="bold" color="blue.600">
-                    {player.votes || 0} votos
+                    {player.totalVotos} votos
+                  </Text>
+                  <Text fontSize="sm" color="gray.500">
+                    {player.porcentaje.toFixed(1)}%
                   </Text>
                 </Box>
               ))}
@@ -162,16 +186,16 @@ const ThanksPage = () => {
           </Box>
         )}
 
-        {/* Ganador destacado */}
-        {winner && (
+        {/* Ganador destacado - solo mostrar si hay ganador */}
+        {dataLoaded && winner && (
           <Box w="full" bg="green.50" p={6} rounded="lg" shadow="md" border="2px solid" borderColor="green.200">
             <Heading size="lg" mb={4} textAlign="center" color="green.700">
               🏆 Jugador del Partido ��
             </Heading>
             <Box textAlign="center">
               <Image
-                src={winner.imagen || "/placeholder-player.jpg"}
-                alt={winner.nombre}
+                src={winner.playerImage}
+                alt={winner.playerName}
                 boxSize="120px"
                 mx="auto"
                 mb={4}
@@ -179,18 +203,21 @@ const ThanksPage = () => {
                 objectFit="cover"
               />
               <Heading size="md" mb={2} color="green.700">
-                {winner.nombre}
+                {winner.playerName}
               </Heading>
-              <Text color="gray.600" mb={2}>
-                {winner.apodo}
-              </Text>
-              <Badge colorScheme="green" mb={2}>
-                {winner.posicion}
-              </Badge>
-              <Text fontSize="lg" fontWeight="bold" color="green.600">
-                Camiseta #{winner.camiseta}
+              <Text fontSize="lg" fontWeight="bold" color="green.600" mb={2}>
+                {winner.totalVotos} votos ({winner.porcentaje.toFixed(1)}%)
               </Text>
             </Box>
+          </Box>
+        )}
+
+        {/* Mensaje si no hay votos aún */}
+        {dataLoaded && matchStats.length === 0 && (
+          <Box w="full" bg="yellow.50" p={6} rounded="lg" border="1px solid" borderColor="yellow.200">
+            <Text textAlign="center" color="yellow.800">
+              Los resultados se mostrarán cuando haya más votos registrados.
+            </Text>
           </Box>
         )}
 

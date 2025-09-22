@@ -22,6 +22,7 @@ export interface VoteState {
 export interface VoteStatistics {
   playerId: string;
   playerName: string;
+  playerImage: string;
   totalVotos: number;
   porcentaje: number;
 }
