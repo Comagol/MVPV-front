@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { voteService  } from '../services';
-import type { Vote } from '../types';
+import type { VoteResponse } from '../types';
 
 export const useVoting = () => {
-  const [ votes, setVotes ] = useState<Vote[]>([]);
+  const [ votes, setVotes ] = useState<VoteResponse[]>([]);
   const [ isLoading, setIsLoading ] = useState(false);
   const [ error, setError ] = useState<string | null>(null);
 
