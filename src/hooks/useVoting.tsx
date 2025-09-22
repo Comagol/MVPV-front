@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { voteService  } from '../services';
-import type { VoteResponse } from '../types';
+import type { VoteResponse, VoteStatistics, VoteValidationResponse } from '../types';
 
 export const useVoting = () => {
   const [ votes, setVotes ] = useState<VoteResponse[]>([]);
@@ -25,17 +25,19 @@ export const useVoting = () => {
   };
 
   //valido si puede votar
-  const validateVote = async (matchId: string) => {
+  const validateVote = async (matchId: string): Promise<VoteValidationResponse> => {
     try{
       return await voteService.validateVote(matchId);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al validar voto');
-      return false;
+      return { puedeVotar: false,
+        razon: 'Error al validar voto',
+       };
     }
   };
 
   // obtener estadisticas del partido
-  const getMatchStats = async (matchId: string) => {
+  const getMatchStats = async (matchId: string): Promise<VoteStatistics[]> => {
     setIsLoading(true);
     setError(null);
     try {
@@ -49,7 +51,7 @@ export const useVoting = () => {
   };
 
   //obtener ganador de un partido
-  const getMatchWinner = async (matchId: string) => {
+  const getMatchWinner = async (matchId: string): Promise<VoteStatistics> => {
     setIsLoading(true);
     setError(null);
 
@@ -64,7 +66,7 @@ export const useVoting = () => {
   }
 
   //obtener total de votos
-  const getTotalVotes = async (matchId: string) => {
+  const getTotalVotes = async (matchId: string): Promise<number> => {
     try {
       return await voteService.getTotalVotes(matchId);
     } catch (err: any) {
