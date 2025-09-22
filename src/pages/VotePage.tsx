@@ -15,26 +15,27 @@ import { useAuth } from '../hooks/useAuth';
 import { useMatches } from '../hooks/useMatches';
 import { useVoting } from '../hooks/useVoting';
 import type { PlayerResponse } from '../types';
+import type { VoteValidationResponse } from '../types';
 
 const VotePage = () => {
   const { user, logout } = useAuth();
   const { activeMatches, isLoading: matchesLoading } = useMatches();
   const { createVote, validateVote, isLoading: votingLoading } = useVoting();
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerResponse | null>(null);
-  const [canVote, setCanVote] = useState<boolean>(false);
+  const [voteValidation, setVoteValidation] = useState<VoteValidationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   
   const navigate = useNavigate();
 
-  // Obtener el partido activo (asumimos que hay solo uno)
+  // Obtener el partido activo
   const activeMatch = activeMatches?.[0] || null;
 
   useEffect(() => {
     const checkVotingStatus = async () => {
       if (activeMatch) {
         try {
-          const canVoteResult = await validateVote(activeMatch.id);
-          setCanVote(canVoteResult);
+          const validationResult = await validateVote(activeMatch.id);
+          setVoteValidation(validationResult);
         } catch (err) {
           setError('Error al verificar estado de votación');
         }
@@ -73,12 +74,23 @@ const VotePage = () => {
     );
   }
 
-  if (!canVote) {
+  if (voteValidation && !voteValidation.puedeVotar) {
     return (
       <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
-        <VStack gap={4}>
-          <Heading>Ya has votado</Heading>
-          <Text>Ya has realizado tu voto para este partido.</Text>
+        <VStack gap={4} maxW="md">
+          <Box p={6} bg="orange.100" color="orange.800" rounded="lg" w="full" textAlign="center">
+            <Heading size="md" mb={2}>No puedes votar</Heading>
+            <Text>
+              {voteValidation.razon || 'Ya has realizado tu voto para este partido.'}
+            </Text>
+          </Box>
+          
+          {voteValidation.tiempoRestante && (
+            <Text fontSize="sm" color="gray.600">
+              Tiempo restante: {Math.floor(voteValidation.tiempoRestante / 60)} minutos
+            </Text>
+          )}
+          
           <Button onClick={() => navigate('/thanks')}>
             Ver resultados
           </Button>
