@@ -1,16 +1,16 @@
 import api from './api';
-import type { Vote } from '../types/index';
+import type { CreateVoteRequest, VoteResponse, VoteStatistics, VoteValidationResponse } from '../types/index';
 
 export const voteService = {
   //Rutas Publicas
   //get match stats
-  getMatchStats: async (matchId: string): Promise<Vote[]> => {
+  getMatchStats: async (matchId: string): Promise<VoteStatistics[]> => {
     const response = await api.get(`/votes/${matchId}/stats`);
     return response.data;
   },
 
   //get ganador del partido
-  getMatchWinner: async (matchId: string): Promise<any> => {
+  getMatchWinner: async (matchId: string): Promise<VoteStatistics> => {
     const response = await api.get(`/votes/${matchId}/winner`);
     return response.data;
   },
@@ -23,14 +23,19 @@ export const voteService = {
 
   //Rutas protegidas (usuario autenticado)
   //Validar voto
-  validateVote: async (matchId: string): Promise<boolean> => {
+  validateVote: async (matchId: string): Promise<VoteValidationResponse> => {
     const response = await api.get(`/votes/validate/${matchId}`);
     return response.data;
   },
 
-  //Realizar un voto
-  createVote: async (playerId: string, matchId: string): Promise<Vote> => {
-    const response = await api.post(`/votes/`, { playerId, matchId });
+  // Realizar un voto
+  createVote: async (playerId: string, matchId: string): Promise<VoteResponse> => {
+    const voteData: CreateVoteRequest = {
+      userId: '', // Se obtiene del token en el backend
+      playerId,
+      matchId,
+    };
+    const response = await api.post(`/votes/`, voteData);
     return response.data;
   }
-};
+}
