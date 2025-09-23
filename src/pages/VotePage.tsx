@@ -111,7 +111,7 @@ const VotePage = () => {
             {activeMatch.rival} - {new Date(activeMatch.fecha).toLocaleDateString()}
           </Text>
           <Text fontSize="sm" color="gray.500">
-            Hola {user?.nombre}, selecciona tu jugador favorito
+            Hola {user?.nombre}, selecciona tu jugador de la fecha
           </Text>
         </Box>
 

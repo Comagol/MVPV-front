@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -25,8 +24,6 @@ const ThanksPage = () => {
   const [totalVotes, setTotalVotes] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [dataLoaded, setDataLoaded] = useState<boolean>(false);
-  
-  const navigate = useNavigate();
 
   // Obtener el partido activo
   const activeMatch = activeMatches?.[0] || null;
@@ -223,18 +220,11 @@ const ThanksPage = () => {
 
         {/* Botones de acción */}
         <VStack gap={4} w="full">
-          <Button
-            colorScheme="blue"
-            size="lg"
-            onClick={() => navigate('/vote')}
-            w="full"
-            maxW="300px"
-          >
-            Volver a Votar
-          </Button>
           
           <Button
             variant="outline"
+            bg="blue.600"
+            color="white"
             onClick={logout}
             w="full"
             maxW="300px"
