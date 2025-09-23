@@ -6,10 +6,13 @@ import {
   Input,
   VStack,
   Heading,
-  Text
+  Text,
+  Image
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
 import type { LoginRequest } from '../types';
+import Footer from '../components/layout/Footer';
+import Navbar from '../components/layout/Navbar';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequest>({
@@ -45,10 +48,17 @@ const LoginPage = () => {
   };
 
   return (
-    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
+    <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
+        <Navbar />
         <VStack gap={6}>
-          <Heading size="lg" textAlign="center">
+          {/* Logo de la app */}
+          <Box w="140px" h="140px" rounded="full" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <Text fontSize="lg" fontWeight="bold" mb={2} textAlign="center">Rugby MVP Voting</Text>
+            <Image src="/favicon.png" alt="Logo" w="140px" h="140px" />
+          </Box>
+          
+          <Heading size="lg" textAlign="center" p={4}>
             Iniciar Sesión
           </Heading>
           
@@ -104,6 +114,7 @@ const LoginPage = () => {
           </Text>
         </VStack>
       </Box>
+      <Footer />
     </Box>
   );
 };
