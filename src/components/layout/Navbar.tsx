@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Button, HStack, Image } from '@chakra-ui/react';
+import { Box, Flex, Heading, Button, HStack, Image, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -20,7 +20,12 @@ const Navbar = () => {
             <Image src="/favicon.png" alt="Logo" w="40px" h="40px" />
           </Box>
           
-          <Heading size="md" color="white">
+          {/* Ocultar en móviles, mostrar en tablets y desktop */}
+          <Heading 
+            size="md" 
+            color="white"
+            display={{ base: "none", md: "block" }}
+          >
             Rugby MVP Voting
           </Heading>
         </HStack>
@@ -35,6 +40,7 @@ const Navbar = () => {
                 color="white"
                 _hover={{ bg: "blue.500" }}
                 onClick={() => navigate('/admin/players')}
+                display={{ base: "none", sm: "flex" }}
               >
                 Cargar Jugadores
               </Button>
@@ -44,6 +50,7 @@ const Navbar = () => {
                 color="white"
                 _hover={{ bg: "blue.500" }}
                 onClick={() => navigate('/admin/matches')}
+                display={{ base: "none", sm: "flex" }}
               >
                 Gestionar Partidos
               </Button>
@@ -55,6 +62,7 @@ const Navbar = () => {
               color="white"
               _hover={{ bg: "blue.500" }}
               onClick={() => navigate('/vote')}
+              display={{ base: "none", sm: "flex" }}
             >
               Votar Jugador del Partido
             </Button>
@@ -64,6 +72,7 @@ const Navbar = () => {
             variant="outline"
             colorScheme="whiteAlpha"
             onClick={handleLogout}
+            size={{ base: "sm", md: "md" }}
           >
             Cerrar Sesión
           </Button>
