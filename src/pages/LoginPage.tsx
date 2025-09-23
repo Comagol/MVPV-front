@@ -11,8 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { useAuth } from '../hooks/useAuth';
 import type { LoginRequest } from '../types';
-import Footer from '../components/layout/Footer';
-import Navbar from '../components/layout/Navbar';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequest>({
@@ -50,7 +48,6 @@ const LoginPage = () => {
   return (
     <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
-        <Navbar />
         <VStack gap={6}>
           {/* Logo de la app */}
           <Box w="140px" h="140px" rounded="full" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -114,7 +111,6 @@ const LoginPage = () => {
           </Text>
         </VStack>
       </Box>
-      <Footer />
     </Box>
   );
 };

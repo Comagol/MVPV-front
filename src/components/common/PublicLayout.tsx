@@ -1,5 +1,6 @@
 // src/components/common/PublicLayout.tsx
 import { Box } from '@chakra-ui/react';
+import Footer from '../layout/Footer';
 
 interface PublicLayoutProps {
   children: React.ReactNode;
@@ -7,8 +8,11 @@ interface PublicLayoutProps {
 
 export const PublicLayout = ({ children }: PublicLayoutProps) => {
   return (
-    <Box minH="100vh" bg="gray.50" w="100%">
-      {children}
+    <Box minH="calc(100vh - 120px)" bg="gray.50" w="100%">
+      <Box w="100%">
+        {children}
+      </Box>
+      <Footer />
     </Box>
   );
 };

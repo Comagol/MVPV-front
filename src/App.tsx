@@ -7,6 +7,7 @@ import VotePage from './pages/VotePage';
 import ThanksPage from './pages/ThanksPage';
 import PlayersPage from './pages/admin/PlayersPage';
 import MatchesPage from './pages/admin/MatchesPage';
+import { PublicLayout } from './components/common/PublicLayout';
 
 function App() {
   return(
@@ -14,8 +15,22 @@ function App() {
       <Router>
         <Routes>
           {/* rutas Publicas */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route 
+            path="/login" 
+            element={
+              <PublicLayout>
+                <LoginPage />
+              </PublicLayout>
+            } 
+          />
+          <Route 
+            path="/register" 
+            element={
+              <PublicLayout>
+                <RegisterPage />
+              </PublicLayout>
+            } 
+          />  
 
           {/* rutas Protegidas */}
           <Route 
