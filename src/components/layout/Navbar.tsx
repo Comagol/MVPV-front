@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Button, HStack, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Button, HStack, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -13,7 +13,7 @@ const Navbar = () => {
 
   return (
     <Box bg="blue.600" color="white" px={4} py={3} shadow="md">
-      <Flex justify="space-between" align="center" maxW="7xl" mx="auto">
+      <Flex justify="space-between" align="center" w="100%" mx="auto">
         {/* Logo y nombre de la app */}
         <HStack gap={4}>
           <Box w="40px" h="40px" rounded="full" display="flex" alignItems="center" justifyContent="center">
@@ -23,10 +23,6 @@ const Navbar = () => {
           <Heading size="md" color="white">
             Rugby MVP Voting
           </Heading>
-          
-          <Text fontSize="sm" color="blue.100">
-            {isAdmin ? 'Panel Admin' : 'Usuario'}
-          </Text>
         </HStack>
 
         {/* Navegación */}
