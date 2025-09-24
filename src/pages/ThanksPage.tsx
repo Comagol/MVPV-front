@@ -18,8 +18,8 @@ import type { VoteStatistics } from '../types/vote';
 const ThanksPage = () => {
   const { user, logout } = useAuth();
   const { activeMatches, isLoading: matchesLoading } = useMatches();
-  const { getMatchStats, getTotalVotes, isLoading: votingLoading } = useVoting();
-  const [matchStats, setMatchStats] = useState<VoteStatistics[]>([]);
+  const { getMatchStats, getTotalVotes, getTop3Players, isLoading: votingLoading } = useVoting();
+  const [top3, setTop3] = useState<VoteStatistics[]>([]);
   const [winner, setWinner] = useState<VoteStatistics | null>(null);
   const [totalVotes, setTotalVotes] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
@@ -35,20 +35,21 @@ const ThanksPage = () => {
           console.log('🔍 Iniciando carga de datos para match:', activeMatch.id);
           
           // Solo cargar stats (que funciona) y total votes
-          const [stats, total] = await Promise.all([
+          const [ stats, total, top3 ] = await Promise.all([
             getMatchStats(activeMatch.id),
-            getTotalVotes(activeMatch.id)
+            getTotalVotes(activeMatch.id),
+            getTop3Players(activeMatch.id)
           ]);
           
-          console.log('�� Stats del backend:', stats);
+          console.log('�� Top3 del backend:', top3);
           console.log('🔍 Total votos del backend:', total);
-          
-          setMatchStats(stats);
+          console.log('🔍 Top 3 players del backend:', top3);
+          setTop3(top3);
           setTotalVotes(total);
           
-          // Calcular el ganador desde las stats en lugar de usar el endpoint
-          if (stats.length > 0) {
-            const winner = stats.reduce((prev, current) => 
+          
+          if (top3.length > 0) {
+            const winner = top3.reduce((prev, current) => 
               (prev.totalVotos > current.totalVotos) ? prev : current
             );
             setWinner(winner);
@@ -56,7 +57,7 @@ const ThanksPage = () => {
           }
           
           setDataLoaded(true);
-          console.log('�� Estado actualizado - matchStats:', stats);
+          console.log('�� Estado actualizado - top3:', top3);
           console.log('🔍 Estado actualizado - totalVotes:', total);
           
         } catch (err) {
@@ -136,13 +137,13 @@ const ThanksPage = () => {
         </Box>
 
         {/* Resultados de votación - mostrar SIEMPRE que haya datos */}
-        {dataLoaded && matchStats.length > 0 && (
+        {dataLoaded && top3.length > 0 && (
           <Box w="full" bg="white" p={6} rounded="lg" shadow="md">
             <Heading size="md" mb={4} textAlign="center">
               Resultados de Votación
             </Heading>
             <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={4}>
-              {matchStats.map((player: VoteStatistics, index: number) => (
+              {top3.map((player: VoteStatistics, index: number) => (
                 <Box
                   key={player.playerId}
                   p={4}
@@ -210,7 +211,7 @@ const ThanksPage = () => {
         )}
 
         {/* Mensaje si no hay votos aún */}
-        {dataLoaded && matchStats.length === 0 && (
+        {dataLoaded && top3.length === 0 && (
           <Box w="full" bg="yellow.50" p={6} rounded="lg" border="1px solid" borderColor="yellow.200">
             <Text textAlign="center" color="yellow.800">
               Los resultados se mostrarán cuando haya más votos registrados.

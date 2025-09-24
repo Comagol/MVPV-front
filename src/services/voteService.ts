@@ -9,6 +9,12 @@ export const voteService = {
     return response.data;
   },
 
+  //get top 3 players
+  getTop3Players: async (matchId: string): Promise<VoteStatistics[]> => {
+    const response = await api.get(`/votes/${matchId}/top3`);
+    return response.data;
+  },
+
   //get ganador del partido
   getMatchWinner: async (matchId: string): Promise<VoteStatistics> => {
     const response = await api.get(`/votes/${matchId}/winner`);

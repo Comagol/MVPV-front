@@ -50,6 +50,20 @@ export const useVoting = () => {
     }
   };
 
+  //obtener top 3 players
+  const getTop3Players = async (matchId: string): Promise<VoteStatistics[]> => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      return await voteService.getTop3Players(matchId);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener top 3 players');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   //obtener ganador de un partido
   const getMatchWinner = async (matchId: string): Promise<VoteStatistics> => {
     setIsLoading(true);
@@ -82,6 +96,7 @@ export const useVoting = () => {
     createVote,
     validateVote,
     getMatchStats,
+    getTop3Players,
     getMatchWinner,
     getTotalVotes,
     clearError: () => setError(null)
