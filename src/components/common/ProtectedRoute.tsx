@@ -23,9 +23,9 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   //si esta autenticado, renderizo el componente hijo
   return (
-    <Box minH="100vh" bg="gray.50" w="100%">
+    <Box  minH="calc(100vh - 120px)" bg="gray.50" w="100%">
       <Navbar />
-      <Box w="100%" minH="calc(100vh - 120px)">
+      <Box w="100%">
         {children}
       </Box>
       <Footer />
