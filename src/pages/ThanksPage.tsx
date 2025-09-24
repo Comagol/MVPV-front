@@ -18,7 +18,7 @@ import type { VoteStatistics } from '../types/vote';
 const ThanksPage = () => {
   const { user, logout } = useAuth();
   const { activeMatches, isLoading: matchesLoading } = useMatches();
-  const { getMatchStats, getTotalVotes, getTop3Players, isLoading: votingLoading } = useVoting();
+  const { getTotalVotes, getTop3Players, isLoading: votingLoading } = useVoting();
   const [top3, setTop3] = useState<VoteStatistics[]>([]);
   const [winner, setWinner] = useState<VoteStatistics | null>(null);
   const [totalVotes, setTotalVotes] = useState<number>(0);
