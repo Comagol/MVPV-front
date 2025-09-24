@@ -44,11 +44,11 @@ const VotePage = () => {
     checkVotingStatus();
   }, [activeMatch, validateVote]);
 
-  const handleVote = async () => {
-    if (!selectedPlayer || !activeMatch) return;
+  const handleVoteForPlayer = async (player: PlayerResponse) => {
+    if (!activeMatch) return;
 
     try {
-      await createVote(selectedPlayer.id, activeMatch.id);
+      await createVote(player.id, activeMatch.id);
       navigate('/thanks');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al votar');
@@ -158,21 +158,20 @@ const VotePage = () => {
               <Text fontSize="sm" color="gray.500">
                 Camiseta #{player.camiseta}
               </Text>
+              {/* Vote Button */}
+              <Button
+                colorScheme="blue"
+                size="lg"
+                onClick={() => handleVoteForPlayer(player)}
+                disabled={votingLoading}
+                loading={votingLoading}
+                loadingText="Votando..."
+              >
+                Votar por {player.nombre}
+              </Button>
             </Box>
           ))}
         </Grid>
-
-        {/* Vote Button */}
-        <Button
-          colorScheme="blue"
-          size="lg"
-          onClick={handleVote}
-          disabled={!selectedPlayer || votingLoading}
-          loading={votingLoading}
-          loadingText="Votando..."
-        >
-          Votar por {selectedPlayer?.nombre || "un jugador"}
-        </Button>
 
         {/* Logout Button */}
         <Button variant="outline" onClick={logout}>
