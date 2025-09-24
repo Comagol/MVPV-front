@@ -35,8 +35,7 @@ const ThanksPage = () => {
           console.log('🔍 Iniciando carga de datos para match:', activeMatch.id);
           
           // Solo cargar stats (que funciona) y total votes
-          const [ stats, total, top3 ] = await Promise.all([
-            getMatchStats(activeMatch.id),
+          const [ total, top3 ] = await Promise.all([
             getTotalVotes(activeMatch.id),
             getTop3Players(activeMatch.id)
           ]);
