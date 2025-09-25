@@ -167,7 +167,7 @@ const VotePage = () => {
                 loading={votingLoading}
                 loadingText="Votando..."
               >
-                Votar por {player.nombre}
+                Vota a {player.nombre}
               </Button>
             </Box>
           ))}
