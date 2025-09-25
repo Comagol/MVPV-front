@@ -32,5 +32,19 @@ export const usePasswordReset = () => {
     }
   };
 
-  return { forgotPassword, resetPassword, isLoading, error };
+  const verifyResetToken = async (token: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await authService.verifyResetToken(token);
+      return response;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al verificar token');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { forgotPassword, resetPassword, verifyResetToken, isLoading, error };
 };
