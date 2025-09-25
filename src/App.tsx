@@ -8,6 +8,8 @@ import ThanksPage from './pages/ThanksPage';
 import PlayersPage from './pages/admin/PlayersPage';
 import MatchesPage from './pages/admin/MatchesPage';
 import { PublicLayout } from './components/common/PublicLayout';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
   return(
@@ -31,7 +33,22 @@ function App() {
               </PublicLayout>
             } 
           />  
-
+          <Route 
+            path="/forgot-password" 
+            element={
+              <PublicLayout>
+                <ForgotPasswordPage />
+              </PublicLayout>
+            } 
+          />
+          <Route 
+            path="/reset-password/:token" 
+            element={
+              <PublicLayout>
+                <ResetPasswordPage />
+              </PublicLayout>
+            } 
+          />
           {/* rutas Protegidas */}
           <Route 
             path='vote' 
