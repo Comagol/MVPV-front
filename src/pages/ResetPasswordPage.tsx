@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import { Box, VStack, Text, Button } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
+import { usePasswordReset } from "../hooks/usePasswordReset";
 
 const ResetPasswordPage = () => {
   const [formData, setFormData] = useState({
@@ -12,11 +13,42 @@ const ResetPasswordPage = () => {
     confirmPassword: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidatingToken, setIsValidatingToken] = useState(true);
+  const [isTokenValid, setIsTokenValid] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [tokenError, setTokenError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const { token } = useParams<{ token: string }>();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  const { verifyResetToken } = usePasswordReset();
+
+  // �� NUEVO: Verificar token al cargar la página
+  useEffect(() => {
+    const validateToken = async () => {
+      if (!token) {
+        setTokenError('Token no proporcionado');
+        setIsValidatingToken(false);
+        return;
+      }
+
+      try {
+        const response = await verifyResetToken(token);
+        setIsTokenValid(response.valid);
+        if (!response.valid) {
+          setTokenError('Token inválido o expirado');
+        }
+      } catch (error) {
+        setTokenError('Error al verificar el token');
+        setIsTokenValid(false);
+      } finally {
+        setIsValidatingToken(false);
+      }
+    };
+
+    validateToken();
+  }, [token, verifyResetToken]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +76,57 @@ const ResetPasswordPage = () => {
     }
   };
 
+  // �� NUEVO: Estados de carga y error del token
+  if (isValidatingToken) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
+        <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
+          <VStack gap={6}>
+            <Heading size="lg" textAlign="center">
+              Verificando Token...
+            </Heading>
+            <Text textAlign="center" color="gray.600">
+              Por favor espera mientras verificamos tu enlace de recuperación.
+            </Text>
+          </VStack>
+        </Box>
+      </Box>
+    );
+  }
+
+  // 🔥 NUEVO: Token inválido
+  if (!isTokenValid || tokenError) {
+    return (
+      <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
+        <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
+          <VStack gap={6}>
+            <Heading size="lg" textAlign="center" color="red.500">
+              Enlace Inválido
+            </Heading>
+            <Box p={4} bg="red.100" color="red.700" rounded="md" w="full">
+              <Text textAlign="center">
+                {tokenError || 'El enlace de recuperación no es válido o ha expirado.'}
+              </Text>
+            </Box>
+            <VStack gap={3} w="full">
+              <Link to="/forgot-password" style={{ width: '100%' }}>
+                <Button colorScheme="blue" size="lg" w="full">
+                  Solicitar Nuevo Enlace
+                </Button>
+              </Link>
+              <Link to="/login" style={{ width: '100%' }}>
+                <Button variant="outline" size="lg" w="full">
+                  Volver al Login
+                </Button>
+              </Link>
+            </VStack>
+          </VStack>
+        </Box>
+      </Box>
+    );
+  }
+
+  // 🔥 NUEVO: Formulario solo se muestra si el token es válido
   return (
     <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
@@ -51,6 +134,14 @@ const ResetPasswordPage = () => {
           <Heading size="lg" textAlign="center" p={4}>
             Restablecer Contraseña
           </Heading>
+          
+          {/* �� NUEVO: Mensaje de confirmación de token válido */}
+          <Box p={3} bg="green.100" color="green.700" rounded="md" w="full">
+            <Text textAlign="center" fontSize="sm">
+              ✅ Enlace verificado. Puedes restablecer tu contraseña.
+            </Text>
+          </Box>
+
           {error && (
             <Box p={4} bg="red.100" color="red.700" rounded="md">
               {error}
@@ -61,6 +152,7 @@ const ResetPasswordPage = () => {
               {message}
             </Box>
           )}
+          
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <VStack gap={4}>
               <Box w="full">
