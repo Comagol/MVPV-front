@@ -41,3 +41,9 @@ export interface ResetPasswordResponse {
   success: boolean;
   message: string;
 }
+
+export interface VerifyResetTokenResponse {
+  success: boolean;
+  valid: boolean;
+  message: string;
+}

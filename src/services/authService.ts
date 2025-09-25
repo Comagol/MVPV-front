@@ -7,6 +7,7 @@ import type {
   ForgotPasswordResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
+  VerifyResetTokenResponse,
 } from '../types/index';
 
 export const authService = {
@@ -48,5 +49,11 @@ export const authService = {
   resetPassword: async (data: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
     const response = await api.post('/auth/reset-password', data);
     return response.data;
-  }
+  },
+
+  //verify reset token
+  verifyResetToken: async (token: string): Promise<VerifyResetTokenResponse> => {
+    const response = await api.get(`/auth/verify-reset-token/${token}`);
+    return response.data;
+  },
 };
