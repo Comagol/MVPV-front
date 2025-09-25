@@ -109,6 +109,11 @@ const LoginPage = () => {
               Regístrate aquí
             </Link>
           </Text>
+          <Text textAlign="center" mt={2}>
+            <Link to="/forgot-password" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </Text>
         </VStack>
       </Box>
     </Box>
