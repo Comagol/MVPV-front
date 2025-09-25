@@ -3,6 +3,10 @@ import type {
   LoginRequest,
   RegisterRequest,
   AuthResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
 } from '../types/index';
 
 export const authService = {
@@ -32,5 +36,17 @@ export const authService = {
     console.log('Token en sessionStorage:', token);
     console.log('¿Token existe?', !!token);
     return !!token;
+  },
+
+  //forgot password
+  forgotPassword: async (data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> => {
+    const response = await api.post('/auth/forgot-password', data);
+    return response.data;
+  },
+
+  //reset password
+  resetPassword: async (data: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
+    const response = await api.post('/auth/reset-password', data);
+    return response.data;
   }
 };
