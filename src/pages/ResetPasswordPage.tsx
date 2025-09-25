@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
-import { Box, VStack, Text, Button } from "@chakra-ui/react";
+import { Box, VStack, Text, Button, Image } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import { usePasswordReset } from "../hooks/usePasswordReset";
@@ -131,6 +131,11 @@ const ResetPasswordPage = () => {
     <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
         <VStack gap={6}>
+          {/* Logo de la app */}
+          <Box w="140px" h="140px" rounded="full" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <Text fontSize="lg" fontWeight="bold" mb={2} textAlign="center">Rugby MVP Voting</Text>
+            <Image src="/favicon.png" alt="Logo" w="140px" h="140px" />
+          </Box>
           <Heading size="lg" textAlign="center" p={4}>
             Restablecer Contraseña
           </Heading>
