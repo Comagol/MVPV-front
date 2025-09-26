@@ -13,17 +13,17 @@ import type {
 export const authService = {
   //Usuarios
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post('/auth/login', data);
+    const response = await api.post('/api/auth/login', data);
     return response.data;
   },
 
   userRegister: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post('/users/register', data);
+    const response = await api.post('/api/users/register', data);
     return response.data;
   },
 
   adminRegister: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post('/admin/register', data);
+    const response = await api.post('/api/admin/register', data);
     return response.data;
   },
 
@@ -41,19 +41,19 @@ export const authService = {
 
   //forgot password
   forgotPassword: async (data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> => {
-    const response = await api.post('/auth/forgot-password', data);
+    const response = await api.post('/api/auth/forgot-password', data);
     return response.data;
   },
 
   //reset password
   resetPassword: async (data: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
-    const response = await api.post('/auth/reset-password', data);
+    const response = await api.post('/api/auth/reset-password', data);
     return response.data;
   },
 
   //verify reset token
   verifyResetToken: async (token: string): Promise<VerifyResetTokenResponse> => {
-    const response = await api.get(`/auth/verify-reset-token/${token}`);
+    const response = await api.get(`/api/auth/verify-reset-token/${token}`);
     return response.data;
   },
 };
