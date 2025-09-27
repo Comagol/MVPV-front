@@ -181,6 +181,7 @@ const ThanksPage = () => {
                 </Box>
               ))}
             </Grid>
+            <Sponsors />
           </Box>
         )}
 
@@ -207,7 +208,6 @@ const ThanksPage = () => {
                 {winner.totalVotos} votos ({winner.porcentaje.toFixed(1)}%)
               </Text>
             </Box>
-            <Sponsors />
           </Box>
         )}
 
