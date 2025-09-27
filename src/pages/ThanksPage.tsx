@@ -134,6 +134,7 @@ const ThanksPage = () => {
               <Text color="gray.600">Jugadores</Text>
             </Box>
           </Grid>
+          <Sponsors />
         </Box>
 
         {/* Resultados de votación - mostrar SIEMPRE que haya datos */}
@@ -181,7 +182,6 @@ const ThanksPage = () => {
                 </Box>
               ))}
             </Grid>
-            <Sponsors />
           </Box>
         )}
 
