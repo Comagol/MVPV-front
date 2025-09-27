@@ -17,25 +17,25 @@ const sponsors: Sponsor[] = [
   {
     id: '2',
     name: 'Checho Sandwicheria',
-    logo: '/checho.png',
+    logo: '/Checho.png',
     website: 'https://checho.com'
   },
   {
     id: '3',
     name: 'Leon Cars',
-    logo: '/leon-cars.png',
+    logo: '/LeonCars.png',
     website: 'https://leon-cars.com'
   },
   {
     id: '4',
     name: 'Seib Natatorios',
-    logo: '/seib.png',
+    logo: '/Seib.png',
     website: 'https://seib.com'
   },
   {
     id: '5',
     name: 'Alori Estudio',
-    logo: '/alori.png',
+    logo: '/Alori.png',
     website: 'https://alori.com'
   }
 ];
