@@ -100,7 +100,7 @@ const ThanksPage = () => {
             ¡Gracias por tu voto!
           </Heading>
           <Text fontSize="lg" color="gray.600" mb={2}>
-            {activeMatch.rival} - {new Date(activeMatch.fecha).toLocaleDateString()}
+            Vicentinos vs {activeMatch.rival} - {new Date(activeMatch.fecha).toLocaleDateString()}
           </Text>
           <Text fontSize="md" color="gray.500">
             {user?.nombre}, tu voto ha sido registrado exitosamente
