@@ -29,7 +29,7 @@ const sponsors: Sponsor[] = [
   {
     id: '4',
     name: 'Seib Natatorios',
-    logo: '/Seib.png',
+    logo: '/SeibLogo.png',
     website: 'https://seib.com'
   },
   {
