@@ -45,7 +45,7 @@ const Sponsors = () => {
     <Box w="full" bg="white" p={6} rounded="lg" shadow="md">
       <VStack gap={6}>
         <Heading size="lg" textAlign="center" color="blue.600">
-          🏆 Nuestros Sponsors
+          Nuestros Sponsors del Partido
         </Heading>
         
         <Text textAlign="center" color="gray.600" fontSize="md">
@@ -93,7 +93,7 @@ const Sponsors = () => {
         {/* Mensaje de agradecimiento */}
         <Box p={4} bg="yellow.50" rounded="md" border="1px solid" borderColor="yellow.200" w="full">
           <Text textAlign="center" color="yellow.800" fontSize="sm">
-            💙 Gracias a todos nuestros sponsors por apoyar el rugby y hacer posible este evento
+            💙 Gracias a todos nuestros sponsors por apoyar al club
           </Text>
         </Box>
       </VStack>
