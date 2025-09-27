@@ -14,6 +14,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useMatches } from '../hooks/useMatches';
 import { useVoting } from '../hooks/useVoting';
 import type { VoteStatistics } from '../types/vote';
+import Sponsors from '../components/layout/Sponsors';
 
 const ThanksPage = () => {
   const { user, logout } = useAuth();
@@ -206,6 +207,7 @@ const ThanksPage = () => {
                 {winner.totalVotos} votos ({winner.porcentaje.toFixed(1)}%)
               </Text>
             </Box>
+            <Sponsors />
           </Box>
         )}
 
