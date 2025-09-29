@@ -153,14 +153,21 @@ const LastWiner = () => {
             <Heading size="lg" color="gray.800">
               {winner.playerName}
             </Heading>
+            {winner.playerApodo && (
+              <Text fontSize="md" color="gray.600" fontStyle="italic">
+                "{winner.playerApodo}"
+              </Text>
+            )}
             
             <HStack gap={4} fontSize="lg">
               <Badge colorScheme="green" px={3} py={1} rounded="full">
                 {winner.totalVotos} votos
               </Badge>
-              <Badge colorScheme="purple" px={3} py={1} rounded="full">
-                {winner.porcentaje.toFixed(1)}%
-              </Badge>
+              {winner.porcentaje && (
+                <Badge colorScheme="purple" px={3} py={1} rounded="full">
+                  {winner.porcentaje.toFixed(1)}%
+                </Badge>
+              )}
             </HStack>
           </VStack>
         </VStack>

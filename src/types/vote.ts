@@ -22,9 +22,10 @@ export interface VoteState {
 export interface VoteStatistics {
   playerId: string;
   playerName: string;
+  playerApodo?: string;
   playerImagen: string;
   totalVotos: number;
-  porcentaje: number;
+  porcentaje?: number;
 }
 
 export interface VoteValidationResponse {
