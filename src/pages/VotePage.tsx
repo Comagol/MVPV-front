@@ -70,7 +70,7 @@ const VotePage = () => {
       <VStack gap={8} maxW="6xl" mx="auto">
         <Box w="full" textAlign="center">
           <Heading size="xl" mb={2} color="gray.700">
-            No hay partidos activos
+            No hay partidos activos o finalizados
           </Heading>
           <Text fontSize="lg" color="gray.600">
             No hay partidos disponibles para votar en este momento.
