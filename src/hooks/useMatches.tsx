@@ -60,14 +60,17 @@ export const useMatches = () => {
 
   //obtener el ultimo partido finalizado
   const fetchLastFinishedMatch = async () => {
+    console.log('🔍 useMatches: Iniciando fetchLastFinishedMatch');
     setIsLoading(true);
     setError(null);
 
     try {
       const lastMatch = await matchService.getLastFinishedMatch();
+      console.log('✅ useMatches: Ultimo partido finalizado obtenido:', lastMatch);
       setLastFinishedMatch(lastMatch);
       return lastMatch;
     } catch (err: any) {
+      console.error('❌ useMatches: Error al obtener el ultimo partido finalizado:', err);
       setError(err.response?.data?.message || 'Error al obtener el ultimo partido finalizado');
       throw err;
     }finally {

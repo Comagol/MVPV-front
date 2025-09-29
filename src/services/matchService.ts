@@ -54,10 +54,12 @@ export const matchService = {
   //get last finished match
   getLastFinishedMatch: async (): Promise<MatchResponse | null> => {
     try {
+      console.log('🔍 matchService: Iniciando getLastFinishedMatch');
       const response = await api.get('/matches/last-match');
+      console.log('✅ matchService: Ultimo partido finalizado obtenido:', response.data.match);
       return response.data.match || null;
     } catch (error) {
-      console.error('Error al obtener el ultimo partido finalizado:', error);
+      console.error('❌ matchService: Error al obtener el ultimo partido finalizado:', error);
       return null;
     }
   }

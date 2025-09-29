@@ -21,15 +21,22 @@ const LastWiner = () => {
 
   useEffect(() => {
     const fetchWinner = async () => {
-      if (!lastFinishedMatch) return;
+      console.log('🔍 LastWiner: lastFinishedMatch recibido:', lastFinishedMatch);
+      if (!lastFinishedMatch) {
+        console.log('❌ LastWiner: No hay lastFinishedMatch disponible');
+        return;
+      }
 
       setIsLoadingWinner(true);
       setError(null);
       
       try {
+        console.log('📡 LastWiner: Solicitando ganador para match ID:', lastFinishedMatch.id);
         const winnerData = await voteService.getMatchWinner(lastFinishedMatch.id);
+        console.log('✅ LastWiner: Ganador recibido:', winnerData);
         setWinner(winnerData);
       } catch (err: any) {
+        console.error('❌ LastWiner: Error al obtener ganador:', err);
         setError(err.message || 'Error al cargar el ganador');
       } finally {
         setIsLoadingWinner(false);
