@@ -177,7 +177,7 @@ const ThanksPage = () => {
                     {player.totalVotos} votos
                   </Text>
                   <Text fontSize="sm" color="gray.500">
-                    {player.porcentaje.toFixed(1)}%
+                    {player.porcentaje?.toFixed(1)}%
                   </Text>
                 </Box>
               ))}
@@ -205,7 +205,7 @@ const ThanksPage = () => {
                 {winner.playerName}
               </Heading>
               <Text fontSize="lg" fontWeight="bold" color="green.600" mb={2}>
-                {winner.totalVotos} votos ({winner.porcentaje.toFixed(1)}%)
+                {winner.totalVotos} votos ({winner.porcentaje?.toFixed(1)}%)
               </Text>
             </Box>
           </Box>
