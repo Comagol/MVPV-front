@@ -82,6 +82,7 @@ export const useMatches = () => {
   useEffect(() => {
     fetchAllMatches();
     fetchActiveMatches();
+    fetchLastFinishedMatch();
   }, []);
 
   return {
