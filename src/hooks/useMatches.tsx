@@ -5,6 +5,7 @@ import type { MatchResponse } from "../types";
 export const useMatches = () => {
   const [matches, setMatches] = useState<MatchResponse[]>([]);
   const [activeMatches, setActiveMatches] = useState<MatchResponse[]>([]);
+  const [lastFinishedMatch, setLastFinishedMatch] = useState<MatchResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -57,6 +58,23 @@ export const useMatches = () => {
     }
   };
 
+  //obtener el ultimo partido finalizado
+  const fetchLastFinishedMatch = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const lastMatch = await matchService.getLastFinishedMatch();
+      setLastFinishedMatch(lastMatch);
+      return lastMatch;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener el ultimo partido finalizado');
+      throw err;
+    }finally {
+      setIsLoading(false);
+    }
+  }
+
   // cargar los datos al montar el hook
   useEffect(() => {
     fetchAllMatches();
@@ -71,6 +89,8 @@ export const useMatches = () => {
     fetchAllMatches,
     fetchActiveMatches,
     fetchMatchById,
+    fetchLastFinishedMatch,
+    lastFinishedMatch,
     clearError: () => setError(null)
   };
 };

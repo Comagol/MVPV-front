@@ -51,4 +51,15 @@ export const matchService = {
     await api.delete(`/matches/${id}`);
   },
 
+  //get last finished match
+  getLastFinishedMatch: async (): Promise<MatchResponse | null> => {
+    try {
+      const response = await api.get('/matches/last-match');
+      return response.data.match || null;
+    } catch (error) {
+      console.error('Error al obtener el ultimo partido finalizado:', error);
+      return null;
+    }
+  }
+
 };

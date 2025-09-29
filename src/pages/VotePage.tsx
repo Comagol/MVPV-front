@@ -16,6 +16,7 @@ import { useMatches } from '../hooks/useMatches';
 import { useVoting } from '../hooks/useVoting';
 import type { PlayerResponse } from '../types';
 import type { VoteValidationResponse } from '../types';
+import LastWiner from '../components/layout/LastWiner';
 
 const VotePage = () => {
   const { user, logout } = useAuth();
@@ -65,12 +66,26 @@ const VotePage = () => {
 
   if (!activeMatch) {
     return (
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
-        <VStack gap={4}>
-          <Heading>No hay partidos activos</Heading>
-          <Text>No hay partidos disponibles para votar en este momento.</Text>
-        </VStack>
-      </Box>
+      <Box minH="100vh" bg="gray.50" p={4}>
+      <VStack gap={8} maxW="6xl" mx="auto">
+        <Box w="full" textAlign="center">
+          <Heading size="xl" mb={2} color="gray.700">
+            No hay partidos activos
+          </Heading>
+          <Text fontSize="lg" color="gray.600">
+            No hay partidos disponibles para votar en este momento.
+          </Text>
+        </Box>
+        
+        {/* Mostrar el último ganador */}
+        <LastWiner />
+        
+        {/* Botón de logout */}
+        <Button variant="outline" onClick={logout}>
+          Cerrar Sesión
+        </Button>
+      </VStack>
+    </Box>
     );
   }
 
