@@ -8,7 +8,6 @@ import type {
   ResetPasswordRequest,
   ResetPasswordResponse,
   VerifyResetTokenResponse,
-  TokenRefreshResponse,
 } from '../types/index';
 
 //token management utilities
