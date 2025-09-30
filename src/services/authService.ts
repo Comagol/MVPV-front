@@ -8,7 +8,19 @@ import type {
   ResetPasswordRequest,
   ResetPasswordResponse,
   VerifyResetTokenResponse,
+  TokenRefreshResponse,
 } from '../types/index';
+
+//token management utilities
+const TOKEN_KEY = 'token';
+const REFRESH_TOKEN_KEY = 'refreshToken';
+const TOKEN_EXPIRES_KEY = 'tokenExpiresAt';
+const USER_KEY = 'user';
+const USER_TYPE_KEY = 'userType';
+const SESSION_TIMEOUT_KEY = 'sessionTimeout';
+
+//session timeout in milliseconds
+const SESSION_TIMEOUT = 30 * 60 * 1000;
 
 export const authService = {
   //Usuarios
