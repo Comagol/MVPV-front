@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useMatches } from '../../hooks/useMatches';
 import { voteService } from '../../services/voteService';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { VoteStatistics } from '../../types';
 
 const LastWiner = () => {
@@ -19,32 +19,27 @@ const LastWiner = () => {
   const [isLoadingWinner, setIsLoadingWinner] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Fixed: Removed extra space and improved error handling
+  const fetchWinner = useCallback(async (matchId: string) => {
+    setIsLoadingWinner(true);
+    setError(null);
+
+    try {
+      const winnerData = await voteService.getMatchWinner(matchId);
+      setWinner(winnerData);
+    } catch (err: any) {
+      console.error('Error fetching winner:', err);
+      setError(err.response?.data?.message || err.message || 'Error al obtener el ganador');
+    } finally {
+      setIsLoadingWinner(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchWinner = async () => {
-      console.log('🔍 LastWiner: lastFinishedMatch recibido:', lastFinishedMatch);
-      if (!lastFinishedMatch) {
-        console.log('❌ LastWiner: No hay lastFinishedMatch disponible');
-        return;
-      }
-
-      setIsLoadingWinner(true);
-      setError(null);
-      
-      try {
-        console.log('📡 LastWiner: Solicitando ganador para match ID:', lastFinishedMatch.id);
-        const winnerData = await voteService.getMatchWinner(lastFinishedMatch.id);
-        console.log('✅ LastWiner: Ganador recibido:', winnerData);
-        setWinner(winnerData);
-      } catch (err: any) {
-        console.error('❌ LastWiner: Error al obtener ganador:', err);
-        setError(err.message || 'Error al cargar el ganador');
-      } finally {
-        setIsLoadingWinner(false);
-      }
-    };
-
-    fetchWinner();
-  }, [lastFinishedMatch]);
+    if (lastFinishedMatch?.id) {
+      fetchWinner(lastFinishedMatch.id);
+    }
+  }, [lastFinishedMatch?.id, fetchWinner]);
 
   if (matchLoading || isLoadingWinner) {
     return (
