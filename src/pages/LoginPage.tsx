@@ -16,6 +16,7 @@ const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequest>({
     email: '',
     password: '',
+    rememberMe: false
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

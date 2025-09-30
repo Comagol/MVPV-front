@@ -9,7 +9,6 @@ import type {
   ResetPasswordResponse,
   VerifyResetTokenResponse,
 } from '../types/index';
-import { i } from 'framer-motion/client';
 
 //token management utilities
 const TOKEN_KEY = 'token';
