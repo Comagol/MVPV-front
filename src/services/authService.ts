@@ -9,6 +9,7 @@ import type {
   ResetPasswordResponse,
   VerifyResetTokenResponse,
 } from '../types/index';
+import { i } from 'framer-motion/client';
 
 //token management utilities
 const TOKEN_KEY = 'token';
@@ -35,6 +36,10 @@ export const authService = {
         expiresAt,
         issuedAt: Date.now(),
       });
+
+      if (authData.userType) {
+        sessionStorage.setItem(USER_TYPE_KEY, authData.userType);
+      }
     }
     return authData;
   },
@@ -51,6 +56,10 @@ export const authService = {
         expiresAt,
         issuedAt: Date.now(),
       });
+
+      if (authData.userType) {
+        sessionStorage.setItem(USER_TYPE_KEY, authData.userType);
+      }
     }
     return authData;
   },
@@ -67,6 +76,10 @@ export const authService = {
         expiresAt,
         issuedAt: Date.now(),
       });
+
+      if (authData.userType) {
+        sessionStorage.setItem(USER_TYPE_KEY, authData.userType);
+      }
     }
     return authData;
   },
