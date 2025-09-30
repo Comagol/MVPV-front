@@ -47,3 +47,19 @@ export interface VerifyResetTokenResponse {
   valid: boolean;
   message: string;
 }
+
+export interface TokenData {
+  token: string,
+  refreshToken?: string,
+  expiresAt: number,
+  issuedAt: number,
+}
+
+export interface AuthState {
+  user: User | null,
+  isAuthenticated: boolean,
+  isLoading: boolean,
+  isAdmin: boolean,
+  sessionTimeout?: number,
+  tokenExpiresAt?: number,
+}
