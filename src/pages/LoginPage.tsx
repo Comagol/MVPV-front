@@ -15,7 +15,7 @@ import type { LoginRequest } from '../types';
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequest>({
     email: '',
-    password: ''
+    password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
