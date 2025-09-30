@@ -7,6 +7,7 @@ import type { User } from './user';
 export interface LoginRequest {
   email:string;
   password:string;
+  rememberMe: boolean;
 }
 
 export interface RegisterRequest {
@@ -19,6 +20,8 @@ export interface AuthResponse {
   success: boolean;
   userType: 'user' | 'admin';
   token: string;
+  refreshToken?: string;
+  expiresAt?: number;
   user?: User;
   admin?: Admin;
 }
@@ -47,3 +50,35 @@ export interface VerifyResetTokenResponse {
   valid: boolean;
   message: string;
 }
+
+export interface TokenData {
+  token: string;
+  refreshToken?: string;
+  expiresAt: number;
+  issuedAt: number;
+}
+
+export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  isAdmin: boolean;
+  sessionTimeout?: number;
+  tokenExpiresAt?: number;
+}
+
+export interface AuthContextType extends AuthState {
+  login: (data: LoginRequest) => Promise<void>;
+  register: (data: RegisterRequest) => Promise<void>;
+  logout: () => void;
+  refreshToken: () => Promise<boolean>;
+  extendSession: () => void;
+  checkSessionTimeout: () => boolean;
+}
+
+export interface TokenRefreshResponse {
+  token: string;
+  refreshToken: string;
+  expiresAt: number;
+}
+

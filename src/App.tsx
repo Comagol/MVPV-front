@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './hooks/useAuth';
+import { useSessionActivity } from './hooks/useSessionActivity';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -11,9 +12,15 @@ import { PublicLayout } from './components/common/PublicLayout';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 
+const AppWithSessionTracking = () => {
+  useSessionActivity(); // This will track user activity
+  return null; // This component doesn't render anything
+};
+
 function App() {
   return(
     <AuthProvider>
+      <AppWithSessionTracking />
       <Router>
         <Routes>
           {/* rutas Publicas */}

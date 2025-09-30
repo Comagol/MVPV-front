@@ -1,6 +1,10 @@
 import api from './api';
 import type { MatchResponse, CreateMatchRequest } from '../types/index';
 
+let lastFinishedMatchCache: MatchResponse | null = null;
+let cacheTimestamp: number = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 export const matchService = {
   //Rutas publicas
   //get all matches
@@ -54,14 +58,23 @@ export const matchService = {
   //get last finished match
   getLastFinishedMatch: async (): Promise<MatchResponse | null> => {
     try {
-      console.log('🔍 matchService: Iniciando getLastFinishedMatch');
+      // Check cache first
+      const now = Date.now();
+      if (lastFinishedMatchCache && (now - cacheTimestamp) < CACHE_DURATION) {
+        return lastFinishedMatchCache;
+      }
+
       const response = await api.get('/matches/last-match');
-      console.log('✅ matchService: Ultimo partido finalizado obtenido:', response.data);
-      return response.data || null;
+      const data = response.data || null;
+      
+      // Update cache
+      lastFinishedMatchCache = data;
+      cacheTimestamp = now;
+      
+      return data;
     } catch (error) {
-      console.error('❌ matchService: Error al obtener el ultimo partido finalizado:', error);
+      console.error('Error getting last finished match:', error);
       return null;
     }
   }
-
-};
+}
