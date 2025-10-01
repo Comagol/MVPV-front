@@ -7,43 +7,31 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 import { matchService, playerService } from '../../services';
-import type { MatchResponse, CreateMatchRequest, PlayerResponse } from '../../types';
+import type { CreateMatchRequest, PlayerResponse } from '../../types';
 import MatchCard from '../../components/admin/MatchCard';
 import MatchForm from '../../components/admin/MatchForm';
+import { useMatches } from '../../hooks/useMatches';
 
 const MatchesPage = () => {
-  const [matches, setMatches] = useState<MatchResponse[]>([]);
+  // ✅ Usar el hook en lugar de estado local
+  const { matches, isLoading, error, fetchAllMatches } = useMatches();
+  
+  // ✅ Solo manejar players localmente (porque no está en el hook)
   const [players, setPlayers] = useState<PlayerResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [editingMatch, setEditingMatch] = useState<MatchResponse | null>(null);
+  const [editingMatch, setEditingMatch] = useState<any>(null);
 
+  // ✅ Solo cargar players, no matches
   useEffect(() => {
-    loadData();
+    const loadPlayers = async () => {
+      try {
+        const playersData = await playerService.getAllPlayers();
+        setPlayers(playersData);
+      } catch (err) {
+        console.error('Error cargando players:', err);
+      }
+    };
+    loadPlayers();
   }, []);
-
-  const loadData = async () => {
-    try {
-      setIsLoading(true);
-      console.log('🔍 Iniciando carga de datos...');
-      
-      const [matchesData, playersData] = await Promise.all([
-        matchService.getAllMatches(),
-        playerService.getAllPlayers()
-      ]);
-      
-      console.log('📊 Matches recibidos:', matchesData);
-      console.log('👥 Players recibidos:', playersData);
-      
-      setMatches(matchesData);
-      setPlayers(playersData);
-    } catch (err: any) {
-      console.error('❌ Error cargando datos:', err);
-      setError('Error al cargar datos');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleSubmitMatch = async (formData: CreateMatchRequest) => {
     try {
@@ -56,14 +44,14 @@ const MatchesPage = () => {
         console.log('Datos para crear partido:', formData);
         await matchService.createMatch(formData);
       }
-      loadData(); // Recargar la lista
+      // ✅ Usar la función del hook para recargar
+      await fetchAllMatches();
     } catch (error) {
       console.error('Error en handleSubmitMatch:', error);
-      setError('Error al procesar partido');
     }
   };
 
-  const handleEditMatch = (match: MatchResponse) => {
+  const handleEditMatch = (match: any) => {
     setEditingMatch(match);
   };
 
@@ -75,30 +63,30 @@ const MatchesPage = () => {
     try {
       await matchService.deleteMatch(id);
       console.log('Eliminar partido:', id);
-      loadData();
-    } catch (err: any) {
+      // ✅ Usar la función del hook para recargar
+      await fetchAllMatches();
+    } catch (err) {
       console.error('Error eliminando partido:', err);
-      setError('Error al eliminar partido');
     }
   };
 
   const handleStartMatch = async (id: string) => {
     try {
       await matchService.startMatch(id);
-      loadData();
-    } catch (err: any) {
+      // ✅ Usar la función del hook para recargar
+      await fetchAllMatches();
+    } catch (err) {
       console.error('Error iniciando partido:', err);
-      setError('Error al iniciar partido');
     }
   };
 
   const handleFinishMatch = async (id: string) => {
     try {
       await matchService.finishMatch(id);
-      loadData();
-    } catch (err: any) {
+      // ✅ Usar la función del hook para recargar
+      await fetchAllMatches();
+    } catch (err) {
       console.error('Error finalizando partido:', err);
-      setError('Error al finalizar partido');
     }
   };
 
@@ -134,11 +122,11 @@ const MatchesPage = () => {
         {/* Lista de partidos */}
         <Box>
           <Text mb={4} fontSize="lg" fontWeight="semibold">
-            Partidos Registrados ({(matches || []).length})
+            Partidos Registrados ({matches.length})
           </Text>
           
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>
-            {(matches || []).map((match) => (
+            {matches.map((match) => (
               <MatchCard
                 key={match.id}
                 match={match}
@@ -150,7 +138,7 @@ const MatchesPage = () => {
             ))}
           </SimpleGrid>
 
-          {(matches || []).length === 0 && (
+          {matches.length === 0 && (
             <Text textAlign="center" color="gray.500">
               No hay partidos registrados
             </Text>
