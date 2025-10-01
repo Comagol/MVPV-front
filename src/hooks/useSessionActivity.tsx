@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useAuth } from './useAuth';
+import { useAuth } from '../contexts/AuthContext';
 
 export const useSessionActivity = () => {
   const { extendSession, checkSessionTimeout } = useAuth();

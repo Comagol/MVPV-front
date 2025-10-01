@@ -11,7 +11,7 @@ import {
   Badge,
   Spinner
 } from '@chakra-ui/react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext';
 import { useMatches } from '../hooks/useMatches';
 import { useVoting } from '../hooks/useVoting';
 import type { PlayerResponse } from '../types';

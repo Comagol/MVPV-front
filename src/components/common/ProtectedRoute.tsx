@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../contexts/AuthContext';
 import { Box } from '@chakra-ui/react';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';

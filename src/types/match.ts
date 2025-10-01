@@ -18,3 +18,17 @@ export interface MatchResponse {
   rival: string;
   estado: 'programado' | 'en_proceso' | 'finalizado';
 }
+
+// MatchContext types
+export interface MatchContextType {
+  matches: MatchResponse[];
+  activeMatches: MatchResponse[];
+  lastFinishedMatch: MatchResponse | null;
+  isLoading: boolean;
+  error: string | null;
+  fetchAllMatches: () => Promise<MatchResponse[]>;
+  fetchActiveMatches: () => Promise<MatchResponse[]>;
+  fetchMatchById: (id: string) => Promise<MatchResponse>;
+  fetchLastFinishedMatch: () => Promise<MatchResponse>;
+  clearError: () => void;
+}
