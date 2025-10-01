@@ -25,15 +25,12 @@ const MatchesPage = () => {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      console.log('🔍 Iniciando carga de datos...');
       
       const [matchesData, playersData] = await Promise.all([
         matchService.getAllMatches(),
         playerService.getAllPlayers()
       ]);
       
-      console.log('📊 Matches recibidos:', matchesData);
-      console.log('👥 Players recibidos:', playersData);
       
       setMatches(matchesData);
       setPlayers(playersData);
