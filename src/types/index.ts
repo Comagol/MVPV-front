@@ -6,3 +6,4 @@ export * from './player';
 export * from './user';
 export * from './vote';
 export * from './admin';
+export * from './appData';

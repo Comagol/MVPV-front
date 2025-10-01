@@ -1,97 +1,132 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { matchService } from "../services";
 import type { MatchResponse } from "../types";
 
 export const useMatches = () => {
+  // ✅ ESTADO CONSOLIDADO
   const [matches, setMatches] = useState<MatchResponse[]>([]);
   const [activeMatches, setActiveMatches] = useState<MatchResponse[]>([]);
   const [lastFinishedMatch, setLastFinishedMatch] = useState<MatchResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);
+  
+  // ✅ REFS PARA PREVENIR LLAMADAS DUPLICADAS
+  const isLoadingRef = useRef(false);
+  const lastFetchRef = useRef<number>(0);
+  const CACHE_DURATION = 30000; // 30 segundos de cache
 
-  //obtengo los partidos
-  const fetchAllMatches = async () => {
+  // ✅ FUNCIÓN PRINCIPAL: Cargar todos los datos en paralelo
+  const loadAllData = useCallback(async (forceRefresh = false) => {
+    const now = Date.now();
+    
+    // Prevenir llamadas duplicadas
+    if (isLoadingRef.current) {
+      console.log('🔄 Carga ya en progreso, omitiendo...');
+      return;
+    }
+
+    // Verificar cache (solo si no es forzado)
+    if (!forceRefresh && (now - lastFetchRef.current) < CACHE_DURATION) {
+      console.log('💾 Usando datos en cache');
+      return;
+    }
+
+    console.log('🔄 Iniciando carga de datos de partidos...');
+    isLoadingRef.current = true;
     setIsLoading(true);
     setError(null);
+
     try {
-      const allMatches = await matchService.getAllMatches();
+      // ✅ OPTIMIZACIÓN CLAVE: Todas las llamadas en paralelo
+      const [allMatches, activeMatchesData, lastFinishedMatchData] = await Promise.all([
+        matchService.getAllMatches(),
+        matchService.getActiveMatches(),
+        matchService.getLastFinishedMatch()
+      ]);
+
+      // ✅ OPTIMIZACIÓN CLAVE: Una sola actualización de estado
       setMatches(allMatches);
-      return allMatches;
+      setActiveMatches(activeMatchesData);
+      setLastFinishedMatch(lastFinishedMatchData);
+      setHasInitiallyLoaded(true);
+      
+      lastFetchRef.current = now;
+      console.log('✅ Datos cargados exitosamente:', {
+        totalMatches: allMatches.length,
+        activeMatches: activeMatchesData.length,
+        hasLastFinished: !!lastFinishedMatchData
+      });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al obtener todos los partidos');
-      throw err;
-    }finally {
+      console.error('❌ Error cargando datos:', err);
+      setError(err.response?.data?.message || 'Error al obtener los datos de partidos');
+    } finally {
       setIsLoading(false);
+      isLoadingRef.current = false;
     }
-  };
+  }, []);
 
-  //obtengo los partidos activos
-  const fetchActiveMatches = async () => {
-    setIsLoading(true);
-    setError(null);
+  // ✅ FUNCIONES INDIVIDUALES MEMOIZADAS
+  const fetchAllMatches = useCallback(async () => {
+    await loadAllData();
+    return matches;
+  }, [loadAllData, matches]);
 
-    try {
-      const active = await matchService.getActiveMatches();
-      setActiveMatches(active);
-      return active;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al obtener los partidos activos');
-      throw err;
-    }finally {
-      setIsLoading(false);
-    }
-  };
+  const fetchActiveMatches = useCallback(async () => {
+    await loadAllData();
+    return activeMatches;
+  }, [loadAllData, activeMatches]);
 
-  //obtengo partido por id
-  const fetchMatchById = async (id:string) => {
-    setIsLoading(true);
-    setError(null);
-
+  const fetchMatchById = useCallback(async (id: string) => {
     try {
       const match = await matchService.getMatchById(id);
       return match;
     } catch (err: any) {
-      setError(err.reponse?.data.message || 'Error al obtener el partido');
+      setError(err.response?.data?.message || 'Error al obtener el partido');
       throw err;
-    }finally {
-      setIsLoading(false);
     }
-  };
-
-  //obtener el ultimo partido finalizado
-  const fetchLastFinishedMatch = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const lastMatch = await matchService.getLastFinishedMatch();
-      setLastFinishedMatch(lastMatch);
-      return lastMatch;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al obtener el ultimo partido finalizado');
-      throw err;
-    }finally {
-      setIsLoading(false);
-    }
-  }
-
-  // cargar los datos al montar el hook
-  useEffect(() => {
-    fetchAllMatches();
-    fetchActiveMatches();
-    fetchLastFinishedMatch();
   }, []);
 
+  const fetchLastFinishedMatch = useCallback(async () => {
+    await loadAllData();
+    return lastFinishedMatch;
+  }, [loadAllData, lastFinishedMatch]);
+
+  // ✅ FUNCIÓN DE REFRESH FORZADO
+  const refreshData = useCallback(async () => {
+    await loadAllData(true);
+  }, [loadAllData]);
+
+  // ✅ FUNCIÓN PARA LIMPIAR ERRORES
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+  // ✅ EFECTO PRINCIPAL: Cargar datos al montar
+  useEffect(() => {
+    if (!hasInitiallyLoaded) {
+      loadAllData();
+    }
+  }, [loadAllData, hasInitiallyLoaded]);
+
+  // ✅ RETORNO OPTIMIZADO
   return {
+    // Estados
     matches,
     activeMatches,
+    lastFinishedMatch,
     isLoading,
     error,
+    hasInitiallyLoaded,
+    
+    // Funciones de datos
     fetchAllMatches,
     fetchActiveMatches,
     fetchMatchById,
     fetchLastFinishedMatch,
-    lastFinishedMatch,
-    clearError: () => setError(null)
+    
+    // Funciones de utilidad
+    refreshData,
+    clearError
   };
 };
