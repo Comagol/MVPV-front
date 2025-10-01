@@ -29,6 +29,6 @@ export interface MatchContextType {
   fetchAllMatches: () => Promise<MatchResponse[]>;
   fetchActiveMatches: () => Promise<MatchResponse[]>;
   fetchMatchById: (id: string) => Promise<MatchResponse>;
-  fetchLastFinishedMatch: () => Promise<MatchResponse>;
+  fetchLastFinishedMatch: () => Promise<MatchResponse | null>;
   clearError: () => void;
 }
