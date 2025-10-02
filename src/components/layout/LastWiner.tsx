@@ -11,13 +11,14 @@ import {
   SkeletonCircle,
   SkeletonText
 } from '@chakra-ui/react';
-import { useMatches } from '../../hooks/useMatches';
+import { useMatch } from '../../contexts/MatchContext';
 import { voteService } from '../../services/voteService';
 import { useState, useEffect, useCallback } from 'react';
 import type { VoteStatistics } from '../../types';
 
 const LastWiner = () => {
-  const { lastFinishedMatch, isLoading: matchLoading } = useMatches();
+  // ✅ Usar el contexto en lugar del hook
+  const { lastFinishedMatch, isLoading: matchLoading } = useMatch();
   const [winner, setWinner] = useState<VoteStatistics | null>(null);
   const [isLoadingWinner, setIsLoadingWinner] = useState(false);
   const [error, setError] = useState<string | null>(null);
