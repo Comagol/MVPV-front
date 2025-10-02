@@ -12,16 +12,17 @@ import {
   Spinner
 } from '@chakra-ui/react';
 import { useAuth } from '../contexts/AuthContext';
-import { useMatches } from '../hooks/useMatches';
-import { useVoting } from '../hooks/useVoting';
+import { useMatch } from '../contexts/MatchContext';
+import { useVote } from '../contexts/VoteContext';
 import type { PlayerResponse } from '../types';
 import type { VoteValidationResponse } from '../types';
 import LastWiner from '../components/layout/LastWiner';
 
 const VotePage = () => {
   const { user, logout } = useAuth();
-  const { activeMatches, isLoading: matchesLoading } = useMatches();
-  const { createVote, validateVote, isLoading: votingLoading } = useVoting();
+  // ✅ Usar contextos en lugar de hooks
+  const { activeMatches, isLoading: matchesLoading } = useMatch();
+  const { createVote, validateVote, isLoading: votingLoading } = useVote();
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerResponse | null>(null);
   const [voteValidation, setVoteValidation] = useState<VoteValidationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
