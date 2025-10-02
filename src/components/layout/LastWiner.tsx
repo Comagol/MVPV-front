@@ -6,10 +6,8 @@ import {
   Image,
   Badge,
   HStack,
-  Spinner,
   Skeleton,
   SkeletonCircle,
-  SkeletonText
 } from '@chakra-ui/react';
 import { useMatch } from '../../contexts/MatchContext';
 import { voteService } from '../../services/voteService';
