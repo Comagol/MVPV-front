@@ -103,7 +103,7 @@ const VotePage = () => {
               {voteValidation.razon || 'Ya has realizado tu voto para este partido.'}
             </Text>
           </Box>
-          
+          <NextMatch match={nextMatch} />
           {voteValidation.tiempoRestante && (
             <Text fontSize="sm" color="gray.600">
               Tiempo restante: {Math.floor(voteValidation.tiempoRestante / 60)} minutos
