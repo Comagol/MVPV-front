@@ -6,20 +6,22 @@ import {
   Image,
   Badge,
   HStack,
-  Spinner
+  Skeleton,
+  SkeletonCircle,
 } from '@chakra-ui/react';
-import { useMatches } from '../../hooks/useMatches';
+import { useMatch } from '../../contexts/MatchContext';
 import { voteService } from '../../services/voteService';
 import { useState, useEffect, useCallback } from 'react';
 import type { VoteStatistics } from '../../types';
 
 const LastWiner = () => {
-  const { lastFinishedMatch, isLoading: matchLoading } = useMatches();
+  // ✅ Usar el contexto en lugar del hook
+  const { lastFinishedMatch, isLoading: matchLoading } = useMatch();
   const [winner, setWinner] = useState<VoteStatistics | null>(null);
   const [isLoadingWinner, setIsLoadingWinner] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);
 
-  // Fixed: Removed extra space and improved error handling
   const fetchWinner = useCallback(async (matchId: string) => {
     setIsLoadingWinner(true);
     setError(null);
@@ -41,50 +43,71 @@ const LastWiner = () => {
     }
   }, [lastFinishedMatch?.id, fetchWinner]);
 
-  if (matchLoading || isLoadingWinner) {
-    return (
-      <Box minH="200px" display="flex" alignItems="center" justifyContent="center">
-        <VStack gap={4}>
-          <Spinner size="lg" />
-          <Text>Cargando último ganador...</Text>
-        </VStack>
-      </Box>
-    );
+  // Track if we've completed the initial loading
+  useEffect(() => {
+    if (!matchLoading && !isLoadingWinner) {
+      setHasInitiallyLoaded(true);
+    }
+  }, [matchLoading, isLoadingWinner]);
+
+  // Show skeleton loading during initial load
+  if (!hasInitiallyLoaded) {
+    return <SkeletonLoader />;
   }
 
+  // Show error state
   if (error) {
     return (
       <Box 
-        p={4} 
+        p={6} 
         bg="red.50" 
         border="1px solid" 
         borderColor="red.200" 
         rounded="lg"
         color="red.700"
+        maxW="2xl"
+        mx="auto"
       >
-        <HStack gap={2}>
-          <Text fontSize="sm" fontWeight="bold">⚠️</Text>
-          <Text fontSize="sm">{error}</Text>
+        <HStack gap={3}>
+          <Text fontSize="lg" fontWeight="bold">⚠️</Text>
+          <VStack align="start" gap={1}>
+            <Text fontSize="md" fontWeight="semibold">Error al cargar datos</Text>
+            <Text fontSize="sm">{error}</Text>
+          </VStack>
         </HStack>
       </Box>
     );
   }
 
+  // Show "no matches" message only after we've confirmed there are no matches
   if (!lastFinishedMatch || !winner) {
     return (
-      <Box minH="200px" display="flex" alignItems="center" justifyContent="center">
+      <Box 
+        p={8} 
+        bg="white" 
+        rounded="xl" 
+        shadow="lg" 
+        border="1px solid" 
+        borderColor="gray.200" 
+        maxW="2xl" 
+        mx="auto"
+        textAlign="center"
+      >
         <VStack gap={4}>
+          <Box fontSize="6xl">🏈</Box>
           <Heading size="md" color="gray.500">
             No hay partidos anteriores
           </Heading>
-          <Text color="gray.400">
-            Aún no se han completado partidos para mostrar resultados.
+          <Text color="gray.400" maxW="md">
+            Aún no se han completado partidos para mostrar resultados. 
+            ¡Pronto podrás ver quién fue el jugador destacado!
           </Text>
         </VStack>
       </Box>
     );
   }
 
+  // Show the winner data
   return (
     <Box
       p={8}
@@ -177,5 +200,61 @@ const LastWiner = () => {
     </Box>
   );
 };
+
+// Skeleton loader component
+const SkeletonLoader = () => (
+  <Box
+    p={8}
+    bg="white"
+    rounded="xl"
+    shadow="lg"
+    border="1px solid"
+    borderColor="gray.200"
+    maxW="2xl"
+    mx="auto"
+  >
+    <VStack gap={6} align="stretch">
+      {/* Header skeleton */}
+      <Box textAlign="center">
+        <Skeleton height="32px" width="200px" mx="auto" mb={2} />
+        <Skeleton height="24px" width="150px" mx="auto" />
+      </Box>
+
+      {/* Separator */}
+      <Box h="1px" bg="gray.200" w="100%" />
+
+      {/* Match info skeleton */}
+      <Box textAlign="center">
+        <Skeleton height="24px" width="180px" mx="auto" mb={2} />
+        <Skeleton height="16px" width="220px" mx="auto" />
+      </Box>
+
+      {/* Separator */}
+      <Box h="1px" bg="gray.200" w="100%" />
+
+      {/* Winner info skeleton */}
+      <VStack gap={4}>
+        <Skeleton height="28px" width="160px" mx="auto" />
+        
+        <SkeletonCircle size="150px" />
+        
+        <VStack gap={2}>
+          <Skeleton height="28px" width="200px" />
+          <Skeleton height="20px" width="120px" />
+          
+          <HStack gap={4}>
+            <Skeleton height="24px" width="80px" />
+            <Skeleton height="24px" width="60px" />
+          </HStack>
+        </VStack>
+      </VStack>
+
+      {/* Message skeleton */}
+      <Box textAlign="center" p={4} bg="blue.50" rounded="lg">
+        <Skeleton height="16px" width="300px" mx="auto" />
+      </Box>
+    </VStack>
+  </Box>
+);
 
 export default LastWiner;

@@ -33,3 +33,17 @@ export interface VoteValidationResponse {
   razon?: string;
   tiempoRestante?: number;
 }
+
+// VoteContext types
+export interface VoteContextType {
+  votes: VoteResponse[];
+  isLoading: boolean;
+  error: string | null;
+  createVote: (playerId: string, matchId: string) => Promise<VoteResponse>;
+  validateVote: (matchId: string) => Promise<VoteValidationResponse>;
+  getMatchStats: (matchId: string) => Promise<VoteStatistics[]>;
+  getTop3Players: (matchId: string) => Promise<VoteStatistics[]>;
+  getMatchWinner: (matchId: string) => Promise<VoteStatistics>;
+  getTotalVotes: (matchId: string) => Promise<number>;
+  clearError: () => void;
+}

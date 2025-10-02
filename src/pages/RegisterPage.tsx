@@ -9,7 +9,7 @@ import {
   Text,
   Image
 } from '@chakra-ui/react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext';
 import type { RegisterRequest } from '../types';
 
 const RegisterPage = () => {
