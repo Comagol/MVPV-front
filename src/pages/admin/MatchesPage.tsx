@@ -10,13 +10,13 @@ import { matchService, playerService } from '../../services';
 import type { CreateMatchRequest, PlayerResponse } from '../../types';
 import MatchCard from '../../components/admin/MatchCard';
 import MatchForm from '../../components/admin/MatchForm';
-import { useMatches } from '../../hooks/useMatches';
+import { useMatch } from '../../contexts/MatchContext';
 
 const MatchesPage = () => {
-  // ✅ Usar el hook en lugar de estado local
-  const { matches, isLoading, error, fetchAllMatches } = useMatches();
+  // ✅ Usar el contexto en lugar del hook
+  const { matches, isLoading, error, fetchAllMatches } = useMatch();
   
-  // ✅ Solo manejar players localmente (porque no está en el hook)
+  // ✅ Solo manejar players localmente (porque no está en el contexto)
   const [players, setPlayers] = useState<PlayerResponse[]>([]);
   const [editingMatch, setEditingMatch] = useState<any>(null);
 
@@ -44,7 +44,7 @@ const MatchesPage = () => {
         console.log('Datos para crear partido:', formData);
         await matchService.createMatch(formData);
       }
-      // ✅ Usar la función del hook para recargar
+      // ✅ Usar la función del contexto para recargar
       await fetchAllMatches();
     } catch (error) {
       console.error('Error en handleSubmitMatch:', error);
@@ -63,7 +63,7 @@ const MatchesPage = () => {
     try {
       await matchService.deleteMatch(id);
       console.log('Eliminar partido:', id);
-      // ✅ Usar la función del hook para recargar
+      // ✅ Usar la función del contexto para recargar
       await fetchAllMatches();
     } catch (err) {
       console.error('Error eliminando partido:', err);
@@ -73,7 +73,7 @@ const MatchesPage = () => {
   const handleStartMatch = async (id: string) => {
     try {
       await matchService.startMatch(id);
-      // ✅ Usar la función del hook para recargar
+      // ✅ Usar la función del contexto para recargar
       await fetchAllMatches();
     } catch (err) {
       console.error('Error iniciando partido:', err);
@@ -83,7 +83,7 @@ const MatchesPage = () => {
   const handleFinishMatch = async (id: string) => {
     try {
       await matchService.finishMatch(id);
-      // ✅ Usar la función del hook para recargar
+      // ✅ Usar la función del contexto para recargar
       await fetchAllMatches();
     } catch (err) {
       console.error('Error finalizando partido:', err);
