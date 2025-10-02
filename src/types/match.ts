@@ -23,11 +23,13 @@ export interface MatchResponse {
 export interface MatchContextType {
   matches: MatchResponse[];
   activeMatches: MatchResponse[];
+  programmedMatches: MatchResponse[];
   lastFinishedMatch: MatchResponse | null;
   isLoading: boolean;
   error: string | null;
   fetchAllMatches: () => Promise<MatchResponse[]>;
   fetchActiveMatches: () => Promise<MatchResponse[]>;
+  fetchProgrammedMatches: () => Promise<MatchResponse[]>;
   fetchMatchById: (id: string) => Promise<MatchResponse>;
   fetchLastFinishedMatch: () => Promise<MatchResponse | null>;
   clearError: () => void;

@@ -15,13 +15,13 @@ export const useMatch = () => {
 export const MatchProvider = ({children}: { children: React.ReactNode }) => {
   const [matches, setMatches] = useState<MatchResponse[]>([]);
   const [activeMatches, setActiveMatches] = useState<MatchResponse[]>([]);
+  const [programmedMatches, setProgrammedMatches] = useState<MatchResponse[]>([]);
   const [lastFinishedMatch, setLastFinishedMatch] = useState<MatchResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Obtener todos los partidos
   const fetchAllMatches = useCallback(async () => {
-    setIsLoading(true);
     setError(null);
     try {
       const allMatches = await matchService.getAllMatches();
@@ -30,14 +30,11 @@ export const MatchProvider = ({children}: { children: React.ReactNode }) => {
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al obtener todos los partidos');
       throw err;
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
   // Obtener partidos activos
   const fetchActiveMatches = useCallback(async () => {
-    setIsLoading(true);
     setError(null);
 
     try {
@@ -47,14 +44,11 @@ export const MatchProvider = ({children}: { children: React.ReactNode }) => {
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al obtener los partidos activos');
       throw err;
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
   // Obtener partido por ID
   const fetchMatchById = useCallback(async (id: string) => {
-    setIsLoading(true);
     setError(null);
 
     try {
@@ -63,14 +57,11 @@ export const MatchProvider = ({children}: { children: React.ReactNode }) => {
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al obtener el partido');
       throw err;
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
   // Obtener el último partido finalizado
   const fetchLastFinishedMatch = useCallback(async () => {
-    setIsLoading(true);
     setError(null);
 
     try {
@@ -80,8 +71,19 @@ export const MatchProvider = ({children}: { children: React.ReactNode }) => {
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al obtener el último partido finalizado');
       throw err;
-    } finally {
-      setIsLoading(false);
+    }
+  }, []);
+
+  // Obtener partidos programados
+  const fetchProgrammedMatches = useCallback(async () => {
+    setError(null);
+    try {
+      const programmed = await matchService.getProgrammedMatches();
+      setProgrammedMatches(programmed);
+      return programmed;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener los partidos programados');
+      throw err;
     }
   }, []);
 
@@ -92,20 +94,38 @@ export const MatchProvider = ({children}: { children: React.ReactNode }) => {
 
   // Cargar datos iniciales
   useEffect(() => {
-    fetchAllMatches();
-    fetchActiveMatches();
-    fetchLastFinishedMatch();
-  }, [fetchAllMatches, fetchActiveMatches, fetchLastFinishedMatch]);
+    const loadInitialData = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        await Promise.all([
+          fetchAllMatches(),
+          fetchActiveMatches(),
+          fetchProgrammedMatches(),
+          fetchLastFinishedMatch()
+        ]);
+      } catch (err) {
+        console.error('❌ Error cargando datos iniciales:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    loadInitialData();
+  }, []);
 
   // Memoized context value
   const value = useMemo(() => ({
     matches,
     activeMatches,
+    programmedMatches,
     lastFinishedMatch,
     isLoading,
     error,
     fetchAllMatches,
     fetchActiveMatches,
+    fetchProgrammedMatches,
     fetchMatchById,
     fetchLastFinishedMatch,
     clearError,

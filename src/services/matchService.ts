@@ -19,6 +19,12 @@ export const matchService = {
     return response.data;
   },
 
+  //get programmed matches
+  getProgrammedMatches: async (): Promise<MatchResponse[]> => {
+    const response = await api.get('/matches/scheduled');
+    return response.data;
+  },
+
   //Get match By ID
   getMatchById: async (id: string): Promise<MatchResponse> => {
     const response = await api.get(`/matches/${id}`);

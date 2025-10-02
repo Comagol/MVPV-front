@@ -17,11 +17,11 @@ import { useVote } from '../contexts/VoteContext';
 import type { PlayerResponse } from '../types';
 import type { VoteValidationResponse } from '../types';
 import LastWiner from '../components/layout/LastWiner';
+import NextMatch from '../components/layout/NextMatch';
 
 const VotePage = () => {
   const { user, logout } = useAuth();
-  // ✅ Usar contextos en lugar de hooks
-  const { activeMatches, isLoading: matchesLoading } = useMatch();
+  const { activeMatches, programmedMatches, isLoading: matchesLoading } = useMatch();
   const { createVote, validateVote, isLoading: votingLoading } = useVote();
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerResponse | null>(null);
   const [voteValidation, setVoteValidation] = useState<VoteValidationResponse | null>(null);
@@ -31,6 +31,7 @@ const VotePage = () => {
 
   // Obtener el partido activo
   const activeMatch = activeMatches?.[0] || null;
+  const nextMatch = programmedMatches?.[0] || activeMatch || null;
 
   useEffect(() => {
     const checkVotingStatus = async () => {
@@ -79,6 +80,8 @@ const VotePage = () => {
         </Box>
         
         {/* Mostrar el último ganador */}
+        
+        <NextMatch match={nextMatch} />
         <LastWiner />
         
         {/* Botón de logout */}
