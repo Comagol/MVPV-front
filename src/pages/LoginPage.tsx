@@ -8,8 +8,7 @@ import {
   Heading,
   Text,
   Image,
-  Icon,
-  HStack
+  Icon
 } from '@chakra-ui/react';
 import { FaGoogle } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
