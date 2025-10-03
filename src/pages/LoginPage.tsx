@@ -7,8 +7,11 @@ import {
   VStack,
   Heading,
   Text,
-  Image
+  Image,
+  Icon,
+  HStack
 } from '@chakra-ui/react';
+import { FaGoogle } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import type { LoginRequest } from '../types';
 
@@ -19,9 +22,10 @@ const LoginPage = () => {
     rememberMe: false
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +47,20 @@ const LoginPage = () => {
       setError(err.response?.data?.message || 'Error al iniciar sesión');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    setError(null);
+
+    try {
+      await loginWithGoogle();
+      navigate('/vote');
+    } catch (err: any) {
+      setError(err.message || 'Error al iniciar sesión con Google');
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -101,6 +119,19 @@ const LoginPage = () => {
               >
                 Iniciar Sesión
               </Button>
+              <Button
+                onClick={handleGoogleLogin}
+                loading={isGoogleLoading}
+                loadingText="Iniciando con Google..."
+                colorScheme="red"
+                variant="outline"
+                size="lg"
+                w="full"
+              >
+                <Icon as={FaGoogle} mr={2} />
+                Continuar con Google
+              </Button>
+          
             </VStack>
           </form>
 
