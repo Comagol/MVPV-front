@@ -185,4 +185,25 @@ export const authService = {
     const response = await api.get(`/auth/verify-reset-token/${token}`);
     return response.data;
   },
+
+  // Firebase login method
+  firebaseLogin: async (firebaseToken: string): Promise<AuthResponse> => {
+    const response = await api.post('/auth/firebase-login', { token: firebaseToken });
+    const authData = response.data;
+
+    if (authData.token) {
+      const expiresAt = authData.expiresAt || Date.now() + (24*60*60*1000);
+      authService.setTokenData({
+        token: authData.token,
+        refreshToken: authData.refreshToken,
+        expiresAt,
+        issuedAt: Date.now(),
+      });
+
+      if (authData.userType) {
+        sessionStorage.setItem(USER_TYPE_KEY, authData.userType);
+      }
+    }
+    return authData;
+  },
 };
