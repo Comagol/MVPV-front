@@ -1,7 +1,8 @@
 /*User interface*/ 
 
 export interface User {
-  _id: string;
+  _id?: string;
+  id?: string;
   email: string;
   nombre: string;
   fechaRegistro: string;
@@ -9,4 +10,7 @@ export interface User {
   votosRealizados: number;
   activo: boolean;
   role: 'user' | 'admin';
+  avatar?: string;
+  provider?: string;
+  displayName?: string;
 }
