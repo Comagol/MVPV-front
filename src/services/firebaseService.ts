@@ -20,7 +20,7 @@ export const firebaseService = {
       const idToken = await user.getIdToken();
       
       // Enviar el token al backend
-      const response = await api.post('/auth/firebase-login', { token: idToken });
+      const response = await api.post('/auth/firebase-login', { firebaseToken: idToken });
       
       return response.data;
     } catch (error: any) {

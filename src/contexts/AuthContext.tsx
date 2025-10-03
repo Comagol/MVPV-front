@@ -1,6 +1,5 @@
 import { useState, useEffect, createContext, useContext, useMemo, useCallback } from 'react';
-import { authService } from '../services';
-import { firebaseService } from '../services/firebaseService';
+import { authService, firebaseService } from '../services';
 import type { User, LoginRequest, RegisterRequest, AuthResponse, AuthContextType } from '../types';
 
 const AuthContext = createContext<AuthContextType | null>(null);

@@ -12,7 +12,7 @@ export interface LoginRequest {
 
 // Nuevo tipo para Firebase login
 export interface FirebaseLoginRequest {
-  token: string; // Token de Firebase
+  firebaseToken: string; // Token de Firebase
 }
 
 export interface RegisterRequest {
