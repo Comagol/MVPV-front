@@ -10,6 +10,11 @@ export interface LoginRequest {
   rememberMe: boolean;
 }
 
+// Nuevo tipo para Firebase login
+export interface FirebaseLoginRequest {
+  firebaseToken: string; // Token de Firebase
+}
+
 export interface RegisterRequest {
   email: string;
   nombre: string;
@@ -70,6 +75,7 @@ export interface AuthState {
 export interface AuthContextType extends AuthState {
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<boolean>;
   extendSession: () => void;

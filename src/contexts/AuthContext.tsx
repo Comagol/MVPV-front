@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext, useMemo, useCallback } from 'react';
-import { authService } from '../services';
+import { authService, firebaseService } from '../services';
 import type { User, LoginRequest, RegisterRequest, AuthResponse, AuthContextType } from '../types';
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -200,6 +200,38 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     return authService.isSessionExpired();
   }, []);
 
+  // Enhanced Google login
+  const loginWithGoogle = useCallback(async () => {
+    try {
+      const response: AuthResponse = await firebaseService.signInWithGoogle();
+      
+      // Store user data
+      if (response.userType === 'admin' && response.admin) {
+        sessionStorage.setItem('user', JSON.stringify(response.admin));
+        sessionStorage.setItem('userType', 'admin'); // ← Agregar esta línea
+        setUser(response.admin);
+        setIsAdmin(true);
+      } else if (response.userType === 'user' && response.user) {
+        sessionStorage.setItem('user', JSON.stringify(response.user));
+        sessionStorage.setItem('userType', 'user'); // ← Agregar esta línea
+        setUser(response.user);
+        setIsAdmin(false);
+      }
+
+      // Set session timeout
+      const timeoutTime = Date.now() + (30 * 60 * 1000);
+      setSessionTimeout(timeoutTime);
+      authService.extendSession();
+
+      // Set token expiration
+      const tokenExpiration = authService.getTokenExpirationTime();
+      setTokenExpiresAt(tokenExpiration || undefined);
+
+    } catch (error) {
+      throw error;
+    }
+  }, []);
+
   // Memoized context value
   const value = useMemo(() => ({
     user,
@@ -210,11 +242,12 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     tokenExpiresAt,
     login,
     register,
+    loginWithGoogle,
     logout,
     refreshToken,
     extendSession,
     checkSessionTimeout,
-  }), [user, isLoading, isAdmin, sessionTimeout, tokenExpiresAt, login, register, logout, refreshToken, extendSession, checkSessionTimeout]);
+  }), [user, isLoading, isAdmin, sessionTimeout, tokenExpiresAt, login, register, loginWithGoogle, logout, refreshToken, extendSession, checkSessionTimeout]);
 
   return (
     <AuthContext.Provider value={value}>
