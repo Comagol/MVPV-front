@@ -7,10 +7,12 @@ import {
   VStack,
   Heading,
   Text,
-  Image
+  Image,
+  Icon
 } from '@chakra-ui/react';
 import { useAuth } from '../contexts/AuthContext';
 import type { RegisterRequest } from '../types';
+import { FaGoogle } from 'react-icons/fa';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -19,9 +21,10 @@ const RegisterPage = () => {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { register } = useAuth();
+  const { register, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +49,20 @@ const RegisterPage = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    setError(null);
+
+    try {
+      await loginWithGoogle();
+      navigate('/vote');
+    } catch (err: any) {
+      setError(err.message || 'Error al registrarse con Google');
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
   return (
     <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
@@ -64,6 +81,19 @@ const RegisterPage = () => {
               {error}
             </Box>
           )}
+
+              <Button
+                onClick={handleGoogleLogin}
+                loading={isGoogleLoading}
+                loadingText="Iniciando con Google..."
+                colorScheme="red"
+                variant="outline"
+                size="lg"
+                w="full"
+              >
+                <Icon as={FaGoogle} mr={2} />
+                Continuar con Google
+              </Button>
 
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <VStack gap={4}>
