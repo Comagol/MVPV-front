@@ -6,7 +6,7 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 import api from './api';
-import type { AuthResponse, FirebaseLoginRequest } from '../types';
+import type { AuthResponse } from '../types';
 
 export const firebaseService = {
   // Login con Google
