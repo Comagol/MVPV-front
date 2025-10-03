@@ -208,10 +208,12 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
       // Store user data
       if (response.userType === 'admin' && response.admin) {
         sessionStorage.setItem('user', JSON.stringify(response.admin));
+        sessionStorage.setItem('userType', 'admin'); // ← Agregar esta línea
         setUser(response.admin);
         setIsAdmin(true);
       } else if (response.userType === 'user' && response.user) {
         sessionStorage.setItem('user', JSON.stringify(response.user));
+        sessionStorage.setItem('userType', 'user'); // ← Agregar esta línea
         setUser(response.user);
         setIsAdmin(false);
       }
