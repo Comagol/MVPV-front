@@ -10,6 +10,11 @@ export interface LoginRequest {
   rememberMe: boolean;
 }
 
+// Nuevo tipo para Firebase login
+export interface FirebaseLoginRequest {
+  token: string; // Token de Firebase
+}
+
 export interface RegisterRequest {
   email: string;
   nombre: string;
