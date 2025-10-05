@@ -2,6 +2,7 @@ import { Box, Button, Input, VStack, Text, Image } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import { authService } from "../services/authService";
 import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -72,6 +73,12 @@ const ForgotPasswordPage = () => {
               </Button>
             </VStack>
           </form>
+          <Text textAlign="center">
+            ¿Ya tienes cuenta?{' '}
+            <RouterLink to="/login" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+              Inicia sesión aquí
+            </RouterLink>
+          </Text>
         </VStack>
       </Box>
     </Box>
