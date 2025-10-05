@@ -60,7 +60,7 @@ const VotePage = () => {
 
   if (matchesLoading) {
     return (
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
         <Spinner size="xl" />
       </Box>
     );
@@ -68,7 +68,7 @@ const VotePage = () => {
 
   if (!activeMatch) {
     return (
-      <Box minH="100vh" bg="gray.50" p={4}>
+      <Box flex="1" p={4}>
       <VStack gap={8} maxW="6xl" mx="auto">
         <Box w="full" textAlign="center">
           <Heading size="xl" mb={2} color="gray.700">
@@ -95,7 +95,7 @@ const VotePage = () => {
 
   if (voteValidation && !voteValidation.puedeVotar) {
     return (
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
         <VStack gap={4} maxW="md">
           <Box p={6} bg="orange.100" color="orange.800" rounded="lg" w="full" textAlign="center">
             <Heading size="md" mb={2}>No puedes votar</Heading>
@@ -119,7 +119,7 @@ const VotePage = () => {
   }
 
   return (
-    <Box minH="100vh" bg="gray.50" p={4}>
+    <Box flex="1" p={4}>
       <VStack gap={6} maxW="6xl" mx="auto">
         {/* Header */}
         <Box w="full" textAlign="center">

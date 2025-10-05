@@ -15,13 +15,13 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 
 const AppWithSessionTracking = () => {
-  useSessionActivity(); // This will track user activity
-  return null; // This component doesn't render anything
+  useSessionActivity();
+  return null;
 };
 
 function App() {
   return(
-    <AuthProvider>
+      <AuthProvider>
       <MatchProvider>
         <VoteProvider>
           <AppWithSessionTracking />
@@ -96,6 +96,7 @@ function App() {
         </VoteProvider>
       </MatchProvider>
     </AuthProvider>
+    
   );
 }
 

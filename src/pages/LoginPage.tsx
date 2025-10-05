@@ -64,7 +64,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
+    <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
         <VStack gap={6}>
           {/* Logo de la app */}

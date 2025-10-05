@@ -18,8 +18,7 @@ export const PublicLayout = ({ children }: PublicLayoutProps) => {
       <Box 
         flex="1" 
         w="100%" 
-        display="flex" 
-        flexDirection="column"
+        minH="0"  // ← Importante para que flex funcione correctamente
       >
         {children}
       </Box>

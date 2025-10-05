@@ -79,7 +79,7 @@ const ResetPasswordPage = () => {
   // �� NUEVO: Estados de carga y error del token
   if (isValidatingToken) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
+      <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
         <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
           <VStack gap={6}>
             <Heading size="lg" textAlign="center">
@@ -97,7 +97,7 @@ const ResetPasswordPage = () => {
   // 🔥 NUEVO: Token inválido
   if (!isTokenValid || tokenError) {
     return (
-      <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
+      <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
         <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
           <VStack gap={6}>
             <Heading size="lg" textAlign="center" color="red.500">
@@ -128,7 +128,7 @@ const ResetPasswordPage = () => {
 
   // 🔥 NUEVO: Formulario solo se muestra si el token es válido
   return (
-    <Box minH="100vh" display="flex" flexDirection="column" alignItems="center" justifyContent="center" bg="gray.50">
+    <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
         <VStack gap={6}>
           {/* Logo de la app */}

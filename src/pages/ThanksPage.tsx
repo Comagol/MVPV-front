@@ -75,7 +75,7 @@ const ThanksPage = () => {
 
   if (matchesLoading || votingLoading) {
     return (
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
         <Spinner size="xl" />
       </Box>
     );
@@ -83,7 +83,7 @@ const ThanksPage = () => {
 
   if (!activeMatch) {
     return (
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
         <VStack gap={4}>
           <Heading>No hay partidos activos</Heading>
           <Text>No hay partidos disponibles en este momento.</Text>
@@ -93,7 +93,7 @@ const ThanksPage = () => {
   }
 
   return (
-    <Box minH="100vh" bg="gray.50" p={4}>
+    <Box flex="1" p={4}>
       <VStack gap={8} maxW="6xl" mx="auto">
         {/* Header de agradecimiento */}
         <Box w="full" textAlign="center">
