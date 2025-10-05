@@ -178,7 +178,7 @@ graph TD
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/tu-usuario/mvpv.git
+git clone https://github.com/Comagol/mvpv.git
 cd mvpv
 ```
 

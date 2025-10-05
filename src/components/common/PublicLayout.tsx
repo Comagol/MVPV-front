@@ -8,8 +8,19 @@ interface PublicLayoutProps {
 
 export const PublicLayout = ({ children }: PublicLayoutProps) => {
   return (
-    <Box minH="calc(100vh - 120px)" bg="gray.50" w="100%">
-      <Box w="100%">
+    <Box 
+      minH="100vh" 
+      bg="gray.50" 
+      w="100%" 
+      display="flex" 
+      flexDirection="column"
+    >
+      <Box 
+        flex="1" 
+        w="100%" 
+        display="flex" 
+        flexDirection="column"
+      >
         {children}
       </Box>
       <Footer />
