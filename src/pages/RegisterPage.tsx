@@ -64,7 +64,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+    <Box flex="1" display="flex" alignItems="center" justifyContent="center" marginTop="100px">
       <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
         <VStack gap={6}>
           {/* Logo de la app */}
