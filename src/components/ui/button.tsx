@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import { Button as ChakraButton, ButtonProps as ChakraButtonProps } from '@chakra-ui/react'
+import { Button as ChakraButton, type ButtonProps as ChakraButtonProps } from '@chakra-ui/react'
 
 interface ButtonProps extends Omit<ChakraButtonProps, 'variant'> {
   variant?: 'primary' | 'secondary' | 'outline'
