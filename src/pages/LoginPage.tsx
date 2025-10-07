@@ -69,7 +69,7 @@ const LoginPage = () => {
         <VStack gap={6}>
           {/* Logo de la app */}
           <Box w="140px" h="140px" rounded="full" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            <Text fontSize="lg" fontWeight="bold" mb={2} textAlign="center">Rugby MVP Voting</Text>
+            <Text fontSize="lg" fontWeight="bold" mb={2} textAlign="center" color="text-primary">Rugby MVP Voting</Text>
             <Image src="/favicon.png" alt="Logo" w="140px" h="140px" />
           </Box>
           
