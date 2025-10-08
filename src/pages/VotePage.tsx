@@ -12,7 +12,7 @@ import type { PlayerResponse, MatchResponse } from '../types'
 import type { VoteValidationResponse } from '../types'
 
 const VotePage = () => {
-  const { user, logout } = useAuth()
+  const { logout } = useAuth()
   const { activeMatches, programmedMatches, isLoading: matchesLoading } = useMatch()
   const { createVote, validateVote, isLoading: votingLoading } = useVote()
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerResponse | null>(null)

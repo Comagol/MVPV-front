@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, VStack, Text, Spinner } from '@chakra-ui/react'
 import { useAuth } from '../contexts/AuthContext'
 import { useMatches } from '../hooks/useMatches'
