@@ -1,4 +1,4 @@
-import { Box, VStack, HStack, Text, Badge } from '@chakra-ui/react'
+import {  VStack, HStack, Text, Badge } from '@chakra-ui/react'
 import { Card, Button } from '../ui'
 
 interface MatchCardProps {
