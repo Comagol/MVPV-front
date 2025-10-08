@@ -5,8 +5,8 @@ interface MatchCardProps {
   match: {
     id: string
     rival: string
-    fecha: string
-    estado: 'programado' | 'activo' | 'finalizado'
+    fecha: string | Date
+    estado: 'programado' | 'en_proceso' | 'finalizado'  
     resultado?: {
       vicentinos: number
       rival: number
@@ -19,7 +19,7 @@ interface MatchCardProps {
 export const MatchCard = ({ match, onVote, showVoteButton = true }: MatchCardProps) => {
   const getEstadoColor = () => {
     switch (match.estado) {
-      case 'activo':
+      case 'en_proceso':
         return 'button-primary'
       case 'finalizado':
         return 'text-secondary'
@@ -31,7 +31,7 @@ export const MatchCard = ({ match, onVote, showVoteButton = true }: MatchCardPro
 
   const getEstadoText = () => {
     switch (match.estado) {
-      case 'activo':
+      case 'en_proceso':
         return 'En Vivo'
       case 'finalizado':
         return 'Finalizado'
@@ -86,7 +86,7 @@ export const MatchCard = ({ match, onVote, showVoteButton = true }: MatchCardPro
         </VStack>
 
         {/* Botón de voto */}
-        {showVoteButton && onVote && match.estado === 'activo' && (
+        {showVoteButton && onVote && match.estado === 'en_proceso' && (
           <Button
             variant="primary"
             size="lg"
