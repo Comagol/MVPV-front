@@ -1,242 +1,164 @@
-import { useState, useEffect } from 'react';
-import {
-  Box,
-  Button,
-  VStack,
-  Heading,
-  Text,
-  Grid,
-  Image,
-  Badge,
-  Spinner
-} from '@chakra-ui/react';
-import { useAuth } from '../contexts/AuthContext';
-import { useMatches } from '../hooks/useMatches';
-import { useVoting } from '../hooks/useVoting';
-import type { VoteStatistics } from '../types/vote';
-import Sponsors from '../components/layout/Sponsors';
+import React, { useState, useEffect } from 'react'
+import { Box, VStack, Text, Spinner } from '@chakra-ui/react'
+import { useAuth } from '../contexts/AuthContext'
+import { useMatches } from '../hooks/useMatches'
+import { useVoting } from '../hooks/useVoting'
+import { Header, Button, Card } from '../components/ui'
+import { ResultsCard } from '../components/domain/ResultCard'
+import { SponsorPlaceholder } from '../components/domain/SponsorPlaceholder'
+import type { VoteStatistics } from '../types/vote'
 
 const ThanksPage = () => {
-  const { user, logout } = useAuth();
-  const { activeMatches, isLoading: matchesLoading } = useMatches();
-  const { getTotalVotes, getTop3Players, isLoading: votingLoading } = useVoting();
-  const [top3, setTop3] = useState<VoteStatistics[]>([]);
-  const [winner, setWinner] = useState<VoteStatistics | null>(null);
-  const [totalVotes, setTotalVotes] = useState<number>(0);
-  const [error, setError] = useState<string | null>(null);
-  const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+  const { user, logout } = useAuth()
+  const { activeMatches, isLoading: matchesLoading } = useMatches()
+  const { getTotalVotes, getTop3Players, isLoading: votingLoading } = useVoting()
+  const [top3, setTop3] = useState<VoteStatistics[]>([])
+  const [winner, setWinner] = useState<VoteStatistics | null>(null)
+  const [totalVotes, setTotalVotes] = useState<number>(0)
+  const [error, setError] = useState<string | null>(null)
+  const [dataLoaded, setDataLoaded] = useState<boolean>(false)
 
   // Obtener el partido activo
-  const activeMatch = activeMatches?.[0] || null;
+  const activeMatch = activeMatches?.[0] || null
 
   useEffect(() => {
     const loadVotingData = async () => {
       if (activeMatch) {
         try {
-          console.log('🔍 Iniciando carga de datos para match:', activeMatch.id);
-          
-          // Solo cargar stats (que funciona) y total votes
-          const [ total, top3 ] = await Promise.all([
+          const [total, top3Data] = await Promise.all([
             getTotalVotes(activeMatch.id),
             getTop3Players(activeMatch.id)
-          ]);
+          ])
           
-          console.log('�� Top3 del backend:', top3);
-          console.log('🔍 Total votos del backend:', total);
-          console.log('🔍 Top 3 players del backend:', top3);
-          setTop3(top3);
-          setTotalVotes(total);
+          setTop3(top3Data)
+          setTotalVotes(total)
           
-          
-          if (top3.length > 0) {
-            const winner = top3.reduce((prev, current) => 
+          if (top3Data.length > 0) {
+            const winnerData = top3Data.reduce((prev, current) => 
               (prev.totalVotos > current.totalVotos) ? prev : current
-            );
-            setWinner(winner);
-            console.log('🔍 Ganador calculado:', winner);
+            )
+            setWinner(winnerData)
           }
           
-          setDataLoaded(true);
-          console.log('�� Estado actualizado - top3:', top3);
-          console.log('🔍 Estado actualizado - totalVotes:', total);
-          
+          setDataLoaded(true)
         } catch (err) {
-          console.error('❌ Error al cargar datos de votación:', err);
-          setError('Error al cargar datos de votación');
-          setDataLoaded(true);
+          console.error('Error al cargar datos de votación:', err)
+          setError('Error al cargar datos de votación')
+          setDataLoaded(true)
         }
       }
-    };
+    }
     
-    // Esperar un poco antes de cargar datos para dar tiempo al backend
-    const timer = setTimeout(loadVotingData, 1000);
-    return () => clearTimeout(timer);
-  }, [activeMatch?.id]);
+    const timer = setTimeout(loadVotingData, 1000)
+    return () => clearTimeout(timer)
+  }, [activeMatch?.id])
 
   if (matchesLoading || votingLoading) {
     return (
-      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-        <Spinner size="xl" />
+      <Box flex="1" display="flex" alignItems="center" justifyContent="center" bg="bg-primary">
+        <Spinner size="xl" color="button-primary" />
       </Box>
-    );
+    )
   }
 
   if (!activeMatch) {
     return (
-      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-        <VStack gap={4}>
-          <Heading>No hay partidos activos</Heading>
-          <Text>No hay partidos disponibles en este momento.</Text>
+      <Box flex="1" bg="bg-primary" minH="100vh">
+        <VStack gap={8} maxW="6xl" mx="auto" p={6}>
+          <Header title="VICENTINOS" />
+          <Card variant="elevated" textAlign="center">
+            <Text fontSize="xl" color="text-primary">
+              No hay partidos activos
+            </Text>
+          </Card>
         </VStack>
       </Box>
-    );
+    )
   }
 
   return (
-    <Box flex="1" p={4}>
-      <VStack gap={8} maxW="6xl" mx="auto">
-        {/* Header de agradecimiento */}
-        <Box w="full" textAlign="center">
-          <Heading size="xl" mb={4} color="green.600">
-            ¡Gracias por tu voto!
-          </Heading>
-          <Text fontSize="lg" color="gray.600" mb={2}>
-            Vicentinos vs {activeMatch.rival} - {new Date(activeMatch.fecha).toLocaleDateString()}
-          </Text>
-          <Text fontSize="md" color="gray.500">
-            {user?.nombre}, tu voto ha sido registrado exitosamente
-          </Text>
-        </Box>
+    <Box flex="1" bg="bg-primary" minH="100vh">
+      <VStack gap={8} maxW="6xl" mx="auto" p={6}>
+        {/* Header */}
+        <Header 
+          title="VICENTINOS" 
+          rightElement={
+            <Button variant="outline" size="sm" onClick={logout}>
+              Cerrar Sesión
+            </Button>
+          }
+        />
 
-        {/* Error message - solo mostrar si es un error crítico */}
-        {error && (
-          <Box p={4} bg="red.100" color="red.700" rounded="md" w="full">
-            {error}
-          </Box>
-        )}
-
-        {/* Estadísticas generales */}
-        <Box w="full" bg="white" p={6} rounded="lg" shadow="md">
-          <Heading size="md" mb={4} textAlign="center">
-            Estadísticas del Partido
-          </Heading>
-          <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap={4}>
-            <Box textAlign="center" p={4} bg="blue.50" rounded="md">
-            <Text fontSize="2xl" fontWeight="bold" color="blue.600">
-              {dataLoaded ? (typeof totalVotes === 'object' ? (totalVotes as { totalVotes: number }).totalVotes : totalVotes) : '...'}
+        {/* Mensaje de agradecimiento */}
+        <Card variant="elevated" textAlign="center" maxW="md">
+          <VStack gap={4}>
+            <Text fontSize="2xl" fontWeight="bold" color="text-primary">
+              ¡Gracias por tu voto!
             </Text>
-              <Text color="gray.600">Total de Votos</Text>
-            </Box>
-            <Box textAlign="center" p={4} bg="green.50" rounded="md">
-              <Text fontSize="2xl" fontWeight="bold" color="green.600">
-                {activeMatch.jugadores.length}
-              </Text>
-              <Text color="gray.600">Jugadores</Text>
-            </Box>
-          </Grid>
-          <Sponsors />
-        </Box>
+            <Text fontSize="lg" color="text-secondary">
+              Vicentinos vs {activeMatch.rival} - {new Date(activeMatch.fecha).toLocaleDateString()}
+            </Text>
+            <Text fontSize="md" color="text-secondary">
+              {user?.nombre}, tu voto ha sido registrado exitosamente
+            </Text>
+          </VStack>
+        </Card>
 
-        {/* Resultados de votación - mostrar SIEMPRE que haya datos */}
-        {dataLoaded && top3.length > 0 && (
-          <Box w="full" bg="white" p={6} rounded="lg" shadow="md">
-            <Heading size="md" mb={4} textAlign="center">
-              Resultados de Votación
-            </Heading>
-            <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={4}>
-              {top3.map((player: VoteStatistics, index: number) => (
-                <Box
-                  key={player.playerId}
-                  p={4}
-                  bg={index === 0 ? "yellow.50" : "gray.50"}
-                  rounded="lg"
-                  border={index === 0 ? "2px solid" : "1px solid"}
-                  borderColor={index === 0 ? "yellow.400" : "gray.200"}
-                  textAlign="center"
-                >
-                  <Badge
-                    colorScheme={index === 0 ? "yellow" : "gray"}
-                    mb={2}
-                    fontSize="sm"
-                  >
-                    #{index + 1}
-                  </Badge>
-                  <Image
-                    src={player.playerImagen}
-                    alt={player.playerName}
-                    boxSize="80px"
-                    mx="auto"
-                    mb={3}
-                    borderRadius="full"
-                    objectFit="cover"
-                  />
-                  <Heading size="sm" mb={1}>
-                    {player.playerName}
-                  </Heading>
-                  <Text fontSize="lg" fontWeight="bold" color="blue.600">
-                    {player.totalVotos} votos
-                  </Text>
-                  <Text fontSize="sm" color="gray.500">
-                    {player.porcentaje?.toFixed(1)}%
-                  </Text>
-                </Box>
-              ))}
-            </Grid>
-          </Box>
+        {/* Error message */}
+        {error && (
+          <Card variant="outlined" borderColor="error.500" bg="error.50">
+            <Text color="error.600" textAlign="center">
+              {error}
+            </Text>
+          </Card>
         )}
 
-        {/* Ganador destacado - solo mostrar si hay ganador */}
-        {dataLoaded && winner && (
-          <Box w="full" bg="green.50" p={6} rounded="lg" shadow="md" border="2px solid" borderColor="green.200">
-            <Heading size="lg" mb={4} textAlign="center" color="green.700">
-              🏆 Jugador del Partido ��
-            </Heading>
-            <Box textAlign="center">
-              <Image
-                src={winner.playerImagen}
-                alt={winner.playerName}
-                boxSize="120px"
-                mx="auto"
-                mb={4}
-                borderRadius="full"
-                objectFit="cover"
-              />
-              <Heading size="md" mb={2} color="green.700">
-                {winner.playerName}
-              </Heading>
-              <Text fontSize="lg" fontWeight="bold" color="green.600" mb={2}>
-                {winner.totalVotos} votos ({winner.porcentaje?.toFixed(1)}%)
-              </Text>
-            </Box>
-          </Box>
+        {/* Resultados */}
+        {dataLoaded && top3.length > 0 && (
+          <ResultsCard 
+            results={{
+              mvp: {
+                nombre: winner?.playerName || '',
+                apodo: winner?.playerApodo,
+                imagen: winner?.playerImagen,
+                porcentaje: winner?.porcentaje || 0,
+                votos: winner?.totalVotos || 0
+              },
+              top3: top3.map(player => ({
+                nombre: player.playerName,
+                apodo: player.playerApodo,
+                imagen: player.playerImagen,
+                votos: player.totalVotos,
+                porcentaje: player.porcentaje || 0
+              })),
+              totalVotos: totalVotes
+            }}
+            onShare={() => {
+              // Implementar compartir resultados
+              console.log('Compartir resultados')
+            }}
+          />
         )}
 
         {/* Mensaje si no hay votos aún */}
         {dataLoaded && top3.length === 0 && (
-          <Box w="full" bg="yellow.50" p={6} rounded="lg" border="1px solid" borderColor="yellow.200">
-            <Text textAlign="center" color="yellow.800">
+          <Card variant="outlined" textAlign="center">
+            <Text color="text-secondary">
               Los resultados se mostrarán cuando haya más votos registrados.
             </Text>
-          </Box>
+          </Card>
         )}
 
-        {/* Botones de acción */}
-        <VStack gap={4} w="full">
-          
-          <Button
-            variant="outline"
-            bg="blue.600"
-            color="white"
-            onClick={logout}
-            w="full"
-            maxW="300px"
-          >
-            Cerrar Sesión
-          </Button>
-        </VStack>
+        {/* Sponsors */}
+        <SponsorPlaceholder count={2} />
+
+        {/* Botón de cerrar sesión */}
+        <Button variant="outline" size="lg" onClick={logout} maxW="300px">
+          Cerrar Sesión
+        </Button>
       </VStack>
     </Box>
-  );
-};
+  )
+}
 
-export default ThanksPage;
+export default ThanksPage
