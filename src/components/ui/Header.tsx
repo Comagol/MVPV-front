@@ -10,11 +10,14 @@ interface HeaderProps {
 
 export const Header = ({ title, icon, rightElement, onMenuClick }: HeaderProps) => {
   return (
-    <Box bg="bg-header" color="text-white" px={4} py={3}>
+    <Box bg="bg-header" color="text-white" px={{ base: 3, md: 4 }} py={3}>
       <Flex justify="space-between" align="center">
         <HStack gap={3}>
           {icon && <Box>{icon}</Box>}
-          <Heading size="lg" color="text-white">
+          <Heading 
+            size={{ base: "md", md: "lg" }}  // Más pequeño en móvil
+            color="text-white"
+          >
             {title}
           </Heading>
         </HStack>
@@ -29,6 +32,7 @@ export const Header = ({ title, icon, rightElement, onMenuClick }: HeaderProps) 
             variant="ghost"
             color="text-white"
             onClick={onMenuClick}
+            display={{ base: "block", md: "none" }}  // Solo en móvil
           >
             ☰
           </IconButton>

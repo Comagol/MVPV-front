@@ -174,7 +174,16 @@ const VotePage = () => {
             Votá al jugador del partido
           </Text>
           
-          <Grid templateColumns="repeat(auto-fit, minmax(280px, 1fr))" gap={6} w="full">
+          <Grid 
+            templateColumns={{
+              base: "1fr",           // 1 columna en móvil
+              sm: "repeat(2, 1fr)",  // 2 columnas en tablet
+              md: "repeat(3, 1fr)",  // 3 columnas en desktop
+              lg: "repeat(4, 1fr)"   // 4 columnas en pantallas grandes
+            }} 
+            gap={{ base: 4, md: 6 }} 
+            w="full"
+          >
             {activeMatch.jugadores.map((player: PlayerResponse) => (
               <PlayerCard
                 key={player.id}

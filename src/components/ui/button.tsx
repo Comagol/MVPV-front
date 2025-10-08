@@ -59,7 +59,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         rounded="md"
         fontWeight="semibold"
-        transition="all 0.2s"
+        transition="all 0.3s ease"
+        transform="auto"
+        _hover={{
+          transform: "translateY(-2px)",
+          shadow: "lg"
+        }}
+        _active={{
+          transform: "translateY(0px)"
+        }}
         {...getVariantStyles()}
         {...getSizeStyles()}
         {...props}

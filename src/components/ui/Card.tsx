@@ -35,6 +35,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         ref={ref}
         rounded="lg"
         p={6}
+        transition="all 0.3s ease"
+        _hover={{
+          transform: "translateY(-4px)",
+          shadow: "xl"
+        }}
         {...getVariantStyles()}
         {...props}
       >

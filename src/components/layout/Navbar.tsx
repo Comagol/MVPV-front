@@ -12,7 +12,7 @@ const Navbar = () => {
   };
 
   return (
-    <Box bg="blue.600" color="white" px={4} py={3} shadow="md">
+    <Box bg="bg-header" color="text-white" px={4} py={3} shadow="md">
       <Flex justify="space-between" align="center" w="100%" mx="auto">
         {/* Logo y nombre de la app */}
         <HStack gap={4}>
@@ -20,25 +20,23 @@ const Navbar = () => {
             <Image src="/favicon.png" alt="Logo" w="40px" h="40px" />
           </Box>
           
-          {/* Ocultar en móviles, mostrar en tablets y desktop */}
           <Heading 
             size="md" 
-            color="white"
+            color="text-white"
             display={{ base: "none", md: "block" }}
           >
-            Rugby MVP Voting
+            VICENTINOS MVP
           </Heading>
         </HStack>
 
         {/* Navegación */}
         <HStack gap={4}>
           {isAdmin ? (
-            // Opciones para Admin
             <>
               <Button
                 variant="ghost"
-                color="white"
-                _hover={{ bg: "blue.500" }}
+                color="text-white"
+                _hover={{ bg: "rgba(255,255,255,0.1)" }}
                 onClick={() => navigate('/admin/players')}
                 display={{ base: "none", sm: "flex" }}
               >
@@ -47,8 +45,8 @@ const Navbar = () => {
               
               <Button
                 variant="ghost"
-                color="white"
-                _hover={{ bg: "blue.500" }}
+                color="text-white"
+                _hover={{ bg: "rgba(255,255,255,0.1)" }}
                 onClick={() => navigate('/admin/matches')}
                 display={{ base: "none", sm: "flex" }}
               >
@@ -56,11 +54,10 @@ const Navbar = () => {
               </Button>
             </>
           ) : (
-            // Opciones para Usuario normal
             <Button
               variant="ghost"
-              color="white"
-              _hover={{ bg: "blue.500" }}
+              color="text-white"
+              _hover={{ bg: "rgba(255,255,255,0.1)" }}
               onClick={() => navigate('/vote')}
               display={{ base: "none", sm: "flex" }}
             >
@@ -70,7 +67,9 @@ const Navbar = () => {
           
           <Button
             variant="outline"
-            colorScheme="whiteAlpha"
+            borderColor="text-white"
+            color="text-white"
+            _hover={{ bg: "rgba(255,255,255,0.1)" }}
             onClick={handleLogout}
             size={{ base: "sm", md: "md" }}
           >

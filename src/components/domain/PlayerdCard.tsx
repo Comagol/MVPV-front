@@ -1,6 +1,7 @@
 import { Box, VStack, HStack, Text, Image, Icon } from '@chakra-ui/react'
 import { Card, Button, Badge } from '../ui'
 import { FaUser } from 'react-icons/fa'
+import { memo } from 'react'
 
 interface PlayerCardProps {
   player: {
@@ -17,7 +18,7 @@ interface PlayerCardProps {
   variant?: 'votable' | 'result' | 'winner'
 }
 
-export const PlayerCard = ({ 
+export const PlayerCard = memo(({ 
   player, 
   isSelected = false, 
   onVote, 
@@ -70,15 +71,15 @@ export const PlayerCard = ({
       <VStack gap={4} align="center">
         {/* Imagen del jugador */}
         <Box position="relative">
-          <Image
-            src={player.imagen || '/placeholder-player.jpg'}
-            alt={player.nombre}
-            boxSize="120px"
-            borderRadius="full"
-            objectFit="cover"
-            border="3px solid"
-            borderColor={isSelected ? 'button-primary' : 'border-light'}
-          />
+            <Image
+              src={player.imagen || '/placeholder-player.jpg'}
+              alt={player.nombre}
+              boxSize={{ base: "100px", md: "120px" }}
+              borderRadius="full"
+              objectFit="cover"
+              border="3px solid"
+              borderColor={isSelected ? 'button-primary' : 'border-light'}
+            />
           {variant === 'winner' && (
           <Box
             position="absolute"
@@ -139,4 +140,4 @@ export const PlayerCard = ({
       </VStack>
     </Card>
   )
-}
+})
