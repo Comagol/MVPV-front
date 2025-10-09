@@ -1,13 +1,15 @@
-import React, { forwardRef } from 'react'
-import { Button as ChakraButton, type ButtonProps as ChakraButtonProps } from '@chakra-ui/react'
+import { forwardRef } from 'react'
+import { Box, Button as ChakraButton, type ButtonProps as ChakraButtonProps } from '@chakra-ui/react'
 
 interface ButtonProps extends Omit<ChakraButtonProps, 'variant'> {
   variant?: 'primary' | 'secondary' | 'outline'
   size?: 'sm' | 'md' | 'lg'
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', size = 'md', children, ...props }, ref) => {
+  ({ variant = 'primary', size = 'md', children, leftIcon, rightIcon, ...props }, ref) => {
     const getVariantStyles = () => {
       switch (variant) {
         case 'primary':
@@ -72,7 +74,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...getSizeStyles()}
         {...props}
       >
+        {leftIcon && <Box as="span" mr={2} display="inline-flex" alignItems="center">{leftIcon}</Box>}
         {children}
+        {rightIcon && <Box as="span" ml={2} display="inline-flex" alignItems="center">{rightIcon}</Box>}
       </ChakraButton>
     )
   }

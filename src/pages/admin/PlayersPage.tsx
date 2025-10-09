@@ -2,20 +2,26 @@ import { useState, useEffect } from 'react';
 import {
   Box,
   VStack,
-  Heading,
   Text,
-  SimpleGrid,
+  Grid,
+  Spinner,
+  HStack,
+  Input,
 } from '@chakra-ui/react';
 import { playerService } from '../../services';
 import type { PlayerResponse, CreatePlayerRequest, UpdatePlayerRequest } from '../../types';
 import PlayerCard from '../../components/admin/PlayerCard';
 import PlayerForm from '../../components/admin/PlayerForm';
+import { Card, Button } from '../../components/ui';
+import { FaSearch, FaPlus } from 'react-icons/fa';
 
 const PlayersPage = () => {
   const [players, setPlayers] = useState<PlayerResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingPlayer, setEditingPlayer] = useState<PlayerResponse | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadPlayers();
@@ -62,9 +68,9 @@ const PlayersPage = () => {
         await playerService.updatePlayer(editingPlayer.id, updatedFields);
         setEditingPlayer(null);
       } else {
-        console.log('Datos para crear:', formData);
         await playerService.createPlayer(formData);
       }
+      setShowForm(false);
       loadPlayers();
     } catch (error) {
       console.error('Error en handleSubmitPlayer:', error);
@@ -74,10 +80,12 @@ const PlayersPage = () => {
 
   const handleEditPlayer = (player: PlayerResponse) => {
     setEditingPlayer(player);
+    setShowForm(true);
   };
 
   const handleCancelEdit = () => {
     setEditingPlayer(null);
+    setShowForm(false);
   };
 
   const handleDeletePlayer = async (id: string) => {
@@ -95,42 +103,104 @@ const PlayersPage = () => {
     }
   };
 
+  // Filtrar jugadores según búsqueda
+  const filteredPlayers = players.filter(player =>
+    player.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    player.apodo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    player.posicion.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (isLoading) {
     return (
-      <Box maxW="7xl" mx="auto" py={8} px={4}>
-        <Text>Cargando jugadores...</Text>
+      <Box flex="1" display="flex" alignItems="center" justifyContent="center" bg="bg-primary" minH="60vh">
+        <Spinner size="xl" color="button-primary" />
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Box maxW="7xl" mx="auto" py={8} px={4}>
-        <Text color="red.500">{error}</Text>
+      <Box maxW="7xl" mx="auto" py={8} px={{ base: 4, md: 6 }}>
+        <Card variant="outlined" borderColor="red.500" bg="red.50">
+          <Text color="red.600" textAlign="center">{error}</Text>
+        </Card>
       </Box>
     );
   }
 
   return (
-    <Box maxW="7xl" mx="auto" py={8} px={4}>
+    <Box maxW="7xl" mx="auto" py={8} px={{ base: 4, md: 6 }}>
       <VStack gap={6} align="stretch">
-        <Heading size="lg">Gestión de Jugadores</Heading>
-        
-        <PlayerForm
-          onSubmit={handleSubmitPlayer}
-          onCancel={editingPlayer ? handleCancelEdit : undefined}
-          initialData={editingPlayer}
-          isEditing={!!editingPlayer}
-        />
+        {/* Header con búsqueda y botón agregar */}
+        <Card variant="elevated">
+          <VStack gap={4} align="stretch">
+            <HStack justify="space-between" flexWrap="wrap" gap={4}>
+              <VStack align="start" gap={1}>
+                <Text fontSize="2xl" fontWeight="bold" color="text-primary">
+                  Gestión de Jugadores
+                </Text>
+                <Text fontSize="sm" color="text-secondary">
+                  {players.length} jugadores registrados
+                </Text>
+              </VStack>
+              
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => setShowForm(!showForm)}
+                leftIcon={<FaPlus />}
+              >
+                {showForm ? 'Ocultar Formulario' : 'Agregar Jugador'}
+              </Button>
+            </HStack>
+
+            {/* Barra de búsqueda */}
+            <HStack gap={2}>
+              <Box flex="1" position="relative">
+                <Input
+                  placeholder="Buscar por nombre, apodo o posición..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+                <Box
+                  position="absolute"
+                  right="12px"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  color="text-secondary"
+                >
+                  <FaSearch />
+                </Box>
+              </Box>
+            </HStack>
+          </VStack>
+        </Card>
+
+        {/* Formulario */}
+        {showForm && (
+          <PlayerForm
+            onSubmit={handleSubmitPlayer}
+            onCancel={handleCancelEdit}
+            initialData={editingPlayer}
+            isEditing={!!editingPlayer}
+          />
+        )}
         
         {/* Lista de jugadores */}
         <Box>
-          <Text mb={4} fontSize="lg" fontWeight="semibold">
-            Jugadores Registrados ({players?.length || 0})
-          </Text>
-          
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>
-            {players.map((player) => (
+          <Grid 
+            templateColumns={{
+              base: "1fr",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)"
+            }} 
+            gap={{ base: 4, md: 6 }}
+          >
+            {filteredPlayers.map((player) => (
               <PlayerCard
                 key={player.id}
                 player={player}
@@ -139,12 +209,21 @@ const PlayersPage = () => {
                 onToggleActive={handleToggleActive}
               />
             ))}
-          </SimpleGrid>
+          </Grid>
 
-          {players.length === 0 && (
-            <Text textAlign="center" color="gray.500">
-              No hay jugadores registrados
-            </Text>
+          {filteredPlayers.length === 0 && (
+            <Card variant="outlined" textAlign="center">
+              <VStack gap={3} py={8}>
+                <Text fontSize="lg" color="text-secondary">
+                  {searchTerm ? 'No se encontraron jugadores' : 'No hay jugadores registrados'}
+                </Text>
+                {searchTerm && (
+                  <Button variant="outline" size="sm" onClick={() => setSearchTerm('')}>
+                    Limpiar búsqueda
+                  </Button>
+                )}
+              </VStack>
+            </Card>
           )}
         </Box>
       </VStack>
