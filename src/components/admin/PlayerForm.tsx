@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Box, Heading, Text, Input, Button, SimpleGrid } from '@chakra-ui/react';
+import { Box, VStack, HStack, Text, Input, Grid } from '@chakra-ui/react';
 import type { CreatePlayerRequest, PlayerResponse } from '../../types';
+import { Card, Button } from '../ui';
 
 interface PlayerFormProps {
   onSubmit: (data: CreatePlayerRequest) => Promise<void>;
@@ -53,114 +54,152 @@ const PlayerForm = ({ onSubmit, onCancel, initialData, isEditing = false }: Play
   };
 
   return (
-    <Box bg="white" p={6} rounded="lg" shadow="md" borderWidth="1px">
-      <Heading size="md" mb={4}>
-        {isEditing ? 'Editar Jugador' : 'Agregar Nuevo Jugador'}
-      </Heading>
-      
-      <form onSubmit={handleSubmit}>
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-          <Box>
-            <Text mb={2} fontWeight="medium">Nombre *</Text>
-            <Input
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleInputChange}
-              placeholder="Nombre del jugador"
-              required={!isEditing}
-              disabled={isSubmitting}
-            />
-          </Box>
-
-          <Box>
-            <Text mb={2} fontWeight="medium">Apodo *</Text>
-            <Input
-              name="apodo"
-              value={formData.apodo}
-              onChange={handleInputChange}
-              placeholder="Apodo del jugador"
-              required={!isEditing}
-              disabled={isSubmitting}
-            />
-          </Box>
-
-          <Box>
-            <Text mb={2} fontWeight="medium">Posición *</Text>
-            <Input
-              name="posicion"
-              value={formData.posicion}
-              onChange={handleInputChange}
-              placeholder="Ej: Fullback, Wing, etc."
-              required={!isEditing}
-              disabled={isSubmitting}
-            />
-          </Box>
-
-          <Box>
-            <Text mb={2} fontWeight="medium">URL de Imagen *</Text>
-            <Input
-              name="imagen"
-              value={formData.imagen}
-              onChange={handleInputChange}
-              placeholder="https://..."
-              required={!isEditing}
-              disabled={isSubmitting}
-            />
-          </Box>
-
-          <Box>
-            <Text mb={2} fontWeight="medium">Número de Camiseta *</Text>
-            <Input
-              name="camiseta"
-              type="number"
-              value={formData.camiseta}
-              onChange={handleInputChange}
-              placeholder="Número"
-              required={!isEditing}
-              disabled={isSubmitting}
-            />
-          </Box>
-
-          <Box>
-            <Text mb={2} fontWeight="medium">Camada *</Text>
-            <Input
-              name="camada"
-              type="number"
-              value={formData.camada}
-              onChange={handleInputChange}
-              placeholder="Ej: 2020"
-              required={!isEditing}
-              disabled={isSubmitting}
-            />
-          </Box>
-        </SimpleGrid>
-
-        <Box mt={4}>
-          <Button 
-            type="submit" 
-            colorScheme="blue" 
-            size="lg"
-            loading={isSubmitting}
-            loadingText={isEditing ? "Actualizando..." : "Creando..."}
-          >
-            {isEditing ? 'Actualizar Jugador' : 'Crear Jugador'}
-          </Button>
-          
-          {isEditing && onCancel && (
-            <Button 
-              type="button" 
-              variant="outline" 
-              ml={4} 
-              size="lg"
-              onClick={onCancel}
-              disabled={isSubmitting}
+    <Card variant="elevated">
+      <VStack gap={6} align="stretch">
+        <Text fontSize="2xl" fontWeight="bold" color="text-primary">
+          {isEditing ? 'Editar Jugador' : 'Agregar Nuevo Jugador'}
+        </Text>
+        
+        <form onSubmit={handleSubmit}>
+          <VStack gap={6} align="stretch">
+            <Grid 
+              templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} 
+              gap={4}
             >
-              Cancelar
-            </Button>
-          )}
-        </Box>
-      </form>
-    </Box>
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Nombre *
+                </Text>
+                <Input
+                  name="nombre"
+                  value={formData.nombre}
+                  onChange={handleInputChange}
+                  placeholder="Nombre del jugador"
+                  required={!isEditing}
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Apodo *
+                </Text>
+                <Input
+                  name="apodo"
+                  value={formData.apodo}
+                  onChange={handleInputChange}
+                  placeholder="Apodo del jugador"
+                  required={!isEditing}
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Posición *
+                </Text>
+                <Input
+                  name="posicion"
+                  value={formData.posicion}
+                  onChange={handleInputChange}
+                  placeholder="Ej: Fullback, Wing, etc."
+                  required={!isEditing}
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  URL de Imagen *
+                </Text>
+                <Input
+                  name="imagen"
+                  value={formData.imagen}
+                  onChange={handleInputChange}
+                  placeholder="https://..."
+                  required={!isEditing}
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Número de Camiseta *
+                </Text>
+                <Input
+                  name="camiseta"
+                  type="number"
+                  value={formData.camiseta}
+                  onChange={handleInputChange}
+                  placeholder="Número"
+                  required={!isEditing}
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Camada *
+                </Text>
+                <Input
+                  name="camada"
+                  type="number"
+                  value={formData.camada}
+                  onChange={handleInputChange}
+                  placeholder="Ej: 2020"
+                  required={!isEditing}
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+            </Grid>
+
+            <HStack gap={3} justify="flex-end">
+              {isEditing && onCancel && (
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="lg"
+                  onClick={onCancel}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </Button>
+              )}
+              
+              <Button 
+                type="submit" 
+                variant="primary" 
+                size="lg"
+                disabled={isSubmitting}
+              >
+                {isSubmitting 
+                  ? (isEditing ? "Actualizando..." : "Creando...")
+                  : (isEditing ? 'Actualizar Jugador' : 'Crear Jugador')
+                }
+              </Button>
+            </HStack>
+          </VStack>
+        </form>
+      </VStack>
+    </Card>
   );
 };
 
