@@ -36,7 +36,7 @@ export const ResultsCard = ({ results, onShare }: ResultsCardProps) => {
             <Image
               src={results.mvp.imagen || '/placeholder-player.jpg'}
               alt={results.mvp.nombre}
-              boxSize="80px"
+              boxSize={{ base: "120px", md: "140px" }}
               borderRadius="full"
               objectFit="cover"
               border="3px solid"

@@ -27,14 +27,14 @@ export const SponsorPlaceholder = ({
   }
 
   return (
-    <VStack gap={3} align="center">
+    <VStack gap={4} align="center">
       {showText && (
         <Text fontSize="sm" color="text-secondary" textAlign="center">
           con nuestros sponsors
         </Text>
       )}
       
-      <HStack gap={3}>
+      <HStack gap={4} justify="center">
         {Array.from({ length: count }, (_, index) => (
           <Card
             key={index}
@@ -45,6 +45,7 @@ export const SponsorPlaceholder = ({
             justifyContent="center"
             borderColor="border-light"
             bg="bg-card"
+            minW="fit-content"
           >
             <Icon as={FaTimes} boxSize="24px" color="border-light" />
           </Card>

@@ -3,13 +3,13 @@ import { Box, VStack, Text, Spinner } from '@chakra-ui/react'
 import { useAuth } from '../contexts/AuthContext'
 import { useMatches } from '../hooks/useMatches'
 import { useVoting } from '../hooks/useVoting'
-import { Header, Button, Card } from '../components/ui'
+import { Card } from '../components/ui'
 import { ResultsCard } from '../components/domain/ResultCard'
-import { SponsorPlaceholder } from '../components/domain/SponsorPlaceholder'
+import Sponsors from '../components/layout/Sponsors'
 import type { VoteStatistics } from '../types/vote'
 
 const ThanksPage = () => {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const { activeMatches, isLoading: matchesLoading } = useMatches()
   const { getTotalVotes, getTop3Players, isLoading: votingLoading } = useVoting()
   const [top3, setTop3] = useState<VoteStatistics[]>([])
@@ -65,7 +65,6 @@ const ThanksPage = () => {
     return (
       <Box flex="1" bg="bg-primary" minH="100vh">
         <VStack gap={8} maxW="6xl" mx="auto" p={6}>
-          <Header title="VICENTINOS" />
           <Card variant="elevated" textAlign="center">
             <Text fontSize="xl" color="text-primary">
               No hay partidos activos
@@ -79,15 +78,7 @@ const ThanksPage = () => {
   return (
     <Box flex="1" bg="bg-primary" minH="100vh">
       <VStack gap={8} maxW="6xl" mx="auto" p={6}>
-        {/* Header */}
-        <Header 
-          title="VICENTINOS" 
-          rightElement={
-            <Button variant="outline" size="sm" onClick={logout}>
-              Cerrar Sesión
-            </Button>
-          }
-        />
+        {/* Header - OCULTO */}
 
         {/* Mensaje de agradecimiento */}
         <Card variant="elevated" textAlign="center" maxW="md">
@@ -150,12 +141,9 @@ const ThanksPage = () => {
         )}
 
         {/* Sponsors */}
-        <SponsorPlaceholder count={2} />
+        <Sponsors />
 
-        {/* Botón de cerrar sesión */}
-        <Button variant="outline" size="lg" onClick={logout} maxW="300px">
-          Cerrar Sesión
-        </Button>
+        {/* Botón de cerrar sesión - OCULTO */}
       </VStack>
     </Box>
   )
