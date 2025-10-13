@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
-import { Box, VStack, Text, Button, Image } from "@chakra-ui/react";
-import { Heading } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
+import { Box, VStack, Text, Image, Input, Spinner } from "@chakra-ui/react";
 import { usePasswordReset } from "../hooks/usePasswordReset";
+import { Card, Button } from "../components/ui";
 
 const ResetPasswordPage = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +23,7 @@ const ResetPasswordPage = () => {
   const token = searchParams.get('token');
   const { verifyResetToken } = usePasswordReset();
 
-  // �� NUEVO: Verificar token al cargar la página
+  // Verificar token al cargar la página
   useEffect(() => {
     const validateToken = async () => {
       if (!token) {
@@ -58,6 +57,11 @@ const ResetPasswordPage = () => {
       return;
     }
 
+    if (formData.newPassword.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setMessage(null);
@@ -76,103 +80,156 @@ const ResetPasswordPage = () => {
     }
   };
 
-  // �� NUEVO: Estados de carga y error del token
+  // Estado de carga
   if (isValidatingToken) {
     return (
-      <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingTop="100px">
-        <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
+      <Box 
+        flex="1" 
+        display="flex" 
+        alignItems="center" 
+        justifyContent="center" 
+        py={{ base: 8, md: 16 }}
+        px={4}
+      >
+        <Card variant="elevated" maxW="md" w="full">
           <VStack gap={6}>
-            <Heading size="lg" textAlign="center">
+            <Spinner size="xl" color="button-primary" />
+            <Text fontSize="xl" fontWeight="semibold" color="text-primary" textAlign="center">
               Verificando Token...
-            </Heading>
-            <Text textAlign="center" color="gray.600">
+            </Text>
+            <Text textAlign="center" color="text-secondary" fontSize="sm">
               Por favor espera mientras verificamos tu enlace de recuperación.
             </Text>
           </VStack>
-        </Box>
+        </Card>
       </Box>
     );
   }
 
-  // 🔥 NUEVO: Token inválido
+  // Token inválido
   if (!isTokenValid || tokenError) {
     return (
-      <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingTop="100px">
-        <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
-          <VStack gap={6}>
-            <Heading size="lg" textAlign="center" color="red.500">
+      <Box 
+        flex="1" 
+        display="flex" 
+        alignItems="center" 
+        justifyContent="center" 
+        py={{ base: 8, md: 16 }}
+        px={4}
+      >
+        <Card variant="elevated" maxW="md" w="full">
+          <VStack gap={6} align="stretch">
+            <VStack gap={3}>
+              <Image src="/favicon.png" alt="Logo" boxSize="120px" />
+              <Text fontSize="2xl" fontWeight="bold" color="text-primary" textAlign="center">
+                VICENTINOS MVP
+              </Text>
+            </VStack>
+
+            <Text fontSize="xl" fontWeight="semibold" color="red.500" textAlign="center">
               Enlace Inválido
-            </Heading>
-            <Box p={4} bg="red.100" color="red.700" rounded="md" w="full">
-              <Text textAlign="center">
+            </Text>
+
+            <Card variant="outlined" borderColor="red.500" bg="red.50">
+              <Text color="red.600" fontSize="sm" textAlign="center">
                 {tokenError || 'El enlace de recuperación no es válido o ha expirado.'}
               </Text>
-            </Box>
+            </Card>
+
             <VStack gap={3} w="full">
-              <Link to="/forgot-password" style={{ width: '100%' }}>
-                <Button colorScheme="blue" size="lg" w="full">
-                  Solicitar Nuevo Enlace
-                </Button>
-              </Link>
-              <Link to="/login" style={{ width: '100%' }}>
-                <Button variant="outline" size="lg" w="full">
-                  Volver al Login
-                </Button>
-              </Link>
+              <Button
+                onClick={() => navigate('/forgot-password')}
+                variant="primary"
+                size="lg"
+                w="full"
+              >
+                Solicitar Nuevo Enlace
+              </Button>
+              <RouterLink
+                to="/login"
+                color="button-primary"
+                style={{ fontSize: "sm", textDecoration: "underline" }}
+              >
+                Volver al Login
+              </RouterLink>
             </VStack>
           </VStack>
-        </Box>
+        </Card>
       </Box>
     );
   }
 
-  // 🔥 NUEVO: Formulario solo se muestra si el token es válido
+  // Formulario (token válido)
   return (
-    <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingTop="100px">
-      <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
-        <VStack gap={6}>
+    <Box 
+      flex="1" 
+      display="flex" 
+      alignItems="center" 
+      justifyContent="center" 
+      py={{ base: 8, md: 16 }}
+      px={4}
+    >
+      <Card variant="elevated" maxW="md" w="full">
+        <VStack gap={6} align="stretch">
           {/* Logo de la app */}
-          <Box w="140px" h="140px" rounded="full" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            <Text fontSize="lg" fontWeight="bold" mb={2} textAlign="center">Rugby MVP Voting</Text>
-            <Image src="/favicon.png" alt="Logo" w="140px" h="140px" />
-          </Box>
-          <Heading size="lg" textAlign="center" p={4}>
-            Restablecer Contraseña
-          </Heading>
+          <VStack gap={3}>
+            <Image src="/favicon.png" alt="Logo" boxSize="120px" />
+            <Text fontSize="2xl" fontWeight="bold" color="text-primary" textAlign="center">
+              VICENTINOS MVP
+            </Text>
+          </VStack>
           
-          {/* �� NUEVO: Mensaje de confirmación de token válido */}
-          <Box p={3} bg="green.100" color="green.700" rounded="md" w="full">
-            <Text textAlign="center" fontSize="sm">
+          <Text fontSize="xl" fontWeight="semibold" color="text-primary" textAlign="center">
+            Restablecer Contraseña
+          </Text>
+          
+          {/* Mensaje de confirmación de token válido */}
+          <Card variant="outlined" borderColor="green.500" bg="green.50">
+            <Text color="green.600" fontSize="sm" textAlign="center">
               ✅ Enlace verificado. Puedes restablecer tu contraseña.
             </Text>
-          </Box>
+          </Card>
 
           {error && (
-            <Box p={4} bg="red.100" color="red.700" rounded="md">
-              {error}
-            </Box>
+            <Card variant="outlined" borderColor="red.500" bg="red.50">
+              <Text color="red.600" fontSize="sm" textAlign="center">
+                {error}
+              </Text>
+            </Card>
           )}
+
           {message && (
-            <Box p={4} bg="green.100" color="green.700" rounded="md">
-              {message}
-            </Box>
+            <Card variant="outlined" borderColor="green.500" bg="green.50">
+              <Text color="green.600" fontSize="sm" textAlign="center">
+                {message}
+              </Text>
+            </Card>
           )}
           
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <VStack gap={4}>
               <Box w="full">
-                <Text mb={2} fontWeight="medium">Nueva Contraseña</Text>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Nueva Contraseña
+                </Text>
                 <Input
                   type="password"
                   name="newPassword"
                   value={formData.newPassword}
                   onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                  placeholder="Tu nueva contraseña"
+                  placeholder="Mínimo 6 caracteres"
                   required
+                  minLength={6}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
                 />
               </Box>
+
               <Box w="full">
-                <Text mb={2} fontWeight="medium">Confirmar Contraseña</Text>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Confirmar Contraseña
+                </Text>
                 <Input
                   type="password"
                   name="confirmPassword"
@@ -180,22 +237,26 @@ const ResetPasswordPage = () => {
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   placeholder="Confirma tu nueva contraseña"
                   required
+                  minLength={6}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
                 />
               </Box>
+
               <Button
                 type="submit"
-                colorScheme="blue"
+                variant="primary"
                 size="lg"
                 w="full"
-                loading={isLoading}
-                loadingText="Restableciendo contraseña..."
+                disabled={isLoading}
               >
-                Restablecer Contraseña
+                {isLoading ? 'Restableciendo contraseña...' : 'Restablecer Contraseña'}
               </Button>
             </VStack>
           </form>
         </VStack>
-      </Box>
+      </Card>
     </Box>
   );
 };
