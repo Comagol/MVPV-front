@@ -1,5 +1,7 @@
-import { Box, VStack, Text, Button, HStack, Image } from '@chakra-ui/react';
+import { Box, VStack, Text, HStack, Image } from '@chakra-ui/react';
 import type { MatchResponse } from '../../types';
+import { Card, Button, Badge } from '../ui';
+import { FaEdit, FaTrash, FaPlay, FaStop, FaCheck, FaCalendar } from 'react-icons/fa';
 
 interface MatchCardProps {
   match: MatchResponse;
@@ -20,88 +22,92 @@ const MatchCard = ({ match, onEdit, onDelete, onStart, onFinish }: MatchCardProp
     });
   };
 
-  const getStatusColor = (estado: string) => {
+  const getStatusBadge = (estado: string) => {
     switch (estado) {
-      case 'programado': return 'blue.500';
-      case 'en_proceso': return 'orange.500';
-      case 'finalizado': return 'green.500';
-      default: return 'gray.500';
+      case 'programado':
+        return { bg: 'blue.500', text: 'Programado' };
+      case 'en_proceso':
+        return { bg: 'button-primary', text: 'En Proceso' };
+      case 'finalizado':
+        return { bg: 'green.500', text: 'Finalizado' };
+      default:
+        return { bg: 'text-secondary', text: 'Desconocido' };
     }
   };
 
-  const getStatusText = (estado: string) => {
-    switch (estado) {
-      case 'programado': return 'Programado';
-      case 'en_proceso': return 'En Proceso';
-      case 'finalizado': return 'Finalizado';
-      default: return 'Desconocido';
-    }
-  };
+  const statusBadge = getStatusBadge(match.estado);
 
   return (
-    <Box 
-      bg="white"
-      p={4}
-      rounded="lg"
-      shadow="md"
-      borderWidth="1px"
-    >
-      <VStack align="start" gap={3}>
+    <Card variant="outlined">
+      <VStack gap={4} align="stretch">
         {/* Header del partido */}
-        <HStack justify="space-between" w="full">
-          <Text fontWeight="bold" fontSize="lg">
-            vs {match.rival}
-          </Text>
-          <Text 
-            fontSize="sm" 
-            color={getStatusColor(match.estado)}
-            fontWeight="semibold"
+        <HStack justify="space-between" align="start">
+          <VStack align="start" gap={1}>
+            <Text fontSize="xl" fontWeight="bold" color="text-primary">
+              VICENTINOS
+            </Text>
+            <Text fontSize="lg" fontWeight="semibold" color="text-primary">
+              vs {match.rival}
+            </Text>
+          </VStack>
+          <Badge 
+            variant="status" 
+            size="sm" 
+            bg={statusBadge.bg}
+            color="text-white"
           >
-            {getStatusText(match.estado)}
-          </Text>
+            {statusBadge.text}
+          </Badge>
         </HStack>
         
         {/* Fecha */}
-        <Text fontSize="sm" color="gray.600">
-          📅 {formatDate(match.fecha)}
-        </Text>
+        <HStack gap={2} color="text-secondary">
+          <FaCalendar />
+          <Text fontSize="sm">
+            {formatDate(match.fecha)}
+          </Text>
+        </HStack>
         
         {/* Descripción */}
-        <Text fontSize="sm" color="gray.700">
-          {match.description}
-        </Text>
+        {match.description && (
+          <Text fontSize="sm" color="text-secondary" maxH="40px" overflow="hidden">
+            {match.description}
+          </Text>
+        )}
         
-        {/* Jugadores */}
-        <Box w="full">
-          <Text fontSize="sm" fontWeight="medium" mb={2}>
+        {/* Jugadores Convocados */}
+        <Box>
+          <Text fontSize="sm" fontWeight="medium" color="text-primary" mb={2}>
             Jugadores Convocados ({match.jugadores.length})
           </Text>
           
-          {/* Mostrar primeros 6 jugadores */}
-          <HStack gap={1} mb={2}>
-            {match.jugadores.slice(0, 6).map((player) => (
+          <HStack gap={1} flexWrap="wrap">
+            {match.jugadores.slice(0, 8).map((player) => (
               <Image
                 key={player.id}
                 src={player.imagen}
                 alt={player.apodo}
-                width={8}
-                height={8}
+                boxSize="32px"
                 rounded="full"
+                objectFit="cover"
+                border="2px solid"
+                borderColor="border-light"
                 title={`${player.apodo} - ${player.posicion}`}
               />
             ))}
-            {match.jugadores.length > 6 && (
+            {match.jugadores.length > 8 && (
               <Box
-                width={8}
-                height={8}
+                boxSize="32px"
                 rounded="full"
-                bg="gray.200"
+                bg="border-light"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
+                border="2px solid"
+                borderColor="border-light"
               >
-                <Text fontSize="xs" color="gray.600">
-                  +{match.jugadores.length - 6}
+                <Text fontSize="xs" fontWeight="bold" color="text-secondary">
+                  +{match.jugadores.length - 8}
                 </Text>
               </Box>
             )}
@@ -109,12 +115,13 @@ const MatchCard = ({ match, onEdit, onDelete, onStart, onFinish }: MatchCardProp
         </Box>
         
         {/* Botones de acción */}
-        <VStack w="full" gap={2}>
+        <VStack gap={2} w="full">
           <Button
-            size="sm"
-            colorScheme="blue"
+            variant="secondary"
+            size="md"
             w="full"
             onClick={() => onEdit(match)}
+            leftIcon={<FaEdit />}
           >
             Editar Partido
           </Button>
@@ -123,10 +130,14 @@ const MatchCard = ({ match, onEdit, onDelete, onStart, onFinish }: MatchCardProp
             {/* Botón de estado según el estado actual */}
             {match.estado === 'programado' && onStart && (
               <Button
+                variant="outline"
                 size="sm"
-                colorScheme="green"
                 flex="1"
                 onClick={() => onStart(match.id)}
+                borderColor="green.500"
+                color="green.500"
+                _hover={{ bg: "green.50" }}
+                leftIcon={<FaPlay />}
               >
                 Iniciar
               </Button>
@@ -134,10 +145,14 @@ const MatchCard = ({ match, onEdit, onDelete, onStart, onFinish }: MatchCardProp
             
             {match.estado === 'en_proceso' && onFinish && (
               <Button
+                variant="outline"
                 size="sm"
-                colorScheme="orange"
                 flex="1"
                 onClick={() => onFinish(match.id)}
+                borderColor="orange.500"
+                color="orange.500"
+                _hover={{ bg: "orange.50" }}
+                leftIcon={<FaStop />}
               >
                 Finalizar
               </Button>
@@ -145,27 +160,34 @@ const MatchCard = ({ match, onEdit, onDelete, onStart, onFinish }: MatchCardProp
             
             {match.estado === 'finalizado' && (
               <Button
+                variant="outline"
                 size="sm"
-                colorScheme="gray"
                 flex="1"
                 disabled
+                borderColor="green.500"
+                color="green.500"
+                leftIcon={<FaCheck />}
               >
                 Completado
               </Button>
             )}
             
             <Button
+              variant="outline"
               size="sm"
-              colorScheme="red"
               flex="1"
               onClick={() => onDelete(match.id)}
+              borderColor="red.500"
+              color="red.500"
+              _hover={{ bg: "red.50" }}
+              leftIcon={<FaTrash />}
             >
               Eliminar
             </Button>
           </HStack>
         </VStack>
       </VStack>
-    </Box>
+    </Card>
   );
 };
 
