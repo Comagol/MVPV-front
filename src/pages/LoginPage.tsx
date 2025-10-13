@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
-  Button,
   Input,
   VStack,
-  Heading,
   Text,
   Image,
-  Icon
+  HStack
 } from '@chakra-ui/react';
 import { FaGoogle } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import type { LoginRequest } from '../types';
+import { Card, Button } from '../components/ui';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequest>({
@@ -64,89 +63,123 @@ const LoginPage = () => {
   };
 
   return (
-    <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingTop="100px">
-      <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
-        <VStack gap={6}>
+    <Box 
+      flex="1" 
+      display="flex" 
+      flexDirection="column" 
+      alignItems="center" 
+      justifyContent="center" 
+      py={{ base: 8, md: 16 }}
+      px={4}
+    >
+      <Card variant="elevated" maxW="md" w="full">
+        <VStack gap={6} align="stretch">
           {/* Logo de la app */}
-          <Box w="140px" h="140px" rounded="full" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            <Text fontSize="lg" fontWeight="bold" mb={2} textAlign="center" color="text-primary">Rugby MVP Voting</Text>
-            <Image src="/favicon.png" alt="Logo" w="140px" h="140px" />
-          </Box>
+          <VStack gap={3}>
+            <Image src="/favicon.png" alt="Logo" boxSize="120px" />
+            <Text fontSize="2xl" fontWeight="bold" color="text-primary" textAlign="center">
+              VICENTINOS MVP
+            </Text>
+          </VStack>
           
-          <Heading size="lg" textAlign="center" p={4}>
+          <Text fontSize="xl" fontWeight="semibold" color="text-primary" textAlign="center">
             Iniciar Sesión
-          </Heading>
+          </Text>
           
           {error && (
-            <Box p={4} bg="red.100" color="red.700" rounded="md">
-              {error}
-            </Box>
+            <Card variant="outlined" borderColor="red.500" bg="red.50">
+              <Text color="red.600" fontSize="sm" textAlign="center">
+                {error}
+              </Text>
+            </Card>
           )}
 
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <VStack gap={4}>
-            <Box w="full">
-              <Text mb={2} fontWeight="medium">Email</Text>
-              <Input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="tu@email.com"
-                required
-              />
-            </Box>
+              <Box w="full">
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Email
+                </Text>
+                <Input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="tu@email.com"
+                  required
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
 
-            <Box w="full">
-              <Text mb={2} fontWeight="medium">Contraseña</Text>
-              <Input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Tu contraseña"
-                required
-              />
-            </Box>
+              <Box w="full">
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Contraseña
+                </Text>
+                <Input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Tu contraseña"
+                  required
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+
               <Button
                 type="submit"
-                colorScheme="blue"
+                variant="primary"
                 size="lg"
                 w="full"
-                loading={isLoading}
-                loadingText="Iniciando sesión..."
+                disabled={isLoading}
               >
-                Iniciar Sesión
+                {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
               </Button>
+
+              <HStack w="full" gap={2}>
+                <Box flex="1" h="1px" bg="border-light" />
+                <Text fontSize="sm" color="text-secondary">o</Text>
+                <Box flex="1" h="1px" bg="border-light" />
+              </HStack>
+
               <Button
                 onClick={handleGoogleLogin}
-                loading={isGoogleLoading}
-                loadingText="Iniciando con Google..."
-                colorScheme="red"
                 variant="outline"
                 size="lg"
                 w="full"
+                disabled={isGoogleLoading}
+                leftIcon={<FaGoogle />}
               >
-                <Icon as={FaGoogle} mr={2} />
-                Continuar con Google
+                {isGoogleLoading ? 'Iniciando con Google...' : 'Continuar con Google'}
               </Button>
-          
             </VStack>
           </form>
 
-          <Text textAlign="center">
-            ¿No tienes cuenta?{' '}
-            <Link to="/register" style={{ color: '#3182ce', textDecoration: 'underline' }}>
-              Regístrate aquí
-            </Link>
-          </Text>
-          <Text textAlign="center" mt={2}>
-            <Link to="/forgot-password" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+          <VStack gap={2}>
+            <Text textAlign="center" fontSize="sm" color="text-secondary">
+              ¿No tienes cuenta?{' '}
+              <RouterLink 
+                to="/register" 
+                color="button-primary" 
+                style={{ textDecoration: "underline" }}
+              >
+                Regístrate aquí
+              </RouterLink>
+            </Text>
+            <RouterLink 
+              to="/forgot-password" 
+              color="button-primary" 
+              style={{ fontSize: "sm", textDecoration: "underline" }}
+            >
               ¿Olvidaste tu contraseña?
-            </Link>
-          </Text>
+            </RouterLink>
+          </VStack>
         </VStack>
-      </Box>
+      </Card>
     </Box>
   );
 };
