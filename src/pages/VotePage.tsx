@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Box, VStack, Text, Grid, Spinner } from '@chakra-ui/react'
 import { useMatch } from '../contexts/MatchContext'
 import { useVote } from '../contexts/VoteContext'
-import { Header, Button, Card } from '../components/ui'
-import { SponsorPlaceholder } from '../components/domain/SponsorPlaceholder'
+import { Button, Card } from '../components/ui'
 import { PlayerCard } from '../components/domain/PlayerdCard'
 import { MatchCard } from '../components/domain/MatchCard'
 import type { PlayerResponse, MatchResponse } from '../types'
@@ -14,7 +13,7 @@ import Sponsors from '../components/layout/Sponsors'
 const VotePage = () => {
   const { activeMatches, programmedMatches, isLoading: matchesLoading } = useMatch()
   const { createVote, validateVote, isLoading: votingLoading } = useVote()
-  const [selectedPlayer, setSelectedPlayer] = useState<PlayerResponse | null>(null)
+  const [selectedPlayer] = useState<PlayerResponse | null>(null)
   const [voteValidation, setVoteValidation] = useState<VoteValidationResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   
