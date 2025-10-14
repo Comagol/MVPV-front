@@ -120,7 +120,7 @@ const PlayersPage = () => {
 
   if (error) {
     return (
-      <Box maxW="7xl" mx="auto" py={8} px={{ base: 4, md: 6 }}>
+      <Box maxW={{ base: "full", md: "7xl" }} mx="auto" py={8} px={{ base: 4, md: 6 }}>
         <Card variant="outlined" borderColor="red.500" bg="red.50">
           <Text color="red.600" textAlign="center">{error}</Text>
         </Card>
@@ -129,7 +129,7 @@ const PlayersPage = () => {
   }
 
   return (
-    <Box maxW="7xl" mx="auto" py={8} px={{ base: 4, md: 6 }}>
+    <Box maxW={{ base: "full", md: "7xl" }} mx="auto" py={8} px={{ base: 4, md: 6 }}>
       <VStack gap={6} align="stretch">
         {/* Header con búsqueda y botón agregar */}
         <Card variant="elevated">

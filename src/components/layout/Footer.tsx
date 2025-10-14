@@ -8,7 +8,7 @@ const Footer = () => {
         direction={{ base: 'column', md: 'row' }}
         justify="space-between"
         align="center"
-        maxW="7xl"
+            maxW={{ base: "full", md: "7xl" }}
         mx="auto"
         gap={6}
       >

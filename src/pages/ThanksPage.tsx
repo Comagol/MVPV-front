@@ -77,7 +77,7 @@ const ThanksPage = () => {
 
   return (
     <Box flex="1" bg="bg-primary" minH="100vh">
-      <VStack gap={8} maxW="6xl" mx="auto" p={6}>
+      <VStack gap={8} maxW={{ base: "full", md: "6xl" }} mx="auto" p={{ base: 4, md: 6 }}>
         {/* Header - OCULTO */}
 
         {/* Mensaje de agradecimiento */}

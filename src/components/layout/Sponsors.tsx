@@ -56,7 +56,7 @@ const Sponsors = () => {
         }} 
         gap={4}
         w="full"
-        maxW="700px"
+        maxW={{ base: "full", md: "700px" }}
       >
         {sponsors.map((sponsor) => (
           <Card
