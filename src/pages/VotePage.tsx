@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, VStack, Text, Grid, Spinner } from '@chakra-ui/react'
-import { useAuth } from '../contexts/AuthContext'
 import { useMatch } from '../contexts/MatchContext'
 import { useVote } from '../contexts/VoteContext'
 import { Header, Button, Card } from '../components/ui'
@@ -10,9 +9,9 @@ import { PlayerCard } from '../components/domain/PlayerdCard'
 import { MatchCard } from '../components/domain/MatchCard'
 import type { PlayerResponse, MatchResponse } from '../types'
 import type { VoteValidationResponse } from '../types'
+import Sponsors from '../components/layout/Sponsors'
 
 const VotePage = () => {
-  const { logout } = useAuth()
   const { activeMatches, programmedMatches, isLoading: matchesLoading } = useMatch()
   const { createVote, validateVote, isLoading: votingLoading } = useVote()
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerResponse | null>(null)
@@ -64,10 +63,6 @@ const VotePage = () => {
     return (
       <Box flex="1" bg="bg-primary" minH="100vh">
         <VStack gap={8} maxW={{ base: "full", md: "6xl" }} mx="auto" p={{ base: 4, md: 6 }}>
-          {/* Header */}
-          <Header 
-            title="VICENTINOS"
-          />
 
           {/* Mensaje principal */}
           <Card variant="elevated" textAlign="center" maxW="md">
@@ -81,7 +76,7 @@ const VotePage = () => {
               <Button variant="primary" size="lg" disabled>
                 VOTÁ AHORA
               </Button>
-              <SponsorPlaceholder count={2} />
+              <Sponsors />
             </VStack>
           </Card>
 
@@ -98,24 +93,17 @@ const VotePage = () => {
     return (
       <Box flex="1" bg="bg-primary" minH="100vh">
         <VStack gap={8} maxW={{ base: "full", md: "6xl" }} mx="auto" p={{ base: 4, md: 6 }}>
-          <Header title="VICENTINOS" />
           
           <Card variant="elevated" textAlign="center" maxW="md">
             <VStack gap={4}>
               <Text fontSize="xl" fontWeight="bold" color="text-primary">
-                No puedes votar
+                Gracias por tu voto
               </Text>
               <Text color="text-secondary">
-                {voteValidation.razon || 'Ya has realizado tu voto para este partido.'}
+                {voteValidation.razon || 'Ya has realizado tu voto para este partido. Verás los resultados en breve.'}
               </Text>
-              {voteValidation.tiempoRestante && (
-                <Text fontSize="sm" color="text-secondary">
-                  Tiempo restante: {Math.floor(voteValidation.tiempoRestante / 60)} minutos
-                </Text>
-              )}
-              <Button variant="primary" size="lg" onClick={() => navigate('/thanks')}>
-                Ver resultados
-              </Button>
+              <Button variant="primary" size="lg" onClick={() => navigate('/thanks')}>Ver resultados</Button>
+              <Sponsors />
             </VStack>
           </Card>
         </VStack>
@@ -126,15 +114,6 @@ const VotePage = () => {
   return (
     <Box flex="1" bg="bg-primary" minH="100vh">
         <VStack gap={8} maxW={{ base: "full", md: "6xl" }} mx="auto" p={{ base: 4, md: 6 }}>
-        {/* Header */}
-        <Header 
-          title="VICENTINOS" 
-          rightElement={
-            <Button variant="outline" size="sm" onClick={logout}>
-              Cerrar Sesión
-            </Button>
-          }
-        />
 
         {/* Mensaje principal */}
         <Card variant="elevated" textAlign="center" maxW="md">
@@ -145,10 +124,7 @@ const VotePage = () => {
             <Text fontSize="lg" color="text-secondary">
               Podés votar por el MVP del partido cada fecha
             </Text>
-            <Button variant="primary" size="lg">
-              VOTÁ AHORA
-            </Button>
-            <SponsorPlaceholder count={2} />
+            <Sponsors />
           </VStack>
         </Card>
 
@@ -176,10 +152,10 @@ const VotePage = () => {
           
           <Grid 
             templateColumns={{
-              base: "1fr",           // 1 columna en móvil
-              sm: "repeat(2, 1fr)",  // 2 columnas en tablet
-              md: "repeat(3, 1fr)",  // 3 columnas en desktop
-              lg: "repeat(4, 1fr)"   // 4 columnas en pantallas grandes
+              base: "1fr",           
+              sm: "repeat(2, 1fr)",  
+              md: "repeat(3, 1fr)",  
+              lg: "repeat(4, 1fr)"   
             }} 
             gap={{ base: 4, md: 6 }} 
             w="full"
