@@ -30,7 +30,7 @@ const Navbar = () => {
   };
 
   const handleNavigation = (path: string) => {
-    
+  console.log('=== HANDLE NAVIGATION START ===');
   console.log('Navigating to:', path);
   console.log('isMobile:', isMobile);
   console.log('isMenuOpen:', isMenuOpen);
@@ -54,7 +54,7 @@ const Navbar = () => {
               color="text-white"
               _hover={{ bg: "rgba(255,255,255,0.1)" }}
               size="sm"
-              onClick={() => handleNavigation('/admin/players')}
+              onClick={() =>{console.log('Cargar Jugadores clicked'); handleNavigation('/admin/players')}}
             >
               Cargar Jugadores
             </Button>
@@ -64,7 +64,7 @@ const Navbar = () => {
               color="text-white"
               _hover={{ bg: "rgba(255,255,255,0.1)" }}
               size="sm"
-              onClick={() => handleNavigation('/admin/matches')}
+              onClick={() =>{console.log('Gestionar Partidos clicked'); handleNavigation('/admin/matches')}}
             >
               Gestionar Partidos
             </Button>
@@ -75,7 +75,7 @@ const Navbar = () => {
             color="text-white"
             _hover={{ bg: "rgba(255,255,255,0.1)" }}
             size="sm"
-            onClick={() => handleNavigation('/vote')}
+            onClick={() =>{console.log('Votar Jugador del Partido clicked'); handleNavigation('/vote')}}
           >
             Votar Jugador del Partido
           </Button>
@@ -86,7 +86,7 @@ const Navbar = () => {
           borderColor="text-white"
           color="text-white"
           _hover={{ bg: "rgba(255,255,255,0.1)" }}
-          onClick={handleLogout}
+          onClick={() =>{console.log('Cerrar Sesión clicked'); handleLogout()}}
           size="sm"
         >
           Cerrar Sesión
