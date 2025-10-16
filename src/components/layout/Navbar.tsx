@@ -30,6 +30,10 @@ const Navbar = () => {
   };
 
   const handleNavigation = (path: string) => {
+    
+  console.log('Navigating to:', path);
+  console.log('isMobile:', isMobile);
+  console.log('isMenuOpen:', isMenuOpen);
     navigate(path);
     // Cerrar el menú móvil después de navegar
     if (isMobile && isMenuOpen) {
