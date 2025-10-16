@@ -42,55 +42,58 @@ const Navbar = () => {
   };
 
   // Componente para los botones de navegación
-  const NavigationButtons = () => (
-    console.log('NavigationButtons:', NavigationButtons),
-    <>
-      {isAdmin ? (
-        <>
+  const NavigationButtons = () => {
+    console.log('NavigationButtons rendering, isAdmin:', isAdmin);
+    
+    return (
+      <>
+        {isAdmin ? (
+          <>
+            <Button
+              variant="ghost"
+              color="text-white"
+              _hover={{ bg: "rgba(255,255,255,0.1)" }}
+              size="sm"
+              onClick={() => handleNavigation('/admin/players')}
+            >
+              Cargar Jugadores
+            </Button>
+            
+            <Button
+              variant="ghost"
+              color="text-white"
+              _hover={{ bg: "rgba(255,255,255,0.1)" }}
+              size="sm"
+              onClick={() => handleNavigation('/admin/matches')}
+            >
+              Gestionar Partidos
+            </Button>
+          </>
+        ) : (
           <Button
             variant="ghost"
             color="text-white"
             _hover={{ bg: "rgba(255,255,255,0.1)" }}
             size="sm"
-            onClick={() => handleNavigation('/admin/players')}
+            onClick={() => handleNavigation('/vote')}
           >
-            Cargar Jugadores
+            Votar Jugador del Partido
           </Button>
-          
-          <Button
-            variant="ghost"
-            color="text-white"
-            _hover={{ bg: "rgba(255,255,255,0.1)" }}
-            size="sm"
-            onClick={() => handleNavigation('/admin/matches')}
-          >
-            Gestionar Partidos
-          </Button>
-        </>
-      ) : (
+        )}
+        
         <Button
-          variant="ghost"
+          variant="outline"
+          borderColor="text-white"
           color="text-white"
           _hover={{ bg: "rgba(255,255,255,0.1)" }}
+          onClick={handleLogout}
           size="sm"
-          onClick={() => handleNavigation('/vote')}
         >
-          Votar Jugador del Partido
+          Cerrar Sesión
         </Button>
-      )}
-      
-      <Button
-        variant="outline"
-        borderColor="text-white"
-        color="text-white"
-        _hover={{ bg: "rgba(255,255,255,0.1)" }}
-        onClick={handleLogout}
-        size="sm"
-      >
-        Cerrar Sesión
-      </Button>
-    </>
-  );
+      </>
+    );
+  };
 
   return (
     <Box bg="bg-header" color="text-white" shadow="md">
