@@ -43,6 +43,7 @@ const Navbar = () => {
 
   // Componente para los botones de navegación
   const NavigationButtons = () => (
+    console.log('NavigationButtons:', NavigationButtons),
     <>
       {isAdmin ? (
         <>
