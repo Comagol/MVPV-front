@@ -20,7 +20,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { open: isMenuOpen, onToggle } = useDisclosure();
   
-  
   // Detectar si estamos en mobile
   const isMobile = useBreakpointValue({ base: true, lg: false });
 
@@ -30,70 +29,11 @@ const Navbar = () => {
   };
 
   const handleNavigation = (path: string) => {
-  console.log('=== HANDLE NAVIGATION START ===');
-  console.log('Navigating to:', path);
-  console.log('isMobile:', isMobile);
-  console.log('isMenuOpen:', isMenuOpen);
     navigate(path);
-    console.log('=== HANDLE NAVIGATION called ===');
     // Cerrar el menú móvil después de navegar
     if (isMobile && isMenuOpen) {
       onToggle();
     }
-    console.log('=== HANDLE NAVIGATION END ===');
-  };
-
-  // Componente para los botones de navegación
-  const NavigationButtons = () => {
-    console.log('NavigationButtons rendering, isAdmin:', isAdmin);
-    
-    return (
-      <>
-        {isAdmin ? (
-          <>
-            <Button
-              variant="ghost"
-              color="text-white"
-              _hover={{ bg: "rgba(255,255,255,0.1)" }}
-              size="sm"
-              onClick={() => {console.log('Cargar Jugadores clicked'); handleNavigation('/admin/players')}} 
-            >
-              Cargar Jugadores
-            </Button>
-            
-            <Button
-              variant="ghost"
-              color="text-white"
-              _hover={{ bg: "rgba(255,255,255,0.1)" }}
-              size="sm"
-              onClick={() => {console.log('Gestionar Partidos clicked'); handleNavigation('/admin/matches')}}            >
-              Gestionar Partidos
-            </Button>
-          </>
-        ) : (
-          <Button
-            variant="ghost"
-            color="text-white"
-            _hover={{ bg: "rgba(255,255,255,0.1)" }}
-            size="sm"
-            onClick={() => {console.log('Votar Jugador del Partido clicked'); handleNavigation('/vote')}}
-          >
-            Votar Jugador del Partido
-          </Button>
-        )}
-        
-        <Button
-          variant="outline"
-          borderColor="text-white"
-          color="text-white"
-          _hover={{ bg: "rgba(255,255,255,0.1)" }}
-          onClick={() => {console.log('Cerrar Sesión clicked'); handleLogout()}}
-          size="sm"
-        >
-          Cerrar Sesión
-        </Button>
-      </>
-    );
   };
 
   return (
@@ -117,7 +57,50 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <HStack gap={4} display={{ base: "none", md: "flex" }}>
-          <NavigationButtons />
+          {isAdmin ? (
+            <>
+              <Button
+                variant="ghost"
+                color="text-white"
+                _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                size="sm"
+                onClick={() => handleNavigation('/admin/players')}
+              >
+                Cargar Jugadores
+              </Button>
+              
+              <Button
+                variant="ghost"
+                color="text-white"
+                _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                size="sm"
+                onClick={() => handleNavigation('/admin/matches')}
+              >
+                Gestionar Partidos
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="ghost"
+              color="text-white"
+              _hover={{ bg: "rgba(255,255,255,0.1)" }}
+              size="sm"
+              onClick={() => handleNavigation('/vote')}
+            >
+              Votar Jugador del Partido
+            </Button>
+          )}
+          
+          <Button
+            variant="outline"
+            borderColor="text-white"
+            color="text-white"
+            _hover={{ bg: "rgba(255,255,255,0.1)" }}
+            onClick={handleLogout}
+            size="sm"
+          >
+            Cerrar Sesión
+          </Button>
         </HStack>
 
         {/* Mobile Menu Button */}
