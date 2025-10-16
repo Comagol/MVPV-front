@@ -22,7 +22,7 @@ const Navbar = () => {
   
   
   // Detectar si estamos en mobile
-  const isMobile = useBreakpointValue({ base: true, md: false });
+  const isMobile = useBreakpointValue({ base: true, lg: false });
 
   const handleLogout = () => {
     logout();
