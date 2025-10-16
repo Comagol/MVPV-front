@@ -1,16 +1,15 @@
-// src/components/common/PublicLayout.tsx
-import { Box } from '@chakra-ui/react';
-import Footer from '../layout/Footer';
+import { Box } from '@chakra-ui/react'
+import Footer from '../layout/Footer'
 
 interface PublicLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const PublicLayout = ({ children }: PublicLayoutProps) => {
   return (
     <Box 
       minH="100vh" 
-      bg="gray.50" 
+      bg="bg-primary" 
       w="100%" 
       display="flex" 
       flexDirection="column"
@@ -18,11 +17,11 @@ export const PublicLayout = ({ children }: PublicLayoutProps) => {
       <Box 
         flex="1" 
         w="100%" 
-        minH="0"  // ← Importante para que flex funcione correctamente
+        minH="0"
       >
         {children}
       </Box>
       <Footer />
     </Box>
-  );
-};
+  )
+}

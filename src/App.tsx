@@ -62,13 +62,13 @@ function App() {
               />
               {/* rutas Protegidas */}
               <Route 
-                path='vote' 
+                path='/vote' 
                 element={
                 <ProtectedRoute>
                   <VotePage/>
                 </ProtectedRoute>} />
               <Route 
-                path='thanks' 
+                path='/thanks' 
                 element={
                   <ProtectedRoute>
                     <ThanksPage/>

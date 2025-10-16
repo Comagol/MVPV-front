@@ -1,83 +1,193 @@
-import { Box, Flex, Heading, Button, HStack, Image} from '@chakra-ui/react';
+import { 
+  Box, 
+  Flex, 
+  Heading, 
+  Button, 
+  HStack, 
+  Image, 
+  IconButton, 
+  VStack, 
+  Collapsible,
+  useDisclosure,
+  useBreakpointValue
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 const Navbar = () => {
   const { logout, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const { open: isMenuOpen, onToggle } = useDisclosure();
+  
+  
+  // Detectar si estamos en mobile
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    // Cerrar el menú móvil después de navegar
+    if (isMobile && isMenuOpen) {
+      onToggle();
+    }
+  };
+
+  // Componente para los botones de navegación
+  const NavigationButtons = () => (
+    <>
+      {isAdmin ? (
+        <>
+          <Button
+            variant="ghost"
+            color="text-white"
+            _hover={{ bg: "rgba(255,255,255,0.1)" }}
+            size="sm"
+            onClick={() => handleNavigation('/admin/players')}
+          >
+            Cargar Jugadores
+          </Button>
+          
+          <Button
+            variant="ghost"
+            color="text-white"
+            _hover={{ bg: "rgba(255,255,255,0.1)" }}
+            size="sm"
+            onClick={() => handleNavigation('/admin/matches')}
+          >
+            Gestionar Partidos
+          </Button>
+        </>
+      ) : (
+        <Button
+          variant="ghost"
+          color="text-white"
+          _hover={{ bg: "rgba(255,255,255,0.1)" }}
+          size="sm"
+          onClick={() => handleNavigation('/vote')}
+        >
+          Votar Jugador del Partido
+        </Button>
+      )}
+      
+      <Button
+        variant="outline"
+        borderColor="text-white"
+        color="text-white"
+        _hover={{ bg: "rgba(255,255,255,0.1)" }}
+        onClick={handleLogout}
+        size="sm"
+      >
+        Cerrar Sesión
+      </Button>
+    </>
+  );
+
   return (
-    <Box bg="blue.600" color="white" px={4} py={3} shadow="md">
-      <Flex justify="space-between" align="center" w="100%" mx="auto">
+    <Box bg="bg-header" color="text-white" shadow="md">
+      {/* Navbar Principal */}
+      <Flex justify="space-between" align="center" px={4} py={3} w="100%" mx="auto">
         {/* Logo y nombre de la app */}
         <HStack gap={4}>
           <Box w="40px" h="40px" rounded="full" display="flex" alignItems="center" justifyContent="center">
             <Image src="/favicon.png" alt="Logo" w="40px" h="40px" />
           </Box>
           
-          {/* Ocultar en móviles, mostrar en tablets y desktop */}
           <Heading 
             size="md" 
-            color="white"
+            color="text-white"
             display={{ base: "none", md: "block" }}
           >
-            Rugby MVP Voting
+            VICENTINOS MVP
           </Heading>
         </HStack>
 
-        {/* Navegación */}
-        <HStack gap={4}>
-          {isAdmin ? (
-            // Opciones para Admin
-            <>
-              <Button
-                variant="ghost"
-                color="white"
-                _hover={{ bg: "blue.500" }}
-                onClick={() => navigate('/admin/players')}
-                display={{ base: "none", sm: "flex" }}
-              >
-                Cargar Jugadores
-              </Button>
+        {/* Desktop Navigation */}
+        <HStack gap={4} display={{ base: "none", md: "flex" }}>
+          <NavigationButtons />
+        </HStack>
+
+        {/* Mobile Menu Button */}
+        <IconButton
+          display={{ base: "flex", md: "none" }}
+          onClick={onToggle}
+          variant="ghost"
+          color="text-white"
+          _hover={{ bg: "rgba(255,255,255,0.1)" }}
+          aria-label="Toggle navigation menu"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </IconButton>
+      </Flex>
+
+      {/* Mobile Menu */}
+      <Collapsible.Root open={isMenuOpen}>
+        <Collapsible.Content>
+          <Box
+            bg="bg-header"
+            px={4}
+            pb={4}
+            display={{ base: "block", md: "none" }}
+            borderTop="1px solid"
+            borderColor="rgba(255,255,255,0.1)"
+          >
+            <VStack gap={2} align="stretch">
+              {isAdmin ? (
+                <>
+                  <Button
+                    variant="ghost"
+                    color="text-white"
+                    _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                    size="sm"
+                    justifyContent="flex-start"
+                    onClick={() => handleNavigation('/admin/players')}
+                  >
+                    Cargar Jugadores
+                  </Button>
+                  
+                  <Button
+                    variant="ghost"
+                    color="text-white"
+                    _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                    size="sm"
+                    justifyContent="flex-start"
+                    onClick={() => handleNavigation('/admin/matches')}
+                  >
+                    Gestionar Partidos
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="ghost"
+                  color="text-white"
+                  _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                  size="sm"
+                  justifyContent="flex-start"
+                  onClick={() => handleNavigation('/vote')}
+                >
+                  Votar Jugador del Partido
+                </Button>
+              )}
               
               <Button
-                variant="ghost"
-                color="white"
-                _hover={{ bg: "blue.500" }}
-                onClick={() => navigate('/admin/matches')}
-                display={{ base: "none", sm: "flex" }}
+                variant="outline"
+                borderColor="text-white"
+                color="text-white"
+                _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                onClick={handleLogout}
+                size="sm"
+                justifyContent="flex-start"
               >
-                Gestionar Partidos
+                Cerrar Sesión
               </Button>
-            </>
-          ) : (
-            // Opciones para Usuario normal
-            <Button
-              variant="ghost"
-              color="white"
-              _hover={{ bg: "blue.500" }}
-              onClick={() => navigate('/vote')}
-              display={{ base: "none", sm: "flex" }}
-            >
-              Votar Jugador del Partido
-            </Button>
-          )}
-          
-          <Button
-            variant="outline"
-            colorScheme="whiteAlpha"
-            onClick={handleLogout}
-            size={{ base: "sm", md: "md" }}
-          >
-            Cerrar Sesión
-          </Button>
-        </HStack>
-      </Flex>
+            </VStack>
+          </Box>
+        </Collapsible.Content>
+      </Collapsible.Root>
     </Box>
   );
 };

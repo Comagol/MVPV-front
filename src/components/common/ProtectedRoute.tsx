@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Box } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 
@@ -11,19 +11,29 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated, isLoading } = useAuth();
 
-  //mostrar loading mientras se verifica la autenticacion
+  // Mostrar loading mientras se verifica la autenticación
   if (isLoading) {
-    return <div>Cargando...</div>;
+    return (
+      <Box 
+        minH="100vh" 
+        display="flex" 
+        alignItems="center" 
+        justifyContent="center" 
+        bg="bg-primary"
+      >
+        <Spinner size="xl" color="button-primary" />
+      </Box>
+    );
   }
 
-  //si no esta authenticado lo redirijo al login
+  // Si no está autenticado lo redirijo al login
   if (!isAuthenticated) {
     return <Navigate to="/login" replace/>
   }
 
-  //si esta autenticado, renderizo el componente hijo
+  // Si está autenticado, renderizo el componente hijo
   return (
-    <Box  minH="100vh" display="flex" flexDirection="column">
+    <Box minH="100vh" display="flex" flexDirection="column" bg="bg-primary">
       <Navbar />
       <Box w="100%" flex="1">
         {children}

@@ -1,8 +1,8 @@
-import { Box, Button, Input, VStack, Text, Image } from "@chakra-ui/react";
-import { Heading } from "@chakra-ui/react";
+import { Box, Input, VStack, Text, Image } from "@chakra-ui/react";
 import { authService } from "../services/authService";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { Card, Button } from "../components/ui";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -27,31 +27,55 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <Box flex="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingTop="100px">
-      <Box maxW="md" w="full" p={8} bg="white" rounded="lg" shadow="md">
-        <VStack gap={6}>
+    <Box 
+      flex="1" 
+      display="flex" 
+      flexDirection="column" 
+      alignItems="center" 
+      justifyContent="center" 
+      py={{ base: 8, md: 16 }}
+      px={4}
+    >
+      <Card variant="elevated" maxW="md" w="full">
+        <VStack gap={6} align="stretch">
           {/* Logo de la app */}
-          <Box w="140px" h="140px" rounded="full" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            <Text fontSize="lg" fontWeight="bold" mb={2} textAlign="center">Rugby MVP Voting</Text>
-            <Image src="/favicon.png" alt="Logo" w="140px" h="140px" />
-          </Box>
-          <Heading size="lg" textAlign="center" p={4}>
+          <VStack gap={3}>
+            <Image src="/favicon.png" alt="Logo" boxSize="120px" />
+            <Text fontSize="2xl" fontWeight="bold" color="text-primary" textAlign="center">
+              VICENTINOS MVP
+            </Text>
+          </VStack>
+          
+          <Text fontSize="xl" fontWeight="semibold" color="text-primary" textAlign="center">
             Recuperar Contraseña
-          </Heading>
+          </Text>
+
+          <Text fontSize="sm" color="text-secondary" textAlign="center">
+            Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña.
+          </Text>
+          
           {error && (
-            <Box p={4} bg="red.100" color="red.700" rounded="md">
-              {error}
-            </Box>
+            <Card variant="outlined" borderColor="red.500" bg="red.50">
+              <Text color="red.600" fontSize="sm" textAlign="center">
+                {error}
+              </Text>
+            </Card>
           )}
+
           {message && (
-            <Box p={4} bg="green.100" color="green.700" rounded="md">
-              {message}
-            </Box>
+            <Card variant="outlined" borderColor="green.500" bg="green.50">
+              <Text color="green.600" fontSize="sm" textAlign="center">
+                {message}
+              </Text>
+            </Card>
           )}
+
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <VStack gap={4}>
               <Box w="full">
-                <Text mb={2} fontWeight="medium">Email</Text>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Email
+                </Text>
                 <Input
                   type="email"
                   name="email"
@@ -59,28 +83,36 @@ const ForgotPasswordPage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
                   required
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
                 />
               </Box>
+
               <Button
                 type="submit"
-                colorScheme="blue"
+                variant="primary"
                 size="lg"
                 w="full"
-                loading={isLoading}
-                loadingText="Enviando email..."
+                disabled={isLoading}
               >
-                Recuperar Contraseña
+                {isLoading ? 'Enviando email...' : 'Enviar Enlace de Recuperación'}
               </Button>
             </VStack>
           </form>
-          <Text textAlign="center">
+
+          <Text textAlign="center" fontSize="sm" color="text-secondary">
             ¿Ya tienes cuenta?{' '}
-            <RouterLink to="/login" style={{ color: '#3182ce', textDecoration: 'underline' }}>
+            <RouterLink 
+              to="/login" 
+              color="button-primary" 
+              style={{ fontSize: "sm", textDecoration: "underline" }}
+            >
               Inicia sesión aquí
             </RouterLink>
           </Text>
         </VStack>
-      </Box>
+      </Card>
     </Box>
   );
 };

@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import {
   Box,
-  Heading,
   Text,
   Input,
-  Button,
-  SimpleGrid,
   VStack,
+  HStack,
+  Grid,
+  Textarea,
 } from '@chakra-ui/react';
 import type { CreateMatchRequest, PlayerResponse } from '../../types';
 import PlayerSelector from './PlayerSelector';
+import { Card, Button } from '../ui';
 
 interface MatchFormProps {
   onSubmit: (data: CreateMatchRequest) => Promise<void>;
@@ -99,107 +100,120 @@ const MatchForm = ({ onSubmit, onCancel, isEditing = false, players }: MatchForm
   };
   
   const parseDateFromInput = (dateString: string): Date => {
-    // El input datetime-local devuelve formato: "YYYY-MM-DDTHH:mm"
     return new Date(dateString);
   };
 
   return (
-    <Box bg="white" p={6} rounded="lg" shadow="md" borderWidth="1px">
-      <Heading size="md" mb={4}>
-        {isEditing ? 'Editar Partido' : 'Crear Nuevo Partido'}
-      </Heading>
-      
-      {validationError && (
-        <Box 
-          bg="red.50" 
-          borderColor="red.200" 
-          borderWidth="1px" 
-          rounded="md" 
-          p={3} 
-          mb={4}
-        >
-          <Text color="red.600" fontSize="sm">
-            {validationError}
-          </Text>
-        </Box>
-      )}
+    <Card variant="elevated">
+      <VStack gap={6} align="stretch">
+        <Text fontSize="2xl" fontWeight="bold" color="text-primary">
+          {isEditing ? 'Editar Partido' : 'Crear Nuevo Partido'}
+        </Text>
+        
+        {validationError && (
+          <Card variant="outlined" borderColor="red.500" bg="red.50">
+            <Text color="red.600" fontSize="sm">
+              {validationError}
+            </Text>
+          </Card>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <VStack gap={4} align="stretch">
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+        <form onSubmit={handleSubmit}>
+          <VStack gap={6} align="stretch">
+            <Grid 
+              templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} 
+              gap={4}
+            >
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Fecha del Partido *
+                </Text>
+                <Input
+                  name="fecha"
+                  type="datetime-local"
+                  value={formatDateForInput(formData.fecha)}
+                  onChange={handleInputChange}
+                  required
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+
+              <Box>
+                <Text mb={2} fontWeight="medium" color="text-primary">
+                  Equipo Rival *
+                </Text>
+                <Input
+                  name="rival"
+                  value={formData.rival}
+                  onChange={handleInputChange}
+                  placeholder="Ej: Los Pumas, San Martín, etc."
+                  required
+                  disabled={isSubmitting}
+                  bg="bg-primary"
+                  borderColor="border-primary"
+                  _focus={{ borderColor: "button-primary" }}
+                />
+              </Box>
+            </Grid>
+
             <Box>
-              <Text mb={2} fontWeight="medium">Fecha del Partido *</Text>
-              <Input
-                name="fecha"
-                type="datetime-local"
-                value={formatDateForInput(formData.fecha)}
+              <Text mb={2} fontWeight="medium" color="text-primary">
+                Descripción del Partido *
+              </Text>
+              <Textarea
+                name="description"
+                value={formData.description}
                 onChange={handleInputChange}
+                placeholder="Ej: Partido amistoso de preparación..."
                 required
                 disabled={isSubmitting}
+                bg="bg-primary"
+                borderColor="border-primary"
+                _focus={{ borderColor: "button-primary" }}
+                rows={3}
               />
             </Box>
 
-            <Box>
-              <Text mb={2} fontWeight="medium">Equipo Rival *</Text>
-              <Input
-                name="rival"
-                value={formData.rival}
-                onChange={handleInputChange}
-                placeholder="Ej: Los Pumas, San Martín, etc."
-                required
-                disabled={isSubmitting}
-              />
-            </Box>
-          </SimpleGrid>
-
-          <Box>
-            <Text mb={2} fontWeight="medium">Descripción del Partido *</Text>
-            <Input
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              placeholder="Ej: Partido amistoso de preparación..."
-              required
+            {/* Selector de Jugadores */}
+            <PlayerSelector
+              players={players}
+              selectedPlayerIds={formData.jugadores}
+              onPlayersChange={handlePlayersChange}
               disabled={isSubmitting}
             />
-          </Box>
 
-          {/* Selector de Jugadores */}
-          <PlayerSelector
-            players={players}
-            selectedPlayerIds={formData.jugadores}
-            onPlayersChange={handlePlayersChange}
-            disabled={isSubmitting}
-          />
-
-          <Box>
-            <Button 
-              type="submit" 
-              colorScheme="blue" 
-              size="lg"
-              loading={isSubmitting}
-              loadingText={isEditing ? "Actualizando..." : "Creando..."}
-              disabled={!!validationError}
-            >
-              {isEditing ? 'Actualizar Partido' : 'Crear Partido'}
-            </Button>
-            
-            {isEditing && onCancel && (
+            <HStack gap={3} justify="flex-end">
+              {isEditing && onCancel && (
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="lg"
+                  onClick={onCancel}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </Button>
+              )}
+              
               <Button 
-                type="button" 
-                variant="outline" 
-                ml={4} 
+                type="submit" 
+                variant="primary" 
                 size="lg"
-                onClick={onCancel}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !!validationError}
               >
-                Cancelar
+                {isSubmitting 
+                  ? (isEditing ? "Actualizando..." : "Creando...")
+                  : (isEditing ? 'Actualizar Partido' : 'Crear Partido')
+                }
               </Button>
-            )}
-          </Box>
-        </VStack>
-      </form>
-    </Box>
+            </HStack>
+          </VStack>
+        </form>
+      </VStack>
+    </Card>
   );
 };
 

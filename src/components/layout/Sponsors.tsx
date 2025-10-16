@@ -1,4 +1,5 @@
-import { Box, VStack, Heading, Text, Grid, Image } from '@chakra-ui/react';
+import { VStack, Text, Grid, Image } from '@chakra-ui/react';
+import { Card } from '../ui';
 
 interface Sponsor {
   id: string;
@@ -42,62 +43,54 @@ const sponsors: Sponsor[] = [
 
 const Sponsors = () => {
   return (
-    <Box w="full" bg="white" p={6} rounded="lg" shadow="md">
-      <VStack gap={6}>
-        <Heading size="lg" textAlign="center" color="blue.600">
-          Nuestros Sponsors del Partido
-        </Heading>
-        
-        <Text textAlign="center" color="gray.600" fontSize="md">
-          Gracias a nuestros sponsors que hacen posible este evento
-        </Text>
-
-        {/* Todos los sponsors en una sola sección */}
-        <Box w="full">
-          <Heading size="md" mb={4} textAlign="center" color="gray.500">
-            Con el Apoyo de
-          </Heading>
-          <Grid templateColumns="repeat(auto-fit, minmax(150px, 1fr))" gap={4}>
-            {sponsors.map((sponsor) => (
-              <Box
-                key={sponsor.id}
-                p={4}
-                bg="gray.50"
-                rounded="md"
-                border="1px solid"
-                borderColor="gray.200"
-                textAlign="center"
-                _hover={{ transform: 'scale(1.03)', transition: 'transform 0.2s' }}
-              >
-                <Image
-                  src={sponsor.logo}
-                  alt={sponsor.name}
-                  boxSize="80px"
-                  mx="auto"
-                  mb={3}
-                  objectFit="contain"
-                />
-                <Text fontSize="sm" fontWeight="medium" color="gray.700">
-                  {sponsor.name}
-                </Text>
-                {sponsor.website && (
-                  <Text fontSize="xs" color="gray.500" mt={1}>
-                    {sponsor.website}
-                  </Text>
-                )}
-              </Box>
-            ))}
-          </Grid>
-        </Box>
-
-        {/* Mensaje de agradecimiento */}
-        <Box p={4} bg="yellow.50" rounded="md" border="1px solid" borderColor="yellow.200" w="full">
-          <Text textAlign="center" color="yellow.800" fontSize="sm">
-            💙 Gracias a todos nuestros sponsors por apoyar al club
-          </Text>
-        </Box>
-      </VStack>
-    </Box>
+    <VStack gap={4} align="center">
+      <Text fontSize="sm" color="text-secondary" textAlign="center">
+        con nuestros sponsors
+      </Text>
+      
+      <Grid 
+        templateColumns={{ 
+          base: "repeat(2, 1fr)", 
+          sm: "repeat(3, 1fr)", 
+          md: "repeat(5, 1fr)" 
+        }} 
+        gap={4}
+        w="full"
+        maxW={{ base: "full", md: "700px" }}
+      >
+        {sponsors.map((sponsor) => (
+          <Card
+            key={sponsor.id}
+            variant="outlined"
+            p={4}
+            textAlign="center"
+            borderColor="border-light"
+            bg="bg-card"
+            _hover={{ 
+              transform: 'scale(1.05)', 
+              shadow: 'md',
+              transition: 'all 0.2s' 
+            }}
+            minH="120px"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+          >
+            <Image
+              src={sponsor.logo}
+              alt={sponsor.name}
+              boxSize="70px"
+              mx="auto"
+              mb={3}
+              objectFit="contain"
+            />
+            <Text fontSize="sm" fontWeight="medium" color="text-primary">
+              {sponsor.name}
+            </Text>
+          </Card>
+        ))}
+      </Grid>
+    </VStack>
   );
 };
 
