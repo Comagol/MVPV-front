@@ -35,10 +35,12 @@ const Navbar = () => {
   console.log('isMobile:', isMobile);
   console.log('isMenuOpen:', isMenuOpen);
     navigate(path);
+    console.log('=== HANDLE NAVIGATION called ===');
     // Cerrar el menú móvil después de navegar
     if (isMobile && isMenuOpen) {
       onToggle();
     }
+    console.log('=== HANDLE NAVIGATION END ===');
   };
 
   // Componente para los botones de navegación
