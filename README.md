@@ -201,7 +201,7 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=tu_sender_id
 VITE_FIREBASE_APP_ID=tu_app_id
 
 # API Configuration
-VITE_API_BASE_URL=http://localhost:5000/api
+VITE_API_BASE_URL=http://localhost:5000
 ```
 
 ### 4. Ejecutar en Desarrollo
