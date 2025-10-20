@@ -188,7 +188,7 @@ export const authService = {
 
   // Firebase login method
   firebaseLogin: async (firebaseToken: string): Promise<AuthResponse> => {
-    const response = await api.post('/api/auth/firebase-login', { firebaseToken: firebaseToken });
+    const response = await api.post('/auth/firebase-login', { firebaseToken: firebaseToken });
     const authData = response.data;
 
     if (authData.token) {
