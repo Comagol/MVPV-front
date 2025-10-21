@@ -47,3 +47,27 @@ export interface VoteContextType {
   getTotalVotes: (matchId: string) => Promise<number>;
   clearError: () => void;
 }
+
+// Tipos para el historial de votos
+export interface VoteHistoryItem {
+  voteId: string;
+  playerId: string;
+  playerName: string;
+  playerApodo?: string;
+  playerImagen: string;
+  playerPosicion: string;
+  playerCamiseta: number;
+  matchId: string;
+  matchFecha: string;
+  matchRival: string;
+  matchEstado: 'finalizado';
+  matchDescripcion: string;
+  fechaVoto: string;
+  ganador: boolean;
+}
+
+// Tipos para la respuesta del historial de votos
+export interface VoteHistoryResponse {
+  message: string;
+  history: VoteHistoryItem[];
+}
