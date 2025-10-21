@@ -78,7 +78,7 @@ function App() {
                 path='/vote-history' 
                 element={
                   <ProtectedRoute>
-                    <VoteHistoryPage/>
+                    <VoteHistoryPage />
                   </ProtectedRoute>} />
 
               {/* rutas de Admin */}

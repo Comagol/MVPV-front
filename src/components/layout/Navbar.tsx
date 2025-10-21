@@ -98,7 +98,7 @@ const Navbar = () => {
                 size="sm"
                 onClick={() => handleNavigation('/vote-history')}
               >
-                Mi Historial
+                Historial de Votos
               </Button>
             </>
           )}
@@ -185,7 +185,7 @@ const Navbar = () => {
                     justifyContent="flex-start"
                     onClick={() => handleNavigation('/vote-history')}
                   >
-                    Mi Historial
+                    Historial de Votos
                   </Button>
                 </>
               )}
