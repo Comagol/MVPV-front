@@ -75,7 +75,6 @@ const VotePage = () => {
               <Button variant="primary" size="lg" disabled>
                 VOTÁ AHORA
               </Button>
-              <Sponsors />
             </VStack>
           </Card>
 
@@ -170,6 +169,7 @@ const VotePage = () => {
               />
             ))}
           </Grid>
+          <Sponsors />
         </VStack>
       </VStack>
     </Box>
