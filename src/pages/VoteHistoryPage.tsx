@@ -6,19 +6,16 @@ import { useAuth } from '../contexts/AuthContext'
 import { VoteHistoryItem } from '../components/domain/VoteHistoryItem'
 import { Card } from '../components/ui'
 import Sponsors from '../components/layout/Sponsors'
-import type { VoteHistoryItem as VoteHistoryItemType } from '../types/vote'
 
 const VoteHistoryPage = () => {
   const { user } = useAuth()
   const { voteHistory, getUserVoteHistory, isLoading, error } = useVote()
-  const [history, setHistory] = useState<VoteHistoryItemType[]>([])
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
     const loadVoteHistory = async () => {
       try {
-        const response = await getUserVoteHistory()
-        setHistory(response.history)
+        await getUserVoteHistory()
         setDataLoaded(true)
       } catch (err) {
         console.error('Error al cargar historial:', err)
@@ -63,20 +60,20 @@ const VoteHistoryPage = () => {
         )}
 
         {/* Lista de votos */}
-        {dataLoaded && history.length > 0 && (
+        {dataLoaded && voteHistory.length > 0 && (
           <VStack gap={4} w="full">
             <Text fontSize="lg" fontWeight="bold" color="text-primary" textAlign="center">
-              {history.length} voto{history.length !== 1 ? 's' : ''} registrado{history.length !== 1 ? 's' : ''}
+              {voteHistory.length} voto{voteHistory.length !== 1 ? 's' : ''} registrado{voteHistory.length !== 1 ? 's' : ''}
             </Text>
             
-            {history.map((vote) => (
+            {voteHistory.map((vote) => (
               <VoteHistoryItem key={vote.voteId} vote={vote} />
             ))}
           </VStack>
         )}
 
         {/* Mensaje si no hay votos */}
-        {dataLoaded && history.length === 0 && (
+        {dataLoaded && voteHistory.length === 0 && (
           <Card variant="outlined" textAlign="center" maxW="md">
             <VStack gap={4}>
               <Text fontSize="lg" color="text-primary" fontWeight="bold">
