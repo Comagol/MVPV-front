@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import VotePage from './pages/VotePage';
 import ThanksPage from './pages/ThanksPage';
+import VoteHistoryPage from './pages/VoteHistoryPage';
 import PlayersPage from './pages/admin/PlayersPage';
 import MatchesPage from './pages/admin/MatchesPage';
 import { PublicLayout } from './components/common/PublicLayout';
@@ -72,6 +73,12 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ThanksPage/>
+                  </ProtectedRoute>} />
+              <Route 
+                path='/vote-history' 
+                element={
+                  <ProtectedRoute>
+                    <VoteHistoryPage/>
                   </ProtectedRoute>} />
 
               {/* rutas de Admin */}
