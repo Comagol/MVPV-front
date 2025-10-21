@@ -45,6 +45,7 @@ export interface VoteContextType {
   getTop3Players: (matchId: string) => Promise<VoteStatistics[]>;
   getMatchWinner: (matchId: string) => Promise<VoteStatistics>;
   getTotalVotes: (matchId: string) => Promise<number>;
+  getUserVoteHistory: () => Promise<VoteHistoryResponse>;
   clearError: () => void;
 }
 

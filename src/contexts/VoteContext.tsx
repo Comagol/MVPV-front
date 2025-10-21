@@ -1,6 +1,6 @@
 import { useState, createContext, useContext, useMemo, useCallback } from 'react';
 import { voteService } from '../services';
-import type { VoteResponse, VoteStatistics, VoteValidationResponse, VoteContextType } from '../types';
+import type { VoteResponse, VoteStatistics, VoteValidationResponse, VoteContextType, VoteHistoryResponse, VoteHistoryItem } from '../types';
 
 const VoteContext = createContext<VoteContextType | null>(null);
 
@@ -14,6 +14,7 @@ export const useVote = () => {
 
 export const VoteProvider = ({children}: { children: React.ReactNode }) => {
   const [votes, setVotes] = useState<VoteResponse[]>([]);
+  const [voteHistory, setVoteHistory] = useState<VoteHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -100,6 +101,22 @@ export const VoteProvider = ({children}: { children: React.ReactNode }) => {
     }
   }, []);
 
+  // Obtener historial de votos
+  const getUserVoteHistory = useCallback(async (): Promise<VoteHistoryResponse> => {
+    setIsLoading(true);
+    setError(null);
+    try { 
+      const response = await voteService.getUserVoteHistory();
+      setVoteHistory(response.history);
+      return response;
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al obtener historial de votos');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   // Limpiar errores
   const clearError = useCallback(() => {
     setError(null);
@@ -108,6 +125,7 @@ export const VoteProvider = ({children}: { children: React.ReactNode }) => {
   // Memoized context value
   const value = useMemo(() => ({
     votes,
+    voteHistory,
     isLoading,
     error,
     createVote,
@@ -116,8 +134,9 @@ export const VoteProvider = ({children}: { children: React.ReactNode }) => {
     getTop3Players,
     getMatchWinner,
     getTotalVotes,
+    getUserVoteHistory,
     clearError,
-  }), [votes, isLoading, error, createVote, validateVote, getMatchStats, getTop3Players, getMatchWinner, getTotalVotes, clearError]);
+  }), [votes, voteHistory, isLoading, error, createVote, validateVote, getMatchStats, getTop3Players, getMatchWinner, getTotalVotes, clearError]);
 
   return (
     <VoteContext.Provider value={value}>
