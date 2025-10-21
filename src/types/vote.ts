@@ -37,6 +37,7 @@ export interface VoteValidationResponse {
 // VoteContext types
 export interface VoteContextType {
   votes: VoteResponse[];
+  voteHistory: VoteHistoryItem[];
   isLoading: boolean;
   error: string | null;
   createVote: (playerId: string, matchId: string) => Promise<VoteResponse>;

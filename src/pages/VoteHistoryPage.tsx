@@ -10,7 +10,7 @@ import type { VoteHistoryItem as VoteHistoryItemType } from '../types/vote'
 
 const VoteHistoryPage = () => {
   const { user } = useAuth()
-  const { getUserVoteHistory, isLoading, error } = useVote()
+  const { voteHistory, getUserVoteHistory, isLoading, error } = useVote()
   const [history, setHistory] = useState<VoteHistoryItemType[]>([])
   const [dataLoaded, setDataLoaded] = useState(false)
 
