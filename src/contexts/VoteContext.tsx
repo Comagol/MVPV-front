@@ -136,7 +136,7 @@ export const VoteProvider = ({children}: { children: React.ReactNode }) => {
     getTotalVotes,
     getUserVoteHistory,
     clearError,
-  }), [votes, voteHistory, isLoading, error, createVote, validateVote, getMatchStats, getTop3Players, getMatchWinner, getTotalVotes, clearError]);
+  }), [votes, voteHistory, isLoading, error, createVote, validateVote, getMatchStats, getTop3Players, getMatchWinner, getTotalVotes, getUserVoteHistory, clearError]);
 
   return (
     <VoteContext.Provider value={value}>
