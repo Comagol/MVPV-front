@@ -51,9 +51,9 @@ export const VoteHistoryItem = ({ vote }: VoteHistoryItemProps) => {
                 {vote.playerName}
               </Text>
               {vote.ganador && (
-                <Badge colorScheme="green" variant="solid" size="sm">
-                  🏆 Ganador
-                </Badge>
+                <Badge colorScheme="green" variant="solid" size="sm" aria-label="Jugador ganador">
+                🏆 Ganador
+              </Badge>
               )}
             </HStack>
             {vote.playerApodo && (
