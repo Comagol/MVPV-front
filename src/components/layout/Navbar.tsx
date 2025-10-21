@@ -80,15 +80,27 @@ const Navbar = () => {
               </Button>
             </>
           ) : (
-            <Button
-              variant="ghost"
-              color="text-white"
-              _hover={{ bg: "rgba(255,255,255,0.1)" }}
-              size="sm"
-              onClick={() => handleNavigation('/vote')}
-            >
-              Votar Jugador del Partido
-            </Button>
+            <>
+              <Button
+                variant="ghost"
+                color="text-white"
+                _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                size="sm"
+                onClick={() => handleNavigation('/vote')}
+              >
+                Votar Jugador del Partido
+              </Button>
+              
+              <Button
+                variant="ghost"
+                color="text-white"
+                _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                size="sm"
+                onClick={() => handleNavigation('/vote-history')}
+              >
+                Mi Historial
+              </Button>
+            </>
           )}
           
           <Button
@@ -153,16 +165,29 @@ const Navbar = () => {
                   </Button>
                 </>
               ) : (
-                <Button
-                  variant="ghost"
-                  color="text-white"
-                  _hover={{ bg: "rgba(255,255,255,0.1)" }}
-                  size="sm"
-                  justifyContent="flex-start"
-                  onClick={() => handleNavigation('/vote')}
-                >
-                  Votar Jugador del Partido
-                </Button>
+                <>
+                  <Button
+                    variant="ghost"
+                    color="text-white"
+                    _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                    size="sm"
+                    justifyContent="flex-start"
+                    onClick={() => handleNavigation('/vote')}
+                  >
+                    Votar Jugador del Partido
+                  </Button>
+                  
+                  <Button
+                    variant="ghost"
+                    color="text-white"
+                    _hover={{ bg: "rgba(255,255,255,0.1)" }}
+                    size="sm"
+                    justifyContent="flex-start"
+                    onClick={() => handleNavigation('/vote-history')}
+                  >
+                    Mi Historial
+                  </Button>
+                </>
               )}
               
               <Button
