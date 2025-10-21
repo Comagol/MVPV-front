@@ -1,5 +1,5 @@
 import api from './api';
-import type { CreateVoteRequest, VoteResponse, VoteStatistics, VoteValidationResponse } from '../types/index';
+import type { CreateVoteRequest, VoteResponse, VoteStatistics, VoteValidationResponse, VoteHistoryResponse } from '../types/index';
 
 export const voteService = {
   //Rutas Publicas
@@ -43,5 +43,11 @@ export const voteService = {
     };
     const response = await api.post(`/votes/`, voteData);
     return response.data;
-  }
+  },
+
+  //obtener historial de votos
+  getUserVoteHistory: async (): Promise<VoteHistoryResponse> => {
+    const response = await api.get('/votes/history');
+    return response.data;
+  },
 }

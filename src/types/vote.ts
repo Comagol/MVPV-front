@@ -37,6 +37,7 @@ export interface VoteValidationResponse {
 // VoteContext types
 export interface VoteContextType {
   votes: VoteResponse[];
+  voteHistory: VoteHistoryItem[];
   isLoading: boolean;
   error: string | null;
   createVote: (playerId: string, matchId: string) => Promise<VoteResponse>;
@@ -45,5 +46,30 @@ export interface VoteContextType {
   getTop3Players: (matchId: string) => Promise<VoteStatistics[]>;
   getMatchWinner: (matchId: string) => Promise<VoteStatistics>;
   getTotalVotes: (matchId: string) => Promise<number>;
+  getUserVoteHistory: () => Promise<VoteHistoryResponse>;
   clearError: () => void;
+}
+
+// Tipos para el historial de votos
+export interface VoteHistoryItem {
+  voteId: string;
+  playerId: string;
+  playerName: string;
+  playerApodo?: string;
+  playerImagen: string;
+  playerPosicion: string;
+  playerCamiseta: number;
+  matchId: string;
+  matchFecha: string;
+  matchRival: string;
+  matchEstado: 'finalizado';
+  matchDescripcion: string;
+  fechaVoto: string;
+  ganador: boolean;
+}
+
+// Tipos para la respuesta del historial de votos
+export interface VoteHistoryResponse {
+  message: string;
+  history: VoteHistoryItem[];
 }
