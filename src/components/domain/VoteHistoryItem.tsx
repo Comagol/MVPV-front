@@ -1,7 +1,7 @@
 // src/components/domain/VoteHistoryItem.tsx
 import { Box, HStack, VStack, Text, Image, Badge, Flex, Stack } from '@chakra-ui/react'
 import type { VoteHistoryItem as VoteHistoryItemType } from '../../types/vote'
-import { Card } from '../ui' // Asegúrate de que Card se importa desde tu carpeta ui
+import { Card } from '../ui'
 
 interface VoteHistoryItemProps {
   vote: VoteHistoryItemType;
@@ -51,7 +51,7 @@ export const VoteHistoryItem = ({ vote }: VoteHistoryItemProps) => {
           <Text fontSize="xs" color="gray.500" wordBreak="break-word">{formatFecha(vote.matchFecha)}</Text>
           <Text fontSize="xs" color="gray.500" wordBreak="break-word">Votado: {formatFecha(vote.fechaVoto, true)}</Text>
           {vote.ganador && (
-            <Badge colorScheme="green" mt={1} wordBreak="break-word">Ganador</Badge>
+            <Badge colorScheme="green" mt={1}>Ganador</Badge>
           )}
         </VStack>
       </Stack>
