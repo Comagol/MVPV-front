@@ -83,6 +83,7 @@ const VotePage = () => {
             <MatchCard match={nextMatch as MatchResponse} showVoteButton={false} />
           )}
         </VStack>
+        <Sponsors />
       </Box>
     )
   }

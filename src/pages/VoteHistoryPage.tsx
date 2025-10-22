@@ -1,6 +1,6 @@
 // src/pages/VoteHistoryPage.tsx
 import { useState, useEffect } from 'react'
-import { Box, VStack, Text, Spinner, Button } from '@chakra-ui/react'
+import { Box, VStack, Text, Spinner, Button, Grid } from '@chakra-ui/react'
 import { useVote } from '../contexts/VoteContext'
 import { useAuth } from '../contexts/AuthContext'
 import { VoteHistoryItem } from '../components/domain/VoteHistoryItem'
@@ -66,9 +66,19 @@ const VoteHistoryPage = () => {
               {voteHistory.length} voto{voteHistory.length !== 1 ? 's' : ''} registrado{voteHistory.length !== 1 ? 's' : ''}
             </Text>
             
-            {voteHistory.map((vote) => (
-              <VoteHistoryItem key={vote.voteId} vote={vote} />
-            ))}
+            {/* Grid responsive: 1 columna en mobile, 2 en desktop */}
+            <Grid 
+              templateColumns={{
+                base: "1fr",           // 1 columna en mobile
+                md: "repeat(2, 1fr)"   // 2 columnas en desktop
+              }}
+              gap={4}
+              w="full"
+            >
+              {voteHistory.map((vote) => (
+                <VoteHistoryItem key={vote.voteId} vote={vote} />
+              ))}
+            </Grid>
           </VStack>
         )}
 
