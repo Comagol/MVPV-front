@@ -1,124 +1,60 @@
 // src/components/domain/VoteHistoryItem.tsx
 import { Box, HStack, VStack, Text, Image, Badge, Flex, Stack } from '@chakra-ui/react'
 import type { VoteHistoryItem as VoteHistoryItemType } from '../../types/vote'
+import { Card } from '../ui' // Asegúrate de que Card se importa desde tu carpeta ui
 
 interface VoteHistoryItemProps {
   vote: VoteHistoryItemType;
 }
 
 export const VoteHistoryItem = ({ vote }: VoteHistoryItemProps) => {
-  const formatFecha = (fecha: string) => {
+  const formatFecha = (fecha: string, includeTime: boolean = false) => {
     const date = new Date(fecha)
     return date.toLocaleDateString('es-ES', {
       day: 'numeric',
       month: 'short',
-      year: 'numeric'
-    })
-  }
-
-  const formatHora = (fecha: string) => {
-    const date = new Date(fecha)
-    return date.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit'
+      year: 'numeric',
+      ...(includeTime && { hour: '2-digit', minute: '2-digit' }),
     })
   }
 
   return (
-    <Box 
-      p={{ base: 3, md: 4 }} 
-      borderWidth={1} 
-      borderRadius="lg" 
-      bg="white"
-      shadow="sm"
-      borderColor={vote.ganador ? "green.200" : "border-light"}
-      borderLeftWidth={vote.ganador ? "4px" : "1px"}
-      borderLeftColor={vote.ganador ? "green.500" : "border-light"}
+    <Card p={4} mb={4} w="100%"
+      borderColor={vote.ganador ? "green.200" : "gray.200"}
+      borderLeftColor={vote.ganador ? "green.500" : "gray.300"}
+      borderLeftWidth={vote.ganador ? "4px" : "2px"}
+      boxShadow="md"
+      borderRadius="lg"
     >
-      {/* Layout responsive: Stack en mobile, Flex en desktop */}
-      <Stack 
-        direction={{ base: "column", md: "row" }} 
-        gap={{ base: 3, md: 4 }}
-        align={{ base: "stretch", md: "start" }}
-      >
-        {/* Información del jugador */}
-        <HStack gap={3} flex="1" align="start">
+      <Stack direction={{ base: 'column', md: 'row' }} gap={4} align="center" justify="space-between">
+        {/* Player Info */}
+        <HStack gap={3} flexShrink={0}>
           <Image
-            src={vote.playerImagen}
-            alt={vote.playerName}
-            boxSize={{ base: "50px", md: "60px" }}
             borderRadius="full"
+            boxSize="60px"
+            src={vote.playerImagen || '/default-player.png'}
+            alt={vote.playerName}
             objectFit="cover"
-            flexShrink={0}
           />
-          <VStack align="start" gap={1} flex="1" minW={0}>
-            <HStack gap={2} wrap="wrap">
-              <Text 
-                fontWeight="bold" 
-                fontSize={{ base: "md", md: "lg" }} 
-                color="text-primary"
-                wordBreak="break-word"
-              >
-                {vote.playerName}
-              </Text>
-              {vote.ganador && (
-                <Badge colorScheme="green" variant="solid" size="sm">
-                  🏆 Ganador
-                </Badge>
-              )}
-            </HStack>
-            {vote.playerApodo && (
-              <Text 
-                fontSize="sm" 
-                color="text-secondary" 
-                fontStyle="italic"
-                wordBreak="break-word"
-              >
-                "{vote.playerApodo}"
-              </Text>
-            )}
-            <Text 
-              fontSize="sm" 
-              color="text-secondary"
-              wordBreak="break-word"
-            >
-              {vote.playerPosicion} • #{vote.playerCamiseta}
-            </Text>
+          <VStack align="flex-start" gap={0}>
+            <Text fontWeight="bold" fontSize="md" wordBreak="break-word">{vote.playerName}</Text>
+            {vote.playerApodo && <Text fontSize="sm" color="gray.500" wordBreak="break-word">"{vote.playerApodo}"</Text>}
+            <Text fontSize="xs" color="gray.600" wordBreak="break-word">{vote.playerPosicion} • #{vote.playerCamiseta}</Text>
           </VStack>
         </HStack>
 
-        {/* Información del partido */}
-        <VStack 
-          align={{ base: "start", md: "end" }} 
-          gap={1} 
-          minW={{ base: "auto", md: "200px" }}
-          flexShrink={0}
-        >
-          <Text 
-            fontWeight="bold" 
-            fontSize={{ base: "sm", md: "md" }} 
-            color="text-primary"
-            textAlign={{ base: "left", md: "right" }}
-            wordBreak="break-word"
-          >
-            vs {vote.matchRival}
+        {/* Match Info */}
+        <VStack align={{ base: 'flex-start', md: 'flex-end' }} gap={0} flexGrow={1} textAlign={{ base: 'left', md: 'right' }}>
+          <Text fontSize="sm" color="gray.700" wordBreak="break-word">
+            vs {vote.matchRival} ({vote.matchDescripcion})
           </Text>
-          <Text 
-            fontSize="sm" 
-            color="text-secondary"
-            textAlign={{ base: "left", md: "right" }}
-          >
-            {formatFecha(vote.matchFecha)}
-          </Text>
-          <Text 
-            fontSize="xs" 
-            color="text-secondary"
-            textAlign={{ base: "left", md: "right" }}
-          >
-            Votado: {formatFecha(vote.fechaVoto)} {formatHora(vote.fechaVoto)}
-          </Text>
+          <Text fontSize="xs" color="gray.500" wordBreak="break-word">{formatFecha(vote.matchFecha)}</Text>
+          <Text fontSize="xs" color="gray.500" wordBreak="break-word">Votado: {formatFecha(vote.fechaVoto, true)}</Text>
+          {vote.ganador && (
+            <Badge colorScheme="green" mt={1} wordBreak="break-word">Ganador</Badge>
+          )}
         </VStack>
       </Stack>
-    </Box>
+    </Card>
   )
 }
