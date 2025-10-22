@@ -1,5 +1,5 @@
 // src/components/domain/VoteHistoryItem.tsx
-import { Box, HStack, VStack, Text, Image, Badge, Flex, Stack } from '@chakra-ui/react'
+import { HStack, VStack, Text, Image, Badge, Stack } from '@chakra-ui/react'
 import type { VoteHistoryItem as VoteHistoryItemType } from '../../types/vote'
 import { Card } from '../ui'
 
@@ -46,12 +46,12 @@ export const VoteHistoryItem = ({ vote }: VoteHistoryItemProps) => {
         {/* Match Info */}
         <VStack align={{ base: 'flex-start', md: 'flex-end' }} gap={0} flexGrow={1} textAlign={{ base: 'left', md: 'right' }}>
           <Text fontSize="sm" color="gray.700" wordBreak="break-word">
-            vs {vote.matchRival} ({vote.matchDescripcion})
+            vs {vote.matchRival}
           </Text>
           <Text fontSize="xs" color="gray.500" wordBreak="break-word">{formatFecha(vote.matchFecha)}</Text>
           <Text fontSize="xs" color="gray.500" wordBreak="break-word">Votado: {formatFecha(vote.fechaVoto, true)}</Text>
           {vote.ganador && (
-            <Badge colorScheme="green" mt={1}>Ganador</Badge>
+            <Badge colorScheme="green" mt={1} wordBreak="break-word">Ganador</Badge>
           )}
         </VStack>
       </Stack>
